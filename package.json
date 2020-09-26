@@ -21,7 +21,9 @@
     "react-native-reanimated": "^1.13.1",
     "react-native-safe-area-context": "^3.1.8",
     "react-native-screens": "^2.11.0",
-    "react-timer-mixin": "^0.13.4"
+    "react-timer-mixin": "^0.13.4",
+    "react-native-vector-icons": "^6.6.0",
+    "@react-native-community/toolbar-android": "^0.1.0-rc.2"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
