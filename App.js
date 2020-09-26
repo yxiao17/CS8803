@@ -7,7 +7,9 @@
  */
 import 'react-native-gesture-handler';
 import React from 'react';
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {
@@ -44,19 +46,60 @@ function HomeScreen({navigation}) {
           </TouchableOpacity>
       </View>
       </View>
-          <View style={{flexDirection: "row",
-              justifyContent: "center"}}>
+          <View>
           <TouchableOpacity onPress={() => navigation.navigate('Article')}>
           <ImageBackground source={require('./atlanta.jpg')} style={{
+              left: 20,
               height: 250,
               width: 370,
-          }}  imageStyle={{ borderRadius: theme.sizes.radius }}></ImageBackground>
+          }}  imageStyle={{ borderRadius: theme.sizes.radius }}>
+              <View style={{flexDirection: "row"}}>
+                  <Image style={{
+                      left: 55,
+                      top:30,
+                      height: 50,
+                      width: 50,
+
+                  }} imageStyle={{ borderRadius: theme.sizes.radius }} source={require('./propic.png')}></Image>
+                  <Text style={{
+                      fontWeight:'bold',
+                      left: 75,
+                      top:30,
+                      color: theme.colors.white,
+                  }}>Julia Smith</Text>
+                  <Text style={{ color: theme.colors.white, bottom:-50, left:10}}>
+                      <Octicons
+                          name="location"
+                          size={theme.sizes.font * 0.8}
+                          color={theme.colors.white}
+                      />
+                      <Text>Atlanta, GA USA</Text>
+                  </Text>
+
+                  <View style={[styles.column, styles.destinationInfo, styles.shadow]}>
+                      <Text style={{ fontSize: theme.sizes.font * 1.25, fontWeight: '500', paddingBottom: 8, }}>
+                          Atlanta
+                      </Text>
+                      <View style={[ styles.row, { justifyContent: 'space-between', alignItems: 'flex-end', }]}>
+                          <Text style={{ color: theme.colors.caption }}>
+                              Atlanta has been dubbed everything from the "capital of the new South" and "the next international city" to...
+                          </Text>
+                          <Icon
+                              name="chevron-right"
+                              size={theme.sizes.font * 0.75}
+                              color={theme.colors.caption}
+                          />
+                      </View>
+                  </View>
+              </View>
+          </ImageBackground>
           </TouchableOpacity>
           </View>
 
-          <View>
 
-              <Text style={{ fontSize: theme.sizes.font * 1.5, left:20 }}>Recommended</Text>
+
+          <View>
+              <Text style={{ bottom: -100,fontSize: theme.sizes.font * 1.5, left:20 }}>Recommended</Text>
           </View>
 
       </View>
@@ -100,7 +143,6 @@ function App() {
           <Stack.Screen  name="Home" component={HomeScreen} options={{
               headerShown: false, // change this to `false`
           }}/>
-
           <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Article" component={Article} />
         </Stack.Navigator>
@@ -128,6 +170,17 @@ const styles = StyleSheet.create({
         height: '100%',
         flex: 1,
         resizeMode:'cover'
+    },
+
+    destinationInfo: {
+        position: 'absolute',
+        borderRadius: theme.sizes.radius,
+        paddingHorizontal: theme.sizes.padding,
+        paddingVertical: theme.sizes.padding / 2,
+        bottom: -250,
+        left: 40,
+        backgroundColor: theme.colors.white,
+        width:270,
     },
 })
 export default App;
