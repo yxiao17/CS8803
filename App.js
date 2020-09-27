@@ -149,10 +149,10 @@ function HomeScreen({navigation}) {
         <View style={[styles.flex, styles.column, styles.recommended]}>
           <View style={[styles.row, styles.recommendedHeader]}>
             <Text style={{fontSize: theme.sizes.font * 1.4}}>
-              {/*{'\n'}*/}
-              {/*{'\n'}*/}
-              {/*{'\n'}*/}
-              {/*Recommended for you*/}
+              {'\n'}
+              {'\n'}
+              {'\n'}
+              Recommended for you
             </Text>
             <TouchableOpacity activeOpacity={0.5}>
               <Text style={{color: theme.colors.caption}}>More</Text>
