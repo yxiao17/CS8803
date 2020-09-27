@@ -7,7 +7,7 @@
  */
 import 'react-native-gesture-handler';
 import React from 'react';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+// import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
@@ -74,6 +74,16 @@ function HomeScreen({navigation}) {
                           color={theme.colors.white}
                       />
                       <Text>Atlanta, GA USA</Text>
+
+                  </Text>
+                  <Text style={{ color: theme.colors.white, bottom:0, left:80, top:10}}>
+                      <Icon
+                          name="thumbs-up"
+                          size={theme.sizes.font * 0.8}
+                          color={theme.colors.white}
+                      />
+                      <Text>1,553</Text>
+
                   </Text>
 
                   <View style={[styles.column, styles.destinationInfo, styles.shadow]}>
