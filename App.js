@@ -35,9 +35,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 function HomeScreen({navigation}) {
-
   return (
-    <View>
+      <View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View>
           <Text style={{color: theme.colors.caption, left: 20}}>
@@ -47,6 +46,7 @@ function HomeScreen({navigation}) {
             Destination
           </Text>
         </View>
+
         <View
           style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}>
           <TouchableOpacity
@@ -119,9 +119,10 @@ function HomeScreen({navigation}) {
                       </View>
                   </View>
               </View>
+
           </ImageBackground>
           </TouchableOpacity>
-
+          </View>
           {/*recommended*/}
           <View>
 
@@ -192,11 +193,9 @@ function HomeScreen({navigation}) {
                   </View>
               </View>
           </View>
+      </View>
 
-          {/*<View>*/}
-          {/*    <Text style={{ bottom: -80,fontSize: theme.sizes.font * 1.5, left:20 }}>Recommended</Text>*/}
-          {/*</View>*/}
-    </View>
+
   );
 }
 
