@@ -9,10 +9,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const { width, height } = Dimensions.get('window');
 
-const article = {
+var article = {
     title : 'Atlanta',
     rating: '4.7',
-    reviews: 3212,
+    likes: 3212,
     description: 'Atlanta has been dubbed everything from the "capital of the new South" and "the next international city" to "the best place to do business." It\'s also a great place to visit. Fueled by the prosperity of local mega companies like Coca Cola and Holiday Inn, the prestige of hosting the 1996 Summer Olympic Games and the energy of young upwardly mobile types who have migrated to the city in droves - Atlanta is on fire. And this time it\'s a good thing. From world-class restaurants and a myriad of cultural attractions to a hip nightlife and sporting events galore, the city is cosmopolitan in every sense of the word. But Atlanta has also managed to maintain its historic character. Stop by the Atlanta History Center or visit the Martin Luther King Jr. Historical Site, a moving tribute to an American icon. Browse through the former home of famous author Margaret Mitchell or pop into the Jimmy Carter Library and Museum for details on the life and times of the former president and his family. Whether you choose modern urban endeavors or old southern pleasures, Atlanta will not disappoint.',
     images: [
       'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
@@ -137,6 +137,7 @@ export default class Article extends Component{
     }
     handleLike = () => {
       this.setState({like: true})
+      article.reviews = article.reviews + 1;
     }
     renderRatings = (rating) => {
         const stars = new Array(5).fill(0);
@@ -176,7 +177,7 @@ export default class Article extends Component{
                           {this.renderRatings(article.ratinga)}
                           <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
-                            ({3212} likes)
+                            ({article.reviews} likes)
                           </Text>
                       </View>
                         <TouchableOpacity>
@@ -206,7 +207,7 @@ export default class Article extends Component{
                                     size={20}
                                 />
                                 }
-                                onPress={() => {this.handleSave()}}
+                                onPress={() => {this.handleSave(this.state.save)}}
                             />
                             <Button
                                 icon={
