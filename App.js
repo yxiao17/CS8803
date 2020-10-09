@@ -12,6 +12,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Article from './navigation/Article'
+import Search from './navigation/Search'
 import {
   Button,
   SafeAreaView,
@@ -28,7 +29,6 @@ import {
 } from 'react-native';
 import * as theme from './theme';
 import Profile1 from './profile';
-
 const {width, height} = Dimensions.get('window');
 import mocks from './RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -38,7 +38,8 @@ function HomeScreen({navigation}) {
     <View>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View>
-          <Text style={{color: theme.colors.caption, left: 20}}>
+          <Text style={{color: theme.colors.caption, left: 20}}
+          onPress={() => navigation.navigate('Search')}>
             Search for place
           </Text>
           <Text style={{fontSize: theme.sizes.font * 2, left: 20}}>
@@ -199,10 +200,10 @@ function HomeScreen({navigation}) {
                           {item.temperature}℃
                         </Text>
                         <FontAwesome
-                          name={item.saved ? 'bookmark' : 'bookmark-o'}
-                          color={theme.colors.white}
-                          size={theme.sizes.font * 1.25}
-                        />
+                                                    name={item.saved ? 'bookmark' : 'bookmark-o'}
+                                                    color={theme.colors.white}
+                                                    size={theme.sizes.font * 1.25}
+                                                  />
                       </View>
                     </View>
                     <View
@@ -283,6 +284,10 @@ function App() {
             options={{ headerTitle: props => <LoadTitle {...props} />,
                        headerTransparent: true,
                    }} />
+        <Stack.Screen name="Search" component={Search}
+          options={{ headerTitle: props => <LoadTitle {...props} />,
+                                headerTransparent: true,
+                            }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
