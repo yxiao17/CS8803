@@ -135,6 +135,9 @@ export default class Search extends Component{
     handlelocation = (text) => {
       this.setState({location:text })
     }
+    handleTag = (text) => {
+        this.tag({tag:text})
+    }
 
     render() {
         return (
@@ -161,6 +164,15 @@ export default class Search extends Component{
                        <FontAwesome name="location-arrow" color="blue"/>
                         <TextInput style={styles.location}
                         placeholder = "location"
+                        underlineColorAndroid = 'grey'
+                        onChangeText = {this.handlelocation}/>
+                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.locationSection}>
+                    <TouchableOpacity>
+                       <FontAwesome name="tag" color="blue"/>
+                        <TextInput style={styles.location}
+                        placeholder = "tags"
                         underlineColorAndroid = 'grey'
                         onChangeText = {this.handlelocation}/>
                     </TouchableOpacity>
