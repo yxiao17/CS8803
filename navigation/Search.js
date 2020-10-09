@@ -123,6 +123,7 @@ export default class Search extends Component{
     images: '',
     location: '',
     };
+
     handleTitle = (text) => {
       this.setState({ title: text })
     }

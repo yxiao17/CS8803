@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import { Button } from 'react-native-elements';
 import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
-
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
+// add bottom navigation bar
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const { width, height } = Dimensions.get('window');
 
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
     marginTop: -theme.sizes.padding / 2,
+    height: height,
   },
   avatar: {
     position: 'absolute',
@@ -98,13 +101,43 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: theme.sizes.font * 1.3,
-    lineHeight: theme.sizes.font * 2.3,
+    lineHeight: theme.sizes.font * 1.8,
     color: theme.colors.caption,
+  },
+  button:{
+    backgroundColor: "white"
+  },
+  fixToText:{
+    marginLeft: 10,
+    marginRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  separator:{
+    marginVertical: 8,
+    borderBottomColor: theme.colors.grey,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   }
 });
 
-export default class Article extends Component{
+const Separator = () => {
+  return <View style={styles.separator} />;
+}
 
+export default class Article extends Component{
+     constructor(props) {
+       super(props);
+       this.state= {
+         save: false,
+         like: false,
+       };
+     }
+    handleSave = () => {
+      this.setState({save: true})
+    }
+    handleLike = () => {
+      this.setState({like: true})
+    }
     renderRatings = (rating) => {
         const stars = new Array(5).fill(0);
         return (
@@ -129,7 +162,7 @@ export default class Article extends Component{
                     <Image
                         source = {require('../atlanta.jpg')}
                         resizeMode = 'cover'
-                        style = {{width, height:width}}
+                        style = {{width, height:width-40}}
                     />
                 </View>
                 <View style={[styles.flex, styles.content]}>
@@ -148,10 +181,43 @@ export default class Article extends Component{
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
-                          {article.description.split('').slice(0, 200)}...
+                          {article.description.split('').slice(0, 250)}...
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
+                        <Separator/>
+                        <View style={styles.fixToText} >
+                            <Button
+                                icon={
+                                <FontAwesome
+                                    name="comment"
+                                    color="white"
+                                    size={20}
+                                />
+                                }
+                                color="white"
+                                onPress={() => {}}
+                            />
+                            <Button
+                                icon={
+                                <FontAwesome
+                                    name="bookmark"
+                                    color={this.state.save?"black":"white"}
+                                    size={20}
+                                />
+                                }
+                                onPress={() => {this.handleSave()}}
+                            />
+                            <Button
+                                icon={
+                                <FontAwesome
+                                    name="heart"
+                                    size={20}
+                                    color={(this.state.like? "black":"white")}/>
+                                    }
+                                onPress={() => {this.handleLike()}}
+                            />
+                        </View>
                     </View>
                 </View>
             </View>
