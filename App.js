@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import Article from './navigation/Article'
 import {
   Button,
   SafeAreaView,
@@ -261,15 +262,7 @@ function Profile() {
     </Profile1Stack.Navigator>
   );
 }
-function Article() {
-  return (
-    <View>
-      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-        <Text>Article</Text>
-      </View>
-    </View>
-  );
-}
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -285,9 +278,21 @@ function App() {
         />
 
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Article" component={Article} />
+        <Stack.Screen name="Article" component={Article}
+         // load title for article
+            options={{ headerTitle: props => <LoadTitle {...props} />,
+                       headerTransparent: true,
+                   }} />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+// customize header for Article screen
+function LoadTitle() {
+  return (
+       <View style={[styles.flex, styles.row, styles.header]}>
+       </View>
   );
 }
 
