@@ -202,9 +202,10 @@ export default class Article extends Component{
                                     size={30}
                                 />
                             </TouchableOpacity>
+
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
-                                    name={(this.state.save? "heart":"heart-o")}
+                                    name={(this.state.like? "heart":"heart-o")}
                                     color="grey"
                                     size={30}
                                 />
