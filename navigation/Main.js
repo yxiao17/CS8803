@@ -18,7 +18,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Profile1 from '../profile';
 import {NavigationContainer} from '@react-navigation/native';
 import Article from './Article';
-import Search from './Search';
+import Post from './Post';
 import React from 'react';
 import {Button} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -166,7 +166,7 @@ export default class Main extends React.Component{
             color={theme.colors.caption}
             style={styles.button}
 
-            onPress={() => this.props.navigation.navigate('Search')}
+            onPress={() => this.props.navigation.navigate('Post')}
           />
         </View>
 
@@ -178,28 +178,28 @@ export default class Main extends React.Component{
         />
         </TouchableOpacity>
         <View style={styles.locations}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
             style = {styles.img}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
             style = {styles.img}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
             style = {styles.img}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
@@ -225,7 +225,7 @@ export default class Main extends React.Component{
           size={theme.sizes.font * 2.5}
           color={theme.colors.black}
           style={styles.add}
-          onPress={() => this.props.navigation.navigate('Search')}
+          onPress={() => this.props.navigation.navigate('Post')}
         />
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
         <Image

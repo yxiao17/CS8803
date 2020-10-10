@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import Article from './navigation/Article'
 import Post from './navigation/Post'
 
@@ -36,8 +35,6 @@ const {width, height} = Dimensions.get('window');
 import mocks from './RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import StackNavigator from '@react-navigation/stack/src/navigators/createStackNavigator';
-import Article from './navigation/Article'
-import Search from './navigation/Search'
 import Main from './navigation/Main'
 import Profile from './navigation/Profile'
 
@@ -58,25 +55,14 @@ function App() {
 
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Article" component={Article}
-
           // load title for article
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
                       }} />
-        <Stack.Screen name="Search" component={Search}
+        <Stack.Screen name="Post" component={Post}
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
                       }}/>
-
-         // load title for article
-            options={{ headerTitle: props => <LoadTitle {...props} />,
-                       headerTransparent: true,
-                   }} />
-        <Stack.Screen name="Post" component={Post}
-          options={{ headerTitle: props => <LoadTitle {...props} />,
-                                headerTransparent: true,
-                            }}/>
-
       </Stack.Navigator>
     </NavigationContainer>
   );
