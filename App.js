@@ -284,7 +284,7 @@ function App() {
             options={{ headerTitle: props => <LoadTitle {...props} />,
                        headerTransparent: true,
                    }} />
-        <Stack.Screen name="Search" component={Search}
+        <Stack.Screen name="Post" component={Post}
           options={{ headerTitle: props => <LoadTitle {...props} />,
                                 headerTransparent: true,
                             }}/>
