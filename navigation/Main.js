@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font * 1.4,
     fontFamily:"Times New Roman",
     left: theme.sizes.padding,
+    marginTop: 10,
 
   },
   scrollview:{
@@ -55,13 +56,16 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'space-between',
     paddingBottom: 30,
+    alignItems:"center",
+    justifyContent:'center',
+    marginTop: 10,
     // flexDirection: "row",
 
   },
   button: {
     alignItems: 'center',
     backgroundColor: 'transparent',
-    padding: 5,
+    padding: 10,
     left: theme.sizes.padding,
   },
 
@@ -76,10 +80,11 @@ const styles = StyleSheet.create({
     height: height/4,
     alignSelf: 'center',
     borderRadius: theme.sizes.padding - 5,
+    marginTop: 10,
   },
   img: {
-    width: width/2 -30 ,
-    height: height/4 - 15,
+    width: width/1.25 ,
+    height: height/4,
     marginHorizontal: theme.sizes.margin/2-5,
     marginVertical: theme.sizes.margin/2,
     paddingHorizontal: theme.sizes.padding,
@@ -136,6 +141,7 @@ const styles = StyleSheet.create({
       borderBottomWidth: StyleSheet.hairlineWidth,
   }
 });
+
 const Separator = () => {
   return <View style={styles.separator} />;
 }
@@ -156,7 +162,7 @@ export default class Main extends React.Component{
     return (
       <View>
       <ScrollView style={styles.scrollview}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly',flex:0.5}}>
         <Text style={styles.top_text}>Nearby</Text>
         <Text style={styles.top_text} >Explore</Text>
         <Text style={styles.top_text}>Follow</Text>
@@ -177,22 +183,26 @@ export default class Main extends React.Component{
           style = {styles.imgMain}
         />
         </TouchableOpacity>
+
+
         <View style={styles.locations}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
             <Image
               source = {require('../santorini.jpg')}
               resizeMode = 'cover'
               style = {styles.img}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
             <Image
               source = {require('../santorini.jpg')}
               resizeMode = 'cover'
               style = {styles.img}
             />
           </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
@@ -200,14 +210,15 @@ export default class Main extends React.Component{
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
             style = {styles.img}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
