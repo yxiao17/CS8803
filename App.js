@@ -12,7 +12,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Article from './navigation/Article'
-import Search from './navigation/Search'
+import Post from './navigation/Post'
 import {
   Button,
   SafeAreaView,
@@ -39,7 +39,7 @@ function HomeScreen({navigation}) {
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <View>
           <Text style={{color: theme.colors.caption, left: 20}}
-          onPress={() => navigation.navigate('Search')}>
+          onPress={() => navigation.navigate('Post')}>
             Search for place
           </Text>
           <Text style={{fontSize: theme.sizes.font * 2, left: 20}}>

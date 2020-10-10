@@ -137,7 +137,7 @@ export default class Article extends Component{
     }
     handleLike = () => {
       this.setState({like: true})
-      article.reviews = article.reviews + 1;
+      article.likes = article.likes + 1;
     }
     renderRatings = (rating) => {
         const stars = new Array(5).fill(0);
@@ -177,7 +177,7 @@ export default class Article extends Component{
                           {this.renderRatings(article.ratinga)}
                           <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
-                            ({article.reviews} likes)
+                            ({article.likes} likes)
                           </Text>
                       </View>
                         <TouchableOpacity>
