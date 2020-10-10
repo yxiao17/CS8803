@@ -200,10 +200,10 @@ function HomeScreen({navigation}) {
                           {item.temperature}℃
                         </Text>
                         <FontAwesome
-                                                    name={item.saved ? 'bookmark' : 'bookmark-o'}
-                                                    color={theme.colors.white}
-                                                    size={theme.sizes.font * 1.25}
-                                                  />
+                        name={item.saved ? 'bookmark' : 'bookmark-o'}
+                        color={theme.colors.white}
+                        size={theme.sizes.font * 1.25}
+                      />
                       </View>
                     </View>
                     <View

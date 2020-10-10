@@ -202,19 +202,19 @@ export default class Article extends Component{
                             <Button
                                 icon={
                                 <FontAwesome
-                                    name="bookmark"
-                                    color={this.state.save?"black":"white"}
+                                    name={(this.state.save? "bookmark":"bookmark-o")}
+                                    color={theme.colors.white}
                                     size={20}
                                 />
                                 }
-                                onPress={() => {this.handleSave(this.state.save)}}
+                                onPress={() => {this.handleSave()}}
                             />
                             <Button
                                 icon={
                                 <FontAwesome
-                                    name="heart"
+                                    name={(this.state.like? "heart":"heart-o")}
                                     size={20}
-                                    color={(this.state.like? "black":"white")}/>
+                                    color={theme.colors.white}/>
                                     }
                                 onPress={() => {this.handleLike()}}
                             />
