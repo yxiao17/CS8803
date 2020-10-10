@@ -74,13 +74,13 @@ const Separator2 = () => {
 export default class Profile extends Component {
 
   render() {
-    const getPost = contactData && contactData.map(({image, words},id) => {
-      return (
-        <View key={id}>
-          <Image source={{uri: image}} />
-        </View>
-      )
-    })
+    // const getPost = contactData && contactData.map(({image, words},id) => {
+    //   return (
+    //     <View key={id}>
+    //       <Image source={{uri: image}} />
+    //     </View>
+    //   )
+    // })
     return (
       <View>
       <View style={styles.container}>
@@ -102,8 +102,7 @@ export default class Profile extends Component {
           <Text>Favorites</Text>
           <Text>Liked</Text>
           </View>
-          {getPost}
-          {/*<Image source={{uri:contactData.posts}}/>*/}
+
         </ScrollView>
       <Separator2/>
     <View style={styles.menu}>

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 3,
     justifyContent: 'space-between',
     paddingBottom: 30,
-    flexDirection: "row",
+    // flexDirection: "row",
 
   },
   button: {
@@ -178,6 +178,20 @@ export default class Main extends React.Component{
         />
         </TouchableOpacity>
         <View style={styles.locations}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+            <Image
+              source = {require('../santorini.jpg')}
+              resizeMode = 'cover'
+              style = {styles.img}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+            <Image
+              source = {require('../santorini.jpg')}
+              resizeMode = 'cover'
+              style = {styles.img}
+            />
+          </TouchableOpacity>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
@@ -185,13 +199,7 @@ export default class Main extends React.Component{
             style = {styles.img}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
-          <Image
-            source = {require('../santorini.jpg')}
-            resizeMode = 'cover'
-            style = {styles.img}
-          />
-        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
