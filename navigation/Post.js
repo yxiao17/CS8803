@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native'
-
+import { ImageBackground,Button, Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import ImagePicker from "react-native-image-picker";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const { width, height } = Dimensions.get('window');
 
-const article = {
+var article = {
     title : 'Atlanta',
     rating: '4.7',
     reviews: 3212,
@@ -114,15 +114,39 @@ const styles = StyleSheet.create({
       paddingLeft:10,
       fontStyle: 'italic',
   },
+    button: {
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+      padding: 10,
+    },
+    imageUpload: {
+        width: 200,
+        height: 200,
+        borderRadius: 20,
+        borderColor: theme.colors.grey,
+        borderWidth:1,
+    },
 });
 
 export default class Search extends Component{
     state = {
     curText: '',
     title: '',
-    images: '',
+    photo: null,
     location: '',
     };
+
+    handleChoosePhoto = () => {
+        const options = {
+            noData: true
+        }
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri){
+                this.setState({photo: response})
+            }
+            console.log("response", response);
+        })
+    }
 
     handleTitle = (text) => {
       this.setState({ title: text })
@@ -140,7 +164,12 @@ export default class Search extends Component{
         this.tag({tag:text})
     }
 
+    submitPost = () => {
+      alert("successfully submitted!");
+    }
+
     render() {
+        const {photo} = this.state;
         return (
             <View style={styles.flex}>
                 <View style={[styles.flex, styles.content]}>
@@ -178,6 +207,26 @@ export default class Search extends Component{
                         onChangeText = {this.handlelocation}/>
                     </TouchableOpacity>
                     </View>
+                    <View style={{flex:1, alignItems:"center",justifyContent:'center'}}>
+                        {photo && (
+                            <Image
+                                source={{uri: photo.uri}}
+                                style={styles.imageUpload}
+                            />
+                        )}
+                        <Button
+                            title="Choose Photo"
+                            onPress={this.handleChoosePhoto}
+                            color="grey"
+                        />
+                    </View>
+                    <TouchableOpacity>
+                        <Button
+                            title="Submit"
+                            onPress={this.submitPost}
+                            color="grey"
+                        />
+                    </TouchableOpacity>
                 </View>
             </View>
         );

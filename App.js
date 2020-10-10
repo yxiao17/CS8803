@@ -12,6 +12,9 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import Article from './navigation/Article'
+import Post from './navigation/Post'
+
 import {
 
   Button,
@@ -55,6 +58,7 @@ function App() {
 
         {/*<Stack.Screen name="Profile" component={Profile} />*/}
         <Stack.Screen name="Article" component={Article}
+
           // load title for article
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
@@ -63,6 +67,16 @@ function App() {
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
                       }}/>
+
+         // load title for article
+            options={{ headerTitle: props => <LoadTitle {...props} />,
+                       headerTransparent: true,
+                   }} />
+        <Stack.Screen name="Post" component={Post}
+          options={{ headerTitle: props => <LoadTitle {...props} />,
+                                headerTransparent: true,
+                            }}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
