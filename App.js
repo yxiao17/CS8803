@@ -39,7 +39,7 @@ import StackNavigator from '@react-navigation/stack/src/navigators/createStackNa
 import Article from './navigation/Article'
 import Search from './navigation/Search'
 import Main from './navigation/Main'
-
+import Profile from './navigation/Profile'
 
 
 const Stack = createStackNavigator();
@@ -56,7 +56,7 @@ function App() {
           }}
         />
 
-        {/*<Stack.Screen name="Profile" component={Profile} />*/}
+        <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Article" component={Article}
 
           // load title for article

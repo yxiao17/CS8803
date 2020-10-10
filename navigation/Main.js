@@ -23,6 +23,7 @@ import React from 'react';
 import {Button} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
+const contactData = require('../mocks/contact.json');
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -50,8 +51,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
 
   },
-  destinations: {
-    flex: 1,
+  locations: {
+    flex: 3,
     justifyContent: 'space-between',
     paddingBottom: 30,
     flexDirection: "row",
@@ -129,8 +130,15 @@ const styles = StyleSheet.create({
     fontSize: theme.sizes.font * 1.25,
     color: theme.colors.white,
   },
-
+  separator:{
+    marginVertical: 8,
+      borderBottomColor: theme.colors.grey,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+  }
 });
+const Separator = () => {
+  return <View style={styles.separator} />;
+}
 
 export default class Main extends React.Component{
   constructor(props) {
@@ -162,15 +170,14 @@ export default class Main extends React.Component{
           />
         </View>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
         <Image
           source = {require('../atlanta.jpg')}
-
           resizeMode = 'cover'
           style = {styles.imgMain}
         />
         </TouchableOpacity>
-        <View style={styles.destinations}>
+        <View style={styles.locations}>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Search')}>
           <Image
             source = {require('../santorini.jpg')}
@@ -199,9 +206,12 @@ export default class Main extends React.Component{
             style = {styles.img}
           />
         </TouchableOpacity>
+
+
         </View>
+        <Text>{contactData.name}</Text>
       </ScrollView>
-        <Text >──────────────────────────────────────</Text>
+        <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
             name="home"
@@ -217,11 +227,12 @@ export default class Main extends React.Component{
           style={styles.add}
           onPress={() => this.props.navigation.navigate('Search')}
         />
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
         <Image
           style={styles.avatar}
           source={require('../propic.png')}>
-
         </Image>
+        </TouchableOpacity>
         </View>
       </View>
 
