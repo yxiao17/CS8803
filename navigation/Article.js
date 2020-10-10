@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: theme.sizes.font * 1.3,
-    lineHeight: theme.sizes.font * 1.8,
+    lineHeight: theme.sizes.font * 2,
     color: theme.colors.caption,
   },
   button:{
@@ -188,36 +188,27 @@ export default class Article extends Component{
                         </TouchableOpacity>
                         <Separator/>
                         <View style={styles.fixToText} >
-                            <Button
-                                icon={
+                            <TouchableOpacity onPress={() => {}}>
                                 <FontAwesome
-                                    name="comment"
-                                    color="white"
-                                    size={20}
+                                    name='comment'
+                                    color="grey"
+                                    size={30}
                                 />
-                                }
-                                color="white"
-                                onPress={() => {}}
-                            />
-                            <Button
-                                icon={
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {this.handleSave()}}>
                                 <FontAwesome
                                     name={(this.state.save? "bookmark":"bookmark-o")}
-                                    color={theme.colors.white}
-                                    size={20}
+                                    color="grey"
+                                    size={30}
                                 />
-                                }
-                                onPress={() => {this.handleSave()}}
-                            />
-                            <Button
-                                icon={
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
-                                    name={(this.state.like? "heart":"heart-o")}
-                                    size={20}
-                                    color={theme.colors.white}/>
-                                    }
-                                onPress={() => {this.handleLike()}}
-                            />
+                                    name={(this.state.save? "heart":"heart-o")}
+                                    color="grey"
+                                    size={30}
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
