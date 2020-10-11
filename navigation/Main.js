@@ -15,8 +15,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import mocks from '../RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createStackNavigator} from '@react-navigation/stack';
-import Profile1 from '../profile';
 import {NavigationContainer} from '@react-navigation/native';
+import Profile from './Profile';
+import Search from './Search';
 import Article from './Article';
 import Post from './Post';
 import React from 'react';
@@ -141,16 +142,24 @@ const Separator = () => {
 }
 
 export default class Main extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state= {
-      click: false,
+  state = {
+    data: ''
+}
 
-    };
+  componentDidMount = () => {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
+      method: 'GET'
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        this.setState({
+          data: responseJson
+        })
+
+      })
   }
-  handleClick = () => {
-    this.setState({click: true})
-  }
+
   render() {
 
     return (
@@ -160,15 +169,17 @@ export default class Main extends React.Component{
         <Text style={styles.top_text}>Nearby</Text>
         <Text style={styles.top_text} >Explore</Text>
         <Text style={styles.top_text}>Follow</Text>
+
         <Icon
             name="search"
             size={theme.sizes.font * 1.5}
             color={theme.colors.caption}
             style={styles.button}
 
-            onPress={() => this.props.navigation.navigate('Post')}
+            onPress={() => this.props.navigation.navigate('Search')}
           />
         </View>
+
 
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
         <Image
@@ -185,28 +196,8 @@ export default class Main extends React.Component{
               style = {styles.img}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
-            <Image
-              source = {require('../santorini.jpg')}
-              resizeMode = 'cover'
-              style = {styles.img}
-            />
-          </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
-          <Image
-            source = {require('../santorini.jpg')}
-            resizeMode = 'cover'
-            style = {styles.img}
-          />
-        </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
-          <Image
-            source = {require('../santorini.jpg')}
-            resizeMode = 'cover'
-            style = {styles.img}
-          />
-        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
           <Image
             source = {require('../santorini.jpg')}
@@ -217,7 +208,7 @@ export default class Main extends React.Component{
 
 
         </View>
-        <Text>{contactData.name}</Text>
+
       </ScrollView>
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -238,7 +229,7 @@ export default class Main extends React.Component{
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
         <Image
           style={styles.avatar}
-          source={require('../propic.png')}>
+          source={{uri:this.state.data.avatar}}>
         </Image>
         </TouchableOpacity>
         </View>

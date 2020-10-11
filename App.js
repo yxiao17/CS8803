@@ -13,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Article from './navigation/Article'
 import Post from './navigation/Post'
+import Personal from './navigation/Personal'
 
 import {
 
@@ -37,6 +38,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import StackNavigator from '@react-navigation/stack/src/navigators/createStackNavigator';
 import Main from './navigation/Main'
 import Profile from './navigation/Profile'
+import Search from './navigation/Search'
 
 
 const Stack = createStackNavigator();
@@ -53,7 +55,11 @@ function App() {
           }}
         />
 
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Profile" component={Profile}  />
+        <Stack.Screen name="Personal" component={Personal}  />
+        <Stack.Screen name="Search" component={Search}
+                      options={{
+                        headerShown:false,}}/>
         <Stack.Screen name="Article" component={Article}
           // load title for article
                       options={{ headerTitle: props => <LoadTitle {...props} />,

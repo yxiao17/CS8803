@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   contentHeader: {
     backgroundColor: 'transparent',
     padding: theme.sizes.padding,
-    backgroundColor: theme.colors.white,
+
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
     marginTop: -theme.sizes.padding / 2,
@@ -130,6 +130,7 @@ export default class Article extends Component{
        this.state= {
          save: false,
          like: false,
+
        };
      }
     handleSave = () => {
@@ -156,6 +157,23 @@ export default class Article extends Component{
           })
         )
       }
+  state = {
+    data: ''
+  }
+
+  componentDidMount = () => {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
+      method: 'GET'
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+        this.setState({
+          data: responseJson
+        })
+
+      })
+  }
     render() {
         return (
             <View style={styles.flex}>
@@ -174,7 +192,7 @@ export default class Article extends Component{
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
                         ]}>
-                          {this.renderRatings(article.ratinga)}
+                          {this.renderRatings(article.rating)}
                           <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
                             ({article.likes} likes)
@@ -182,7 +200,8 @@ export default class Article extends Component{
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
-                          {article.description.split('').slice(0, 250)}...
+
+                          {this.state.data.description.split('').slice(0, 250)}...
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
@@ -204,7 +223,7 @@ export default class Article extends Component{
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
-                                    name={(this.state.save? "heart":"heart-o")}
+                                    name={(this.state.like? "heart":"heart-o")}
                                     color="grey"
                                     size={30}
                                 />

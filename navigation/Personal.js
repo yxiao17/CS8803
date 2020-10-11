@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     padding: theme.sizes.padding * 1.5,
     left: -theme.sizes.padding,
   },
- name: {
+  name: {
     fontSize:theme.sizes.font + 5,
     fontFamily: "notoserif",
   },
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
-},
+  },
   img: {
     width: width/2 -30 ,
     height: height/4 - 30,
@@ -85,7 +85,7 @@ const Separator1 = () => {
 const Separator2 = () => {
   return <View style={styles.separator2} />;
 }
-export default class Profile extends Component {
+export default class Personal extends Component {
   state = {
     data: ''
   }
@@ -108,54 +108,9 @@ export default class Profile extends Component {
 
     return (
       <View>
-      <View style={styles.container}>
-        <Image style={styles.propic} source={{uri:this.state.data.avatar}} />
-        <View style={styles.info}>
-          <Text style={{fontWeight: '700', marginRight: 5}}>ID:</Text>
-          <Text>{this.state.data.username}</Text>
-        </View>
-      </View>
-        {/*<Text style={styles.bio}>{this.state.data[0].article}</Text>*/}
-        <Separator1/>
-
-          <View style={styles.title}>
-          <Text>Posts</Text>
-          <Text>Favorites</Text>
-          <Text>Liked</Text>
-          </View>
-        <ScrollView >
-        <TouchableOpacity onPress={()=> this.props.navigation.navigate('Personal')}>
-        <Image
-              source = {{uri:this.state.data.images}}
-              resizeMode = 'contain'
-              style = {styles.img}
-            />
-        </TouchableOpacity>
-
-        </ScrollView>
-      <Separator2/>
-    <View style={styles.menu}>
-      <Icon
-        name="home"
-        size={theme.sizes.font * 2.5}
-        color={theme.colors.black}
-        style={styles.add}
-        onPress={() => this.props.navigation.navigate('Main')}
-      />
-      <Icon
-        name="plus-circle"
-        size={theme.sizes.font * 2.5}
-        color={theme.colors.black}
-        style={styles.add}
-        onPress={() => this.props.navigation.navigate('Search')}
-      />
-      <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-        <Image
-          style={styles.avatar}
-          source={{uri:this.state.data.avatar}}>
-        </Image>
-      </TouchableOpacity>
-    </View>
+        <Image source={{uri:this.state.data.images}}
+        style={styles.imgBig}/>
+        <Text>{this.state.data.description}</Text>
       </View>
     );
   }
