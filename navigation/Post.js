@@ -21,6 +21,8 @@ var article = {
     ]
   }
 
+
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -167,8 +169,8 @@ export default class Search extends Component{
     submitPost = () => {
       alert("successfully submitted!");
     }
-
     render() {
+        const {textfinal} = this.state;
         const {photo} = this.state;
         return (
             <View style={styles.flex}>

@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   top_text: {
     fontSize: theme.sizes.font * 1.4,
     fontFamily:"Times New Roman",
-    left: theme.sizes.padding,
+    left: theme.sizes.padding-5,
     marginTop: 10,
 
   },

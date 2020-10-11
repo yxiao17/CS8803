@@ -22,6 +22,8 @@ var article = {
     ]
   }
 
+
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -130,8 +132,31 @@ export default class Article extends Component{
        this.state= {
          save: false,
          like: false,
+         data: null,
        };
      }
+
+    getDataUsingGet = () => {
+    //GET request
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
+      method: 'GET',
+      //Request Type
+    })
+      .then((response) => response.json())
+      //If response is in json then in success
+      .then((responseJson) => {
+        this.setState({data: responseJson})
+        console.log(responseJson);
+      })
+      //If response is not in json then in error
+      .catch((error) => {
+        //Error
+        alert(JSON.stringify(error));
+        console.error(error);
+      });
+    };
+
+
     handleSave = () => {
       this.setState({save: true})
     }
@@ -156,7 +181,9 @@ export default class Article extends Component{
           })
         )
       }
+                           //     {article.description.split('').slice(0, 250)}...
     render() {
+        this.getDataUsingGet();
         return (
             <View style={styles.flex}>
                 <View style = {[styles.flex]}>
@@ -174,7 +201,7 @@ export default class Article extends Component{
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
                         ]}>
-                          {this.renderRatings(article.ratinga)}
+                          {this.renderRatings(article.rating)}
                           <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
                             ({article.likes} likes)
@@ -182,7 +209,7 @@ export default class Article extends Component{
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
-                          {article.description.split('').slice(0, 250)}...
+                          {this.state.data.description}
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
