@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text, TouchableHighlight,
-  TouchableOpacity,
+  TouchableOpacity, TouchableOpacityComponent,
   View,
 } from 'react-native';
 import * as theme from '../theme';
@@ -37,12 +37,13 @@ const styles = StyleSheet.create({
   },
   top_text: {
     fontSize: theme.sizes.font * 1.4,
-    fontFamily:"Times New Roman",
+    // fontFamily:"Times New Roman",
     left: theme.sizes.padding,
 
   },
   scrollview:{
     height: height-90,
+    bottom: 20,
   },
   avatar: {
     width: theme.sizes.padding ,
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
   add: {
     alignSelf: 'center',
     backgroundColor: 'transparent',
-    padding: 5,
+    padding: theme.sizes.padding/3,
+    paddingHorizontal: -theme.sizes.padding,
 
   },
   imgMain: {
@@ -77,6 +79,11 @@ const styles = StyleSheet.create({
     height: height/4,
     alignSelf: 'center',
     borderRadius: theme.sizes.padding - 5,
+    marginTop: theme.sizes.padding,
+    padding: 5,
+  },
+  addbold:{
+    fontWeight:"bold",
   },
   img: {
     width: width/2 -30 ,
@@ -132,43 +139,63 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   separator:{
-    marginVertical: 8,
-      borderBottomColor: theme.colors.grey,
-      borderBottomWidth: StyleSheet.hairlineWidth,
-  }
+    marginVertical: -10,
+    borderBottomColor: theme.colors.grey,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+
+
 });
 const Separator = () => {
   return <View style={styles.separator} />;
 }
 
 export default class Main extends React.Component{
-  state = {
-    data: ''
-}
 
-  componentDidMount = () => {
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isBold:true,
+      isLoading:true,
+      d: "",
+      items: "",
+    };
+    this.handleBold = this.handleBold.bind(this);
+  }
+  handleBold() {
+    this.setState(state => ({
+      isBold: !state.isBold,
+
+    }));
+
+  }
+
+componentDidMount = () => {
+    fetch('http://app-env.eba-trzysu8a.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
       method: 'GET'
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          data: responseJson
-        })
 
+        this.setState({
+          d: responseJson,
+          items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
+        })
       })
+
+
   }
 
   render() {
+    const { isLoading, item, d } = this.state;
+
 
     return (
       <View>
-      <ScrollView style={styles.scrollview}>
+
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        <Text style={styles.top_text}>Nearby</Text>
-        <Text style={styles.top_text} >Explore</Text>
-        <Text style={styles.top_text}>Follow</Text>
+        <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "normal":"bold" }, styles.top_text]}>Explore</Text>
+        <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "bold":"normal" }, styles.top_text]}>Follow</Text>
 
         <Icon
             name="search"
@@ -180,36 +207,55 @@ export default class Main extends React.Component{
           />
         </View>
 
+        <View style={styles.container}>
+          {/*Here we use flatlist to access the data */}
+          <FlatList
+            data={this.state.items}
+            renderItem={({item}) =>  {   return (
+              <TouchableOpacity
+              style={{flex:1/3, //here you can use flex:1 also
+                aspectRatio:1}} v>
+              <Image style={{flex: 1}} resizeMode='cover' source={{ uri: item.user.avatar}}></Image>
+              </TouchableOpacity>
+              )}}
+          />
+        </View>
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')}>
+        <ScrollView style={styles.scrollview}>
+
+
+
+
+
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
         <Image
           source = {require('../atlanta.jpg')}
           resizeMode = 'cover'
           style = {styles.imgMain}
         />
         </TouchableOpacity>
-        <View style={styles.locations}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')} hitSlop={{top: -25, bottom: -25, left: -25, right: -30}}>
             <Image
               source = {require('../santorini.jpg')}
               resizeMode = 'cover'
-              style = {styles.img}
+              style = {styles.imgMain}
             />
           </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Post')} hitSlop={{top: -25, bottom: -25, left: -50, right: -30}}>
           <Image
             source = {require('../santorini.jpg')}
             resizeMode = 'cover'
-            style = {styles.img}
+            style = {styles.imgMain}
           />
         </TouchableOpacity>
+        </ScrollView>
 
 
-        </View>
 
-      </ScrollView>
+
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
@@ -229,11 +275,12 @@ export default class Main extends React.Component{
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
         <Image
           style={styles.avatar}
-          source={{uri:this.state.data.avatar}}>
-        </Image>
+          source={{}}
+          />
         </TouchableOpacity>
         </View>
       </View>
+
 
     );
   }
@@ -453,6 +500,5 @@ export default class Main extends React.Component{
 //     </View>
 //   );
 // }
-
 
 

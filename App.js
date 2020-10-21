@@ -56,7 +56,8 @@ function App() {
         />
 
         <Stack.Screen name="Profile" component={Profile}  />
-        <Stack.Screen name="Personal" component={Personal}  />
+        <Stack.Screen name="Personal" component={Personal} options={{
+          headerTransparent: true,}} />
         <Stack.Screen name="Search" component={Search}
                       options={{
                         headerShown:false,}}/>

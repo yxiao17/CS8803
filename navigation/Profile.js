@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     position: 'relative',
     // top: height/3+10,
-    marginTop:height /2.25,
+    marginTop:height /5,
 
   },
   separator1:{
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
   },
   separator2:{
-    top:height /2.25,
+    top:height /5,
     marginVertical: 8,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.sizes.padding,
     paddingVertical: theme.sizes.padding * 0.66,
     borderRadius: theme.sizes.padding - 5,
+    top: -theme.sizes.margin+5,
   },
   title: {
     flexDirection: 'row',
@@ -109,7 +110,7 @@ export default class Profile extends Component {
     return (
       <View>
       <View style={styles.container}>
-        <Image style={styles.propic} source={{uri:this.state.data.avatar}} />
+        {/*<Image style={styles.propic} source={{uri:this.state.data.avatar}} />*/}
         <View style={styles.info}>
           <Text style={{fontWeight: '700', marginRight: 5}}>ID:</Text>
           <Text>{this.state.data.username}</Text>
@@ -119,9 +120,9 @@ export default class Profile extends Component {
         <Separator1/>
 
           <View style={styles.title}>
-          <Text>Posts</Text>
-          <Text>Favorites</Text>
-          <Text>Liked</Text>
+          <Text style={{fontWeight: '700'}}>Posts</Text>
+          <Text style={{fontWeight: '700'}}>Favorites</Text>
+          <Text style={{fontWeight: '700'}}>Liked</Text>
           </View>
         <ScrollView >
         <TouchableOpacity onPress={()=> this.props.navigation.navigate('Personal')}>
@@ -131,7 +132,6 @@ export default class Profile extends Component {
               style = {styles.img}
             />
         </TouchableOpacity>
-
         </ScrollView>
       <Separator2/>
     <View style={styles.menu}>

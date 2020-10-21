@@ -157,23 +157,7 @@ export default class Article extends Component{
           })
         )
       }
-  state = {
-    data: ''
-  }
 
-  componentDidMount = () => {
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
-      method: 'GET'
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          data: responseJson
-        })
-
-      })
-  }
     render() {
         return (
             <View style={styles.flex}>
@@ -201,7 +185,7 @@ export default class Article extends Component{
                         <TouchableOpacity>
                           <Text style={styles.description}>
 
-                          {this.state.data.description.split('').slice(0, 250)}...
+                          {article.description.split('').slice(0, 250)}...
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
