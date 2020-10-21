@@ -125,14 +125,36 @@ const Separator = () => {
 }
 
 export default class Article extends Component{
-     constructor(props) {
+       constructor(props){
        super(props);
        this.state= {
          save: false,
          like: false,
+         data: {},
+         };
+       }
 
-       };
+    fetchDataList(){
+        fetch('https://feiertage-api.de/api/?jahr=2019&nur_land=hb', {
+              method: 'GET'
+            })
+            .then((response)=>response.json())
+            .then(
+                (responseJson)=> {
+                    let data = responseJson;
+                    console.log(data);
+                    this.setState({
+                        data: data,
+                    })
+                }
+            )
+            .catch((error)=>console.error(error))
+    }
+
+     componentDidMount() {
+            this.fetchDataList();
      }
+
     handleSave = () => {
       this.setState({save: true})
     }
@@ -157,23 +179,6 @@ export default class Article extends Component{
           })
         )
       }
-  state = {
-    data: ''
-  }
-
-  componentDidMount = () => {
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
-      method: 'GET'
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          data: responseJson
-        })
-
-      })
-  }
     render() {
         return (
             <View style={styles.flex}>
@@ -200,8 +205,7 @@ export default class Article extends Component{
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
-
-                          {this.state.data.description.split('').slice(0, 250)}...
+                          {this.state.data.value()}...
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
