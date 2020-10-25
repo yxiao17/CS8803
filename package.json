@@ -30,6 +30,7 @@
     "react-native-screens": "^2.11.0",
     "react-native-vector-icons": "^7.1.0",
     "react-timer-mixin": "^0.13.4",
+    "tcomb-form-native": "^0.6.20",
     "typescript": "^4.0.3",
     "yarn": "^1.22.10"
   },

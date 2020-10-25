@@ -14,6 +14,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Article from './navigation/Article'
 import Post from './navigation/Post'
 import Personal from './navigation/Personal'
+import Login from './navigation/Login'
 
 import {
 
@@ -31,7 +32,7 @@ import {
   FlatList,
 } from 'react-native';
 import * as theme from './theme';
-import Profile1 from './profile';
+
 const {width, height} = Dimensions.get('window');
 import mocks from './RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -47,6 +48,8 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Login" component={Login} options={{
+          headerShown: false,}} />
         <Stack.Screen
           name="Main"
           component={Main}
@@ -54,7 +57,6 @@ function App() {
             headerShown: false, // change this to `false`
           }}
         />
-
         <Stack.Screen name="Profile" component={Profile}  />
         <Stack.Screen name="Personal" component={Personal} options={{
           headerTransparent: true,}} />
