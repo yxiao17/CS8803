@@ -21,6 +21,8 @@ var article = {
     ]
   }
 
+
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -120,8 +122,8 @@ const styles = StyleSheet.create({
       padding: 10,
     },
     imageUpload: {
-        width: 200,
-        height: 200,
+        width: 150,
+        height: 150,
         borderRadius: 20,
         borderColor: theme.colors.grey,
         borderWidth:1,
@@ -167,8 +169,8 @@ export default class Search extends Component{
     submitPost = () => {
       alert("successfully submitted!");
     }
-
     render() {
+        const {textfinal} = this.state;
         const {photo} = this.state;
         return (
             <View style={styles.flex}>

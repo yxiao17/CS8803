@@ -22,6 +22,8 @@ var article = {
     ]
   }
 
+
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -130,6 +132,7 @@ export default class Article extends Component{
        this.state= {
          save: false,
          like: false,
+
          data: {},
          };
        }
@@ -151,9 +154,28 @@ export default class Article extends Component{
             .catch((error)=>console.error(error))
     }
 
-     componentDidMount() {
-            this.fetchDataList();
-     }
+
+
+    getDataUsingGet = () => {
+    //GET request
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
+      method: 'GET',
+      //Request Type
+    })
+      .then((response) => response.json())
+      //If response is in json then in success
+      .then((responseJson) => {
+        this.setState({data: responseJson})
+        console.log(responseJson);
+      })
+      //If response is not in json then in error
+      .catch((error) => {
+        //Error
+        alert(JSON.stringify(error));
+        console.error(error);
+      });
+    };
+
 
     handleSave = () => {
       this.setState({save: true})
@@ -181,6 +203,7 @@ export default class Article extends Component{
       }
 
     render() {
+        this.getDataUsingGet();
         return (
             <View style={styles.flex}>
                 <View style = {[styles.flex]}>
@@ -206,9 +229,6 @@ export default class Article extends Component{
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
-
-                           {article.description.split('').slice(0, 250)}...
-
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
@@ -228,6 +248,7 @@ export default class Article extends Component{
                                     size={30}
                                 />
                             </TouchableOpacity>
+
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
                                     name={(this.state.like? "heart":"heart-o")}
