@@ -4,6 +4,7 @@ import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, Toucha
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
+
 // add bottom navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -13,7 +14,7 @@ var article = {
     title : 'Atlanta',
     rating: '4.7',
     likes: 3212,
-    description: 'Atlanta has been dubbed everything from the "capital of the new South" and "the next international city" to "the best place to do business." It\'s also a great place to visit. Fueled by the prosperity of local mega companies like Coca Cola and Holiday Inn, the prestige of hosting the 1996 Summer Olympic Games and the energy of young upwardly mobile types who have migrated to the city in droves - Atlanta is on fire. And this time it\'s a good thing. From world-class restaurants and a myriad of cultural attractions to a hip nightlife and sporting events galore, the city is cosmopolitan in every sense of the word. But Atlanta has also managed to maintain its historic character. Stop by the Atlanta History Center or visit the Martin Luther King Jr. Historical Site, a moving tribute to an American icon. Browse through the former home of famous author Margaret Mitchell or pop into the Jimmy Carter Library and Museum for details on the life and times of the former president and his family. Whether you choose modern urban endeavors or old southern pleasures, Atlanta will not disappoint.',
+    description: 'Atlanta has been dubbed everything from the "capital of the new South" and "the next international city" to "the best place to do business." It\'s also a great place to visit. Fueled by the prosperity of local mega companies like Coca Cola and Holiday Inn, the prestige of hosting the 1996 Summer Olympic Games and the energy of young upwardly mobile types who have migrated to the city in droves - Atlanta is on fire. And this time it\'s a good thing. From world-class restaurants and a myriad of cultural attractions to a hip nightlife and sporting events galore, the city is cosmopolitan in every sense of the word. But Atlanta has also managed to maintain its historic character. Stop by the Atlanta History Center or visit the Martin Luther King Jr. Historical Site, a moving tribute to an American icon..',
     images: [
       'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
       'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
@@ -26,7 +27,7 @@ var article = {
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 0,
+    flex: 1,
   },
   column: {
     flexDirection: 'column'
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
     marginTop: -theme.sizes.padding / 2,
-    height: height,
+    height: width,
   },
   avatar: {
     position: 'absolute',
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   description: {
+    height: width,
     fontSize: theme.sizes.font * 1.3,
     lineHeight: theme.sizes.font * 2,
     color: theme.colors.caption,
@@ -127,43 +129,92 @@ const Separator = () => {
 }
 
 export default class Article extends Component{
+     scrollX = new Animated.Value(0);
      constructor(props) {
        super(props);
        this.state= {
          save: false,
          like: false,
-         data: null,
+         data: [],
+         user: [],
+         images: [],
        };
      }
 
-    getDataUsingGet = () => {
-    //GET request
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
-      method: 'GET',
-      //Request Type
-    })
-      .then((response) => response.json())
-      //If response is in json then in success
-      .then((responseJson) => {
-        this.setState({data: responseJson})
-        console.log(responseJson);
-      })
-      //If response is not in json then in error
-      .catch((error) => {
-        //Error
-        alert(JSON.stringify(error));
-        console.error(error);
-      });
-    };
+    componentDidMount = () => {
+        var data_get = []
+        var users_get = []
+        var images_get = []
+        fetch('http://dataset.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
+          method: 'GET'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson);
+          for (var i = 0; i < responseJson.data.length; i++){
+            var data_i = responseJson.data[i];
+             data_get.push(data_i)
+             users_get.push(data_i.user)
+          }
+          this.setState({data:data_get[0]})
+          this.setState({user:users_get[0]})
 
+          for (var i = 0; i < data_get[0].images.length; i++){
+            images_get.push(data_get[0].images[i])
+          }
+          this.setState({images:images_get})
+          console.log(images_get.length)
+          })
+        .catch((error) => {
+          console.error(error);
+        });
+        }
 
+    /*handle save in react native*/
     handleSave = () => {
+      if (this.state.save){
+        this.setState({save: false})
+      }
+      else{
       this.setState({save: true})
+      }
     }
+
+    /*handle like in react native*/
     handleLike = () => {
-      this.setState({like: true})
-      article.likes = article.likes + 1;
+      if (this.state.like){
+        this.setState({like: false})
+        article.likes = article.likes - 1;
+      }
+      else{
+        this.setState({like: true})
+        article.likes = article.likes + 1;
+      }
     }
+
+    renderDots = () => {
+        const dotPosition = Animated.divide(this.scrollX, width);
+        return (
+          <View style={[ styles.flex, styles.row, styles.dotsContainer ]}>
+            {article.images.map((item, index) => {
+              const opacity = dotPosition.interpolate({
+                inputRange: [index-1, index, index+1],
+                outputRange: [0.5, 1, 0.5],
+                extrapolate: 'clamp'
+              });
+              return (
+                <Animated.View
+                  key={`step-${item}-${index}`}
+                  style={[styles.dots, { opacity }]}
+
+                />
+              )
+            })}
+          </View>
+        )
+      }
+
+
     renderRatings = (rating) => {
         const stars = new Array(5).fill(0);
         return (
@@ -181,22 +232,37 @@ export default class Article extends Component{
           })
         )
       }
-                           //     {article.description.split('').slice(0, 250)}...
     render() {
-        this.getDataUsingGet();
         return (
             <View style={styles.flex}>
                 <View style = {[styles.flex]}>
-                    <Image
-                        source = {require('../atlanta.jpg')}
-                        resizeMode = 'cover'
-                        style = {{width, height:width-40}}
-                    />
+                    <ScrollView
+                        horizontal
+                        pagingEnabled
+                        scrollEnabled
+                        showsHorizontalScrollIndicator={false}
+                        decelerationRate={0}
+                        scrollEventThrottle={16}
+                        snapToAlignment="center"
+                        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
+                    >
+                        {
+                          this.state.images.map((img, index) =>
+                            <Image
+                              key={`${index}-${img}`}
+                              source={{ uri: img }}
+                              resizeMode='cover'
+                              style={{ width, height: width-15 }}
+                            />
+                          )
+                        }
+                      </ScrollView>
+                      {this.renderDots()}
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                        <Image style={[styles.avatar, styles.shadow]} source={require('../propic.png')} />
-                        <Text style={styles.title}> {article.title} </Text>
+                        <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.user.avatar}} />
+                        <Text style={styles.title}> {this.state.data.title} </Text>
                       <View style={[
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
@@ -204,13 +270,12 @@ export default class Article extends Component{
                           {this.renderRatings(article.rating)}
                           <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
-                            ({article.likes} likes)
+                            ({this.state.data.likes} likes)
                           </Text>
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
                           {this.state.data.description}
-                          <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
                         <Separator/>
@@ -229,7 +294,6 @@ export default class Article extends Component{
                                     size={30}
                                 />
                             </TouchableOpacity>
-
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
                                     name={(this.state.like? "heart":"heart-o")}
