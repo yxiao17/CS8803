@@ -79,7 +79,7 @@ export default class Login extends Component {
       console.log(value);
       // value here is an instance of LoginFields
     }
-    this.props.navigation.navigate('Article')
+    this.props.navigation.navigate('Main')
 
   }
 

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { ImageBackground,Button, Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { FlatList, ImageBackground, Button, Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, TextInput } from 'react-native'
 import ImagePicker from "react-native-image-picker";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Tags from "react-native-tags"
+const plusIcon = require('../icons/icons8-plus-256.png');
 
 const { width, height } = Dimensions.get('window');
 
@@ -128,14 +130,48 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.grey,
         borderWidth:1,
     },
+    imageInsert: {
+        width: 150,
+        height: 150,
+        borderRadius: 20,
+        borderWidth:1,
+        borderColor: theme.colors.black,
+       // resizeMode:'contain',
+        marginHorizontal: 5,
+    },
+    fixUploadImages:{
+            marginTop: 15,
+
+    },
+    plusIconStyle:{
+        width: 30,
+        height: 30,
+    },
+    tagStyle: {
+    backgroundColor: '#6495ED',
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+    },
+    textTag: {
+    color: '#EBEBEB',
+    fontWeight: 'bold',
+    },
+    containerTags: {
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'flex-start',
+    },
 });
 
 export default class Search extends Component{
     state = {
     curText: '',
     title: '',
-    photo: null,
+    photo: ['https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80'],
     location: '',
+    initialTags: [],
+    initialText: '',
     };
 
     handleChoosePhoto = () => {
@@ -144,7 +180,10 @@ export default class Search extends Component{
         }
         ImagePicker.launchImageLibrary(options, response => {
             if (response.uri){
-                this.setState({photo: response})
+                this.setState({
+                photo: this.state.photo.concat([response.uri]),
+                    })
+
             }
             console.log("response", response);
         })
@@ -168,13 +207,64 @@ export default class Search extends Component{
 
     submitPost = () => {
       alert("successfully submitted!");
+      this.PostData();
     }
+
+    renderImages() {
+        let images = []
+        this.state.photo.map((item, index) => {
+            images.push(
+                       <TouchableOpacity onPress={this.handleChoosePhoto}>
+                           <Image source={{uri: item}} // Use item to set the image source
+                           style={styles.imageInsert}
+                           />
+                       </TouchableOpacity>
+                )})
+        return images
+    }
+
+      renderTag = ({ tag, index, onPress, deleteTagOnPress, readonly }) => {
+        return (
+          <TouchableOpacity
+            key={`${tag}-${index}`}
+            onPress={onPress}
+            style={styles.tagStyle}>
+            <Text style={styles.textTag}>{tag}</Text>
+          </TouchableOpacity>
+        );
+      };
+
+    onChangeTags = tags => {
+        this.setState({ initialTags: tags });
+    };
+
+
+
+    PostData = () => {
+      fetch("http://dataset.us-east-1.elasticbeanstalk.com/login", {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'keep-alive',
+        },
+        credentials: "same-origin",
+        body: 'username=test&password=password'
+      })
+      .then((response) => {
+        alert(JSON.stringify(response))
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
+
     render() {
         const {textfinal} = this.state;
         const {photo} = this.state;
         return (
             <View style={styles.flex}>
                 <View style={[styles.flex, styles.content]}>
+
                     <View style={[styles.flex, styles.contentHeader]}>
                         <Image style={[styles.avatar, styles.shadow]} source={require('../propic.png')} />
                         <TextInput style={styles.title}
@@ -182,6 +272,7 @@ export default class Search extends Component{
                         placeholder = 'Title'
                         onChangeText = {this.handleTitle}/>
                     </View>
+
                     <View styles={[styles.flex]} >
                         <TouchableOpacity>
                             <TextInput style={styles.description}
@@ -191,6 +282,7 @@ export default class Search extends Component{
                             onChangeText = {this.handleText}/>
                         </TouchableOpacity>
                     </View>
+
                     <View style={styles.locationSection}>
                     <TouchableOpacity>
                        <FontAwesome name="location-arrow" color="blue"/>
@@ -200,28 +292,49 @@ export default class Search extends Component{
                         onChangeText = {this.handlelocation}/>
                     </TouchableOpacity>
                     </View>
+
                     <View style={styles.locationSection}>
                     <TouchableOpacity>
                        <FontAwesome name="tag" color="blue"/>
-                        <TextInput style={styles.location}
-                        placeholder = "tags"
-                        underlineColorAndroid = 'grey'
-                        onChangeText = {this.handlelocation}/>
+                            <Tags
+                                containerStyle={styles.containerTags}
+                                initialText={this.state.initialText}
+                                textInputProps={{
+                                placeholderTextColor: theme.colors.grey,
+                                placeholder: 'Add tags here',
+                                fontStyle: 'italic',
+                                }}
+                                inputStyle={styles.location}
+                                initialTags={this.state.initialTags}
+                                onChangeTags={this.onChangeTags}
+                                renderTag={this.renderTag}
+                            />
                     </TouchableOpacity>
                     </View>
-                    <View style={{flex:1, alignItems:"center",justifyContent:'center'}}>
-                        {photo && (
-                            <Image
-                                source={{uri: photo.uri}}
-                                style={styles.imageUpload}
-                            />
-                        )}
-                        <Button
-                            title="Choose Photo"
-                            onPress={this.handleChoosePhoto}
-                            color="grey"
+
+                    <View style={styles.fixUploadImages}>
+                    <FlatList
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={this.state.photo}
+                    renderItem={({item}) => (
+                    <TouchableOpacity onPress={this.handleChoosePhoto}>
+                        <Image source={{uri: item}} // Use item to set the image source
+                        style={styles.imageInsert}
                         />
+                    </TouchableOpacity>
+                    )}
+                    />
                     </View>
+
+                    <View style={{marginLeft:width-theme.sizes.padding*2-15, marginTop:-15}}>
+                    <TouchableOpacity onPress={this.handleChoosePhoto}>
+                        <Image source={plusIcon}
+                        style={styles.plusIconStyle}
+                        />
+                    </TouchableOpacity>
+                    </View>
+
                     <TouchableOpacity>
                         <Button
                             title="Submit"
@@ -229,6 +342,7 @@ export default class Search extends Component{
                             color="grey"
                         />
                     </TouchableOpacity>
+
                 </View>
             </View>
         );
