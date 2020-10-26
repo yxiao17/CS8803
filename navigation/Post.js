@@ -6,6 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Tags from "react-native-tags"
+import CookieManager from '@react-native-community/cookies'
 const plusIcon = require('../icons/icons8-plus-256.png');
 
 const { width, height } = Dimensions.get('window');
@@ -241,17 +242,21 @@ export default class Search extends Component{
 
 
     PostData = () => {
-      fetch("http://dataset.us-east-1.elasticbeanstalk.com/login", {
+      fetch("http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login", {
         method: 'POST',
+        credentials: "include",
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Connection': 'keep-alive',
         },
-        credentials: "same-origin",
         body: 'username=test&password=password'
       })
       .then((response) => {
-        alert(JSON.stringify(response))
+        CookieManager.get(response.url)
+          .then(cookies => {
+            console.log('CookieManager.get =>', cookies.JSESSIONID.name);
+            alert(JSON.stringify(cookies.JSESSIONID.name))
+          });
       })
       .catch((error) => {
         console.error(error);
