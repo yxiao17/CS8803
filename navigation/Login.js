@@ -24,6 +24,7 @@ import {Button} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 import t from 'tcomb-form-native';
+import { AsyncStorage } from 'react-native';
 
 const Form = t.form.Form;
 
@@ -75,35 +76,50 @@ export default class Login extends Component {
   }
   _onSubmit() {
     const value = this.refs.form.getValue();
+    var formBody = [];
+    for (var property in value) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(value[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+    console.log(formBody)
+
     if (value) { // if validation fails, value will be null
       console.log(value);
-      // value here is an instance of LoginFields
+      this.componentDidMount(formBody)
     }
-    this.props.navigation.navigate('Main')
-
   }
 
-  componentDidMount =() => {
-    fetch('http://test-env.eba-dmkj2yrm.us-east-1.elasticbeanstalk.com/login', {
+  componentDidMount =(formBody) => {
+
+
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
+
       method: 'POST',
       headers: {
         'Accept': 'application/x-www-form-urlencoded',
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'keep-alive',
       },
-      body: JSON.stringify({
-        username: 'test',
-        password: 'password',
-      })
+      credentials: "same-origin",
+      mode: 'same-origin',
+      // body: 'username=&password=password',
+      body: formBody
     })
-      .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          data: responseJson / login
-        })
+
+        console.log(responseJson);
+
+        console.log(responseJson.status)
+        if (responseJson.status == 200) {
+          this.props.navigation.navigate("Main");
+        } else {
+          alert("error!");
+        }
+
       })
   }
-
-
 
   onChange = () => {
     const value = this.refs.form.getValue();

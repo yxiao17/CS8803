@@ -241,7 +241,7 @@ export default class Search extends Component{
 
 
     PostData = () => {
-      fetch("http://dataset.us-east-1.elasticbeanstalk.com/login", {
+      fetch("http://dataset.us-east-1.elasticbeanstalk.com/api/posts1", {
         method: 'POST',
         headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

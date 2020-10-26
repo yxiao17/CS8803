@@ -177,7 +177,7 @@ export default class Main extends React.Component{
 
   }
 componentDidMount = () => {
-    fetch('http://test-env.eba-dmkj2yrm.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
       method: 'GET'
     })
       .then((response) => response.json())
