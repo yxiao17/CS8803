@@ -255,7 +255,7 @@ export default class Search extends Component{
         CookieManager.get(response.url)
           .then(cookies => {
             console.log('CookieManager.get =>', cookies.JSESSIONID.name);
-            alert(JSON.stringify(cookies.JSESSIONID.name))
+            alert(JSON.stringify(cookies))
           });
       })
       .catch((error) => {
