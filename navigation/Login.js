@@ -24,6 +24,8 @@ import {Button} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 import t from 'tcomb-form-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-community/cookies'
 
 const Form = t.form.Form;
 
@@ -70,38 +72,101 @@ export default class Login extends Component {
     super(props);
     this.state = {
       buttonState: true,
-      value: {}
+      value: {},
+      token :"",
+      cookie: ""
+
     }
   }
-  _onSubmit() {
+  _onSubmit = async () => {
     const value = this.refs.form.getValue();
+    try {
+      //set the token to username
+      this.setState({token: value.username});
+      await AsyncStorage.setItem("token",value.username)
+
+    } catch (err) {
+      // console.log(err)
+      // alert(err)
+    }
+    var formBody = [];
+    for (var property in value) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(value[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+
     if (value) { // if validation fails, value will be null
       console.log(value);
-      // value here is an instance of LoginFields
+      // cDM function used to get the user login info
+      this.componentDidMount(formBody);
+      // call the save data function to add the cookie info in by using asyncstorage
+      this.saveData(formBody);
+
     }
-    this.props.navigation.navigate('Main')
-
   }
+  saveData = async (formBody) => {
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
 
-  componentDidMount =() => {
-    fetch('http://test-env.eba-dmkj2yrm.us-east-1.elasticbeanstalk.com/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/x-www-form-urlencoded',
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'keep-alive',
       },
-      body: JSON.stringify({
-        username: 'test',
-        password: 'password',
-      })
+      credentials: "include",
+      body: formBody
     })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          data: responseJson / login
-        })
+      .then((response) => {
+        console.log(response.url)
+        CookieManager.get(response.url)
+          .then(cookies => {
+            console.log(cookies['JSESSIONID'])
+          //  set the cookie
+          this.setState({cookie: cookies['JSESSIONID'].value});
+          console.log(this.state.cookie)
+          //  async set item
+          //  todo: not sure if omitting await is a potential issue or not
+          AsyncStorage.setItem("cookie", cookies['JSESSIONID'].value);
+            });
       })
+
+      .catch((error) => {
+        console.error(error);
+      });
+
   }
+
+  componentDidMount =(formBody) => {
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
+
+      method: 'POST',
+      headers: {
+        'Accept': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'keep-alive',
+      },
+      credentials: "include",
+      body: formBody
+    })
+
+      .then((responseJson) => {
+        if (responseJson.status == 200) {
+
+          this.props.navigation.navigate("Main");
+        } else {
+          alert("error!");
+        }
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+
 
 
 

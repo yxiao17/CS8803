@@ -148,7 +148,7 @@ export default class Article extends Component{
         var data_get = []
         var users_get = []
         var images_get = []
-        fetch('http://dataset.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
+        fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
           method: 'GET'
         })
         .then((response) => response.json())
