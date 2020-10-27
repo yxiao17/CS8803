@@ -243,7 +243,7 @@ export default class Search extends Component{
 
     PostData = () => {
 
-      fetch("http://dataset.us-east-1.elasticbeanstalk.com/api/posts1", {
+      fetch("http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login", {
 
 
         method: 'POST',
@@ -258,7 +258,7 @@ export default class Search extends Component{
         CookieManager.get(response.url)
           .then(cookies => {
             console.log('CookieManager.get =>', cookies.JSESSIONID.name);
-            alert(JSON.stringify(cookies.JSESSIONID.name))
+            alert(JSON.stringify(cookies))
           });
       })
       .catch((error) => {

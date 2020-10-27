@@ -24,7 +24,8 @@ import {Button} from 'react-native-elements';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 import t from 'tcomb-form-native';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-community/cookies'
 
 const Form = t.form.Form;
 
@@ -71,11 +72,25 @@ export default class Login extends Component {
     super(props);
     this.state = {
       buttonState: true,
-      value: {}
+      value: {},
+      token :"",
+      cookie: ""
+
     }
   }
-  _onSubmit() {
+  _onSubmit = async () => {
+
+
     const value = this.refs.form.getValue();
+    try {
+      this.setState({token: value.username});
+
+      await AsyncStorage.setItem("token",value.username)
+
+    } catch (err) {
+      // console.log(err)
+      // alert(err)
+    }
     var formBody = [];
     for (var property in value) {
       var encodedKey = encodeURIComponent(property);
@@ -83,12 +98,46 @@ export default class Login extends Component {
       formBody.push(encodedKey + "=" + encodedValue);
     }
     formBody = formBody.join("&");
-    console.log(formBody)
+
 
     if (value) { // if validation fails, value will be null
       console.log(value);
+
       this.componentDidMount(formBody)
+      this.saveData(formBody);
+
     }
+  }
+  saveData = async (formBody) => {
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
+
+      method: 'POST',
+      headers: {
+        'Accept': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Connection': 'keep-alive',
+      },
+      credentials: "include",
+      //
+      // body: 'username=&password=password',
+      body: formBody
+    })
+      .then((response) => {
+        console.log(response.url)
+        CookieManager.get(response.url)
+          .then(cookies => {
+            console.log(cookies['JSESSIONID'])
+          this.setState({cookie: cookies['JSESSIONID'].value});
+
+          console.log(this.state.cookie)
+          AsyncStorage.setItem("cookie", cookies['JSESSIONID'].value);
+            });
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
+
   }
 
   componentDidMount =(formBody) => {
@@ -102,24 +151,28 @@ export default class Login extends Component {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Connection': 'keep-alive',
       },
-      credentials: "same-origin",
-      mode: 'same-origin',
-      // body: 'username=&password=password',
+      credentials: "include",
       body: formBody
     })
+
       .then((responseJson) => {
-
-        console.log(responseJson);
-
-        console.log(responseJson.status)
         if (responseJson.status == 200) {
+
           this.props.navigation.navigate("Main");
         } else {
           alert("error!");
         }
 
       })
+
+      .catch((error) => {
+        console.error(error);
+      });
   }
+
+
+
+
 
   onChange = () => {
     const value = this.refs.form.getValue();

@@ -1,4 +1,5 @@
 import {
+  AccessibilityInfo,
   Dimensions,
   FlatList,
   Image,
@@ -22,9 +23,10 @@ import Article from './Article';
 import Post from './Post';
 import React from 'react';
 import {Button} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
-const contactData = require('../mocks/contact.json');
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -166,8 +168,13 @@ export default class Main extends React.Component{
       isLoading:true,
       d: "",
       items: "",
+      token:"",
+      cookie:""
+
+
     };
     this.handleBold = this.handleBold.bind(this);
+
   }
   handleBold() {
     this.setState(state => ({
@@ -176,12 +183,41 @@ export default class Main extends React.Component{
     }));
 
   }
-componentDidMount = () => {
+  getdata = async () => {
+    try {
+      const val = await AsyncStorage.getItem("token");
+      const tes = await AsyncStorage.getItem("cookie");
 
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
+      if (val !== null) {
+        this.setState({token:val})
+      }
+      if (tes !== null) {
 
-      method: 'GET'
+        this.setState({cookie:tes})
+      }
+    } catch (err) {
+
+    }
+
+  }
+
+
+  componentDidMount = async () => {
+    const t = await this.getdata();
+    console.log(this.state.token, this.getdata(), this.state.cookie)
+
+    alert("wow" + this.state.token+this.state.cookie)
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
+
+      method: 'GET',
+      credentials: 'omit',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'cookie' : this.state.cookie,
+      }
     })
+
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -189,8 +225,12 @@ componentDidMount = () => {
           d: responseJson,
           items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
         })
+        console.log(this.state.d)
       })
+
+
   }
+
   render() {
 
     return (
@@ -211,17 +251,18 @@ componentDidMount = () => {
         {/*<View style={styles.container}>*/}
           {/*Here we use flatlist to access the data */}
 
-        <ScrollView style={styles.scrollview}>
-          <FlatList
-            data={this.state.items}
-            renderItem={({item}) =>  {   return (
-              <TouchableOpacity
-                style={{flex:1/3, //here you can use flex:1 also
-                  aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
-                <Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.user.avatar}}></Image>
-              </TouchableOpacity>
-            )}} />
-        </ScrollView>
+        {/*<ScrollView style={styles.scrollview}>*/}
+        {/*  <FlatList*/}
+        {/*    data={this.state.items}*/}
+        {/*    renderItem={({item}) =>  {   return (*/}
+        {/*      <TouchableOpacity*/}
+        {/*        style={{flex:1/3, //here you can use flex:1 also*/}
+        {/*          aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>*/}
+        {/*        /!*<Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.user.avatar}}></Image>*!/*/}
+        {/*        <Text>{item.article}</Text>*/}
+        {/*      </TouchableOpacity>*/}
+        {/*    )}} />*/}
+        {/*</ScrollView>*/}
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
@@ -239,10 +280,10 @@ componentDidMount = () => {
           onPress={() => this.props.navigation.navigate('Post')}
         />
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-        <Image
-          style={styles.avatar}
-          source={{uri:this.state.items.avatar}}
-          />
+        {/*<Image*/}
+        {/*  style={styles.avatar}*/}
+        {/*  source={{uri:this.state.items.avatar}}*/}
+        {/*  />*/}
         </TouchableOpacity>
         </View>
       </View>
