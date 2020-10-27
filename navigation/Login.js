@@ -79,12 +79,10 @@ export default class Login extends Component {
     }
   }
   _onSubmit = async () => {
-
-
     const value = this.refs.form.getValue();
     try {
+      //set the token to username
       this.setState({token: value.username});
-
       await AsyncStorage.setItem("token",value.username)
 
     } catch (err) {
@@ -102,8 +100,9 @@ export default class Login extends Component {
 
     if (value) { // if validation fails, value will be null
       console.log(value);
-
-      this.componentDidMount(formBody)
+      // cDM function used to get the user login info
+      this.componentDidMount(formBody);
+      // call the save data function to add the cookie info in by using asyncstorage
       this.saveData(formBody);
 
     }
@@ -118,8 +117,6 @@ export default class Login extends Component {
         'Connection': 'keep-alive',
       },
       credentials: "include",
-      //
-      // body: 'username=&password=password',
       body: formBody
     })
       .then((response) => {
@@ -127,9 +124,11 @@ export default class Login extends Component {
         CookieManager.get(response.url)
           .then(cookies => {
             console.log(cookies['JSESSIONID'])
+          //  set the cookie
           this.setState({cookie: cookies['JSESSIONID'].value});
-
           console.log(this.state.cookie)
+          //  async set item
+          //  todo: not sure if omitting await is a potential issue or not
           AsyncStorage.setItem("cookie", cookies['JSESSIONID'].value);
             });
       })
@@ -141,8 +140,6 @@ export default class Login extends Component {
   }
 
   componentDidMount =(formBody) => {
-
-
     fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
 
       method: 'POST',
@@ -162,7 +159,6 @@ export default class Login extends Component {
         } else {
           alert("error!");
         }
-
       })
 
       .catch((error) => {

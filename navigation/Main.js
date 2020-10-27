@@ -24,6 +24,7 @@ import Post from './Post';
 import React from 'react';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-community/cookies';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 
@@ -168,13 +169,12 @@ export default class Main extends React.Component{
       isLoading:true,
       d: "",
       items: "",
+      // declare in this state
       token:"",
       cookie:""
 
-
     };
     this.handleBold = this.handleBold.bind(this);
-
   }
   handleBold() {
     this.setState(state => ({
@@ -183,50 +183,53 @@ export default class Main extends React.Component{
     }));
 
   }
+  // get data function to read the saved data to persist the user info
   getdata = async () => {
     try {
+      // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
-      const tes = await AsyncStorage.getItem("cookie");
+      const cook = await AsyncStorage.getItem("cookie");
 
       if (val !== null) {
         this.setState({token:val})
       }
-      if (tes !== null) {
-
-        this.setState({cookie:tes})
+      if (cook !== null) {
+        this.setState({cookie:cook})
       }
     } catch (err) {
-
+      console.log(err)
     }
 
   }
 
-
   componentDidMount = async () => {
+    // await CookieManager.clearAll()
+    // calls the get data function
     const t = await this.getdata();
-    console.log(this.state.token, this.getdata(), this.state.cookie)
+
 
     alert("wow" + this.state.token+this.state.cookie)
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
 
       method: 'GET',
-      credentials: 'omit',
+      credentials: 'include',
       headers:{
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        // set the cookie inside of the headers
         'cookie' : this.state.cookie,
       }
     })
-
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({
           d: responseJson,
           items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
         })
+        alert(this.state.d);
         console.log(this.state.d)
       })
+    alert(this.state.d);
 
 
   }
