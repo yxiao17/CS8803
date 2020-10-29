@@ -6,6 +6,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.reactnativecommunity.cookies.CookieManagerPackage;
 import com.reactnativecommunity.cookies.CookieManagerPackage;
+import com.reactnativecommunity.cookies.CookieManagerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
