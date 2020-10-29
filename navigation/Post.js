@@ -173,6 +173,7 @@ export default class Search extends Component{
     location: '',
     initialTags: [],
     initialText: '',
+    cookie: null,
     };
 
     handleChoosePhoto = () => {
@@ -255,13 +256,37 @@ export default class Search extends Component{
         CookieManager.get(response.url)
           .then(cookies => {
             console.log('CookieManager.get =>', cookies.JSESSIONID.name);
-            alert(JSON.stringify(cookies))
+            this.setState({cookie:cookies.JSESSIONID});
+            alert(JSON.stringify(cookies.JSESSIONID));
           });
       })
       .catch((error) => {
         console.error(error);
       });
     }
+
+     testCookie = () => {
+          console.log(this.state.cookie)
+          fetch("http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/1", {
+            method: 'GET',
+            credentials: "include",
+            headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Connection': 'keep-alive',
+            'cookie': this.state.cookie,
+            },
+          })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            alert(JSON.stringify(responseJson));
+            console.log(responseJson)
+            })
+          .catch((error) => {
+            console.error(error);
+          });
+        }
+
+
 
     render() {
         const {textfinal} = this.state;
@@ -344,6 +369,14 @@ export default class Search extends Component{
                         <Button
                             title="Submit"
                             onPress={this.submitPost}
+                            color="grey"
+                        />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                        <Button
+                            title="testCookie"
+                            onPress={this.testCookie}
                             color="grey"
                         />
                     </TouchableOpacity>
