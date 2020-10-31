@@ -48,20 +48,22 @@ const styles = StyleSheet.create({
     fontFamily:"Times New Roman",
     left: theme.sizes.padding-5,
     marginTop: 10,
-
-
   },
   scrollview:{
     height: height-90,
-    bottom: 20,
+    bottom: 30,
+    top: 30,
   },
   avatar: {
     width: theme.sizes.padding ,
     height: theme.sizes.padding *1.1,
-    borderRadius: theme.sizes.padding ,
+    borderRadius: theme.sizes.padding *2 ,
     alignItems: 'flex-end',
     resizeMode: 'contain',
 
+  },
+  container: {
+    bottom:40,
   },
   locations: {
     flex: 3,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
     height: height/4,
     alignSelf: 'center',
     borderRadius: theme.sizes.padding - 5,
-    marginTop: theme.sizes.padding,
+    marginTop: theme.sizes.padding * 2,
     padding: 5,
   },
   addbold:{
@@ -99,11 +101,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   img: {
+    alignSelf: 'center',
+    // marginTop: theme.sizes.padding * 2,
     width: width/1.25 ,
     height: height/4,
     marginHorizontal: theme.sizes.margin/2-5,
     marginVertical: theme.sizes.margin/2,
-    paddingHorizontal: theme.sizes.padding,
+    // paddingHorizontal: theme.sizes.padding,
     paddingVertical: theme.sizes.padding * 0.66,
     borderRadius: theme.sizes.padding - 5,
   },
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingHorizontal: theme.sizes.padding,
   },
-  recommendedList: {},
+
   recommendation: {
     // width: (width - theme.sizes.padding * 2) / 2,
     marginHorizontal: 8,
@@ -177,7 +181,6 @@ export default class Main extends React.Component{
       // declare in this state
       token:"",
       cookie:"",
-
       userAvatar:""
 
     };
@@ -220,7 +223,7 @@ export default class Main extends React.Component{
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getdata();
-    alert(t);
+
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
 
       method: 'GET',
@@ -271,13 +274,14 @@ export default class Main extends React.Component{
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
                 style={{flex:1/3, //here you can use flex:1 also
-                  aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
-                <Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
+                 }} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
 
               </TouchableOpacity>
             )}} />
         </ScrollView>
+        </View>
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
@@ -298,11 +302,13 @@ export default class Main extends React.Component{
 
         <Image
           style={styles.avatar}
+
           source={{uri:this.state.userAvatar}}
           />
+
         </TouchableOpacity>
         </View>
-      </View>
+
       </View>
 
 );

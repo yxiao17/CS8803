@@ -130,7 +130,7 @@ export default class Registration extends Component{
 
       .then((responseJson) => {
         console.log(responseJson)
-        if (responseJson.code == 100) {
+        if (responseJson.status !== 500) {
 
           this.props.navigation.navigate("Login");
         }
@@ -153,7 +153,7 @@ export default class Registration extends Component{
     if(value) {
       this.setState({
         value,
-        buttonState: false
+        buttonState: false,
       });
     }
   }

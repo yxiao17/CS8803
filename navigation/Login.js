@@ -179,25 +179,15 @@ export default class Login extends Component {
             .then((responseJson) => {
               this.setState({
                 avatar: responseJson.data.avatar,
-
               })
               console.log("avatar " +this.state.avatar)
               AsyncStorage.setItem("avatar", this.state.avatar);
               if (responseJson.code == 100 ) {
                 this.props.navigation.navigate("Main");
 
-
         }
             })
-      // .then((responseJson) => {
-      //   console.log(responseJson)
-      //   // if (responseJson.status == 200) {
-      //     console.log("success")
-          // this.props.navigation.navigate("Main");
-        // }
-        // else {
-        //   console.log(responseJson)
-        // }
+
       })
 
       .catch((error) => {

@@ -60,7 +60,8 @@ function App() {
             headerShown: false, // change this to `false`
           }}
         />
-        <Stack.Screen name="Profile" component={Profile}  />
+        <Stack.Screen name="Profile" component={Profile}  options={{
+          headerTransparent: true,}}/>
         <Stack.Screen name="Personal" component={Personal} options={{
           headerTransparent: true,}} />
         <Stack.Screen name="Search" component={Search}

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Dimensions, ScrollView, TextPropTypes} from 'react-native';
 import contactData from '../mocks/contact.json';
 import * as theme from '../theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
   propic: {
     width: width/3,
     height: height/5,
-    borderRadius: theme.sizes.radius *2 ,
+    borderRadius: theme.sizes.radius * 4 ,
     alignItems: 'flex-end',
     resizeMode: 'contain',
 
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: theme.sizes.padding ,
     height: theme.sizes.padding *1.1,
-    borderRadius: theme.sizes.padding / 2,
+    borderRadius: theme.sizes.padding ,
     alignItems: 'flex-end',
     resizeMode: 'contain',
 
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     position: 'relative',
-    // top: height/3+10,
+    top: 270,
     marginTop:height /5,
 
   },
@@ -60,8 +61,8 @@ const styles = StyleSheet.create({
 
   },
   separator2:{
-    top:height /5,
-    marginVertical: 8,
+    // marginBottom: 30,
+    top: 410,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
 },
@@ -87,33 +88,71 @@ const Separator2 = () => {
   return <View style={styles.separator2} />;
 }
 export default class Profile extends Component {
-  state = {
-    data: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      data:"",
+      token:"",
+      userAvatar:"",
+      cookie:"",
+      // article: this.props.route.params.article,
+
+    };
+    this.getdata();
+  }
+  getdata = async () => {
+    try {
+      // get the two saved items token -> username and cookie for headers
+      const val = await AsyncStorage.getItem("token");
+      const cook = await AsyncStorage.getItem("cookie");
+      const avatar = await AsyncStorage.getItem("avatar");
+      if (val !== null) {
+        this.setState({token:val})
+      }
+      if (avatar !== null) {
+        this.setState({userAvatar:avatar})
+      }
+      if (cook !== null) {
+        this.setState({cookie:cook})
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
   }
 
-  componentDidMount = () => {
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata', {
-      method: 'GET'
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          data: responseJson
-        })
-
-      })
-  }
+  // componentDidMount = async () => {
+  //   const t =  await this.getData();
+  //   console.log(this.state.userAvatar)
+  //   fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/currUser', {
+  //     method: 'GET',
+  //     credentials: 'include',
+  //     headers:{
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json',
+  //       // set the cookie inside of the headers
+  //       'cookie' : this.state.cookie,
+  //     }
+  //   })
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       console.log(responseJson);
+  //       this.setState({
+  //         data: responseJson.data
+  //       })
+  //     console.log("et"+this.state.data)
+  //     })
+  // }
 
   render() {
 
     return (
       <View>
       <View style={styles.container}>
-        {/*<Image style={styles.propic} source={{uri:this.state.data.avatar}} />*/}
+        <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
         <View style={styles.info}>
           <Text style={{fontWeight: '700', marginRight: 5}}>ID:</Text>
-          <Text>{this.state.data.username}</Text>
+          <Text>{this.state.token}</Text>
         </View>
       </View>
         {/*<Text style={styles.bio}>{this.state.data[0].article}</Text>*/}
@@ -126,11 +165,7 @@ export default class Profile extends Component {
           </View>
         <ScrollView >
         <TouchableOpacity onPress={()=> this.props.navigation.navigate('Personal')}>
-        <Image
-              source = {{uri:this.state.data.images}}
-              resizeMode = 'contain'
-              style = {styles.img}
-            />
+          {/*<Image style={styles.avatar} source={{uri: this.state.article.user.avatar}} />*/}
         </TouchableOpacity>
         </ScrollView>
       <Separator2/>
@@ -152,11 +187,13 @@ export default class Profile extends Component {
       <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
         <Image
           style={styles.avatar}
-          source={{uri:this.state.data.avatar}}>
+          source={{uri:this.state.userAvatar}}>
         </Image>
       </TouchableOpacity>
     </View>
       </View>
+
+
     );
   }
 }
