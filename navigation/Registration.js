@@ -17,7 +17,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Profile from './Profile';
-import Registration from './Registration';
+
 import Main from './Main';
 import React, {Component} from 'react';
 import {Button} from 'react-native-elements';
@@ -25,9 +25,15 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 import t from 'tcomb-form-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CookieManager from '@react-native-community/cookies'
+import CookieManager from '@react-native-community/cookies';
 
 const Form = t.form.Form;
+const RegisterFields = t.struct({
+  // email: t.String,
+  username: t.String,
+  password: t.String,
+  avatar: t.String,
+});
 
 const styles = StyleSheet.create({
   flex: {
@@ -49,10 +55,6 @@ const styles = StyleSheet.create({
     left: -theme.sizes.padding,
   },
 });
-const LoginFields = t.struct({
-  username: t.String,  // a required string
-  password: t.String, // a required string
-});
 
 const options = {
   fields: {
@@ -64,21 +66,23 @@ const options = {
     },
     username: {
       placeholder: 'username',
-      error: 'Insert a valid email'
+      error: 'Insert a valid username'
     }
+    ,
+    avatar: {
+      placeholder: 'profile pic link',
+      error: 'Insert a valid link'
+    },
   }
 };
-export default class Login extends Component {
+export default class Registration extends Component{
   constructor(props) {
     super(props);
     this.state = {
       buttonState: true,
       value: {},
-      token :"",
-      cookie: "",
-      avatar:"",
-      code:""
-
+      token: "",
+      cookie: ""
 
     }
   }
@@ -107,57 +111,12 @@ export default class Login extends Component {
       // cDM function used to get the user login info
       this.componentDidMount(formBody);
       // call the save data function to add the cookie info in by using asyncstorage
-      this.saveData(formBody);
+
 
     }
   }
-  saveData = async (formBody) => {
-    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
-
-      method: 'POST',
-      headers: {
-        // 'Accept': 'application/x-www-form-urlencoded',
-        'Accept': '*/*',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'Connection': 'keep-alive',
-      },
-      credentials: "include",
-      body: formBody
-    })
-      .then((response) => {
-      //   fetch(response.url, {
-      //     method: 'GET',
-      //   })
-      //     .then((response) => response.json())
-      //     .then((responseJson) => {
-      //       this.setState({
-      //         avatar: responseJson.data,
-      //       })
-      //       console.log("avatar " +this.state.avatar.avatar)
-      //       AsyncStorage.setItem("avatar", JSON.stringify(this.state.avatar.avatar));
-      //     })
-        CookieManager.get(response.url)
-          .then(cookies => {
-            console.log(cookies['JSESSIONID'])
-          //  set the cookie
-          this.setState({cookie: cookies['JSESSIONID'].value});
-          console.log(this.state.cookie)
-          //  async set item
-          //  todo: not sure if omitting await is a potential issue or not
-          AsyncStorage.setItem("cookie", cookies['JSESSIONID'].value);
-            });
-      })
-
-      .catch((error) => {
-        console.error(error);
-      });
-
-  }
-
   componentDidMount =(formBody) => {
-
-
-    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
+    fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/register', {
 
       method: 'POST',
       headers: {
@@ -168,31 +127,16 @@ export default class Login extends Component {
       credentials: "include",
       body: formBody
     })
-      .then((response) => {
-          fetch(response.url, {
-            method: 'GET',
-          })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              this.setState({
-                avatar: responseJson.data.avatar,
 
-              })
-              console.log("avatar " +this.state.avatar)
-              AsyncStorage.setItem("avatar", this.state.avatar);
-              if (responseJson.code == 100 ) {
-                this.props.navigation.navigate("Main");
+      .then((responseJson) => {
+        console.log(responseJson)
+        if (responseJson.code == 100) {
+
+          this.props.navigation.navigate("Login");
         }
-            })
-      // .then((responseJson) => {
-      //   console.log(responseJson)
-      //   // if (responseJson.status == 200) {
-      //     console.log("success")
-          // this.props.navigation.navigate("Main");
-        // }
-        // else {
-        //   console.log(responseJson)
-        // }
+        else {
+          console.log("login error")
+        }
       })
 
       .catch((error) => {
@@ -216,20 +160,20 @@ export default class Login extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.title}>Please Login</Text>
-
+        <Text style={styles.title}>Please Register</Text>
         <Form
           ref="form"
-          type={LoginFields}
+          type={RegisterFields}
           options={options}
           value={this.state.value}
           onChange={this.onChange}
         />
         <View style={styles.button}>
-        <Button  onPress={this._onSubmit.bind(this)}
-                 title="Login"
-                >Submit</Button>
-          <Text onPress={() => this.props.navigation.navigate('Registration')} > No account? Please register! </Text>
+          {/*<Button>*/}
+          <Button  onPress={this._onSubmit.bind(this)}
+                   title="Register">
+            Submit</Button>
+          <Text onPress={() => this.props.navigation.navigate('Login')} > Already have an account? Please login! </Text>
         </View>
       </View>
     );

@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: theme.sizes.padding ,
     height: theme.sizes.padding *1.1,
-    borderRadius: theme.sizes.padding / 2,
+    borderRadius: theme.sizes.padding ,
     alignItems: 'flex-end',
     resizeMode: 'contain',
 
@@ -167,11 +167,14 @@ export default class Main extends React.Component{
     this.state = {
       isBold:true,
       isLoading:true,
+
       d: "",
       items: "",
       // declare in this state
       token:"",
-      cookie:""
+      cookie:"",
+      userAvatar:""
+
 
     };
     this.handleBold = this.handleBold.bind(this);
@@ -189,9 +192,13 @@ export default class Main extends React.Component{
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
       const cook = await AsyncStorage.getItem("cookie");
-
+      const avatar = await AsyncStorage.getItem("avatar");
+      console.log(avatar,val);
       if (val !== null) {
         this.setState({token:val})
+      }
+      if (avatar !== null) {
+        this.setState({userAvatar:avatar})
       }
       if (cook !== null) {
         this.setState({cookie:cook})
@@ -206,9 +213,7 @@ export default class Main extends React.Component{
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getdata();
-
-
-    alert("wow" + this.state.token+this.state.cookie)
+    alert(t);
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
 
       method: 'GET',
@@ -226,10 +231,10 @@ export default class Main extends React.Component{
           d: responseJson,
           items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
         })
-        alert(this.state.d);
-        console.log(this.state.d)
+        // alert(this.state.d);
+        console.log(this.state.items)
       })
-    alert(this.state.d);
+    // alert(this.state.d);
 
 
   }
@@ -251,21 +256,21 @@ export default class Main extends React.Component{
           />
         </View>
 
-        {/*<View style={styles.container}>*/}
-          {/*Here we use flatlist to access the data */}
+        <View style={styles.container}>
+          {/*Here we use flatlist to access the data*/}
 
-        {/*<ScrollView style={styles.scrollview}>*/}
-        {/*  <FlatList*/}
-        {/*    data={this.state.items}*/}
-        {/*    renderItem={({item}) =>  {   return (*/}
-        {/*      <TouchableOpacity*/}
-        {/*        style={{flex:1/3, //here you can use flex:1 also*/}
-        {/*          aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>*/}
-        {/*        /!*<Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.user.avatar}}></Image>*!/*/}
-        {/*        <Text>{item.article}</Text>*/}
-        {/*      </TouchableOpacity>*/}
-        {/*    )}} />*/}
-        {/*</ScrollView>*/}
+        <ScrollView style={styles.scrollview}>
+          <FlatList
+            data={this.state.items}
+            renderItem={({item}) =>  {   return (
+              <TouchableOpacity
+                style={{flex:1/3, //here you can use flex:1 also
+                  aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                <Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
+
+              </TouchableOpacity>
+            )}} />
+        </ScrollView>
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
@@ -283,12 +288,14 @@ export default class Main extends React.Component{
           onPress={() => this.props.navigation.navigate('Post')}
         />
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-        {/*<Image*/}
-        {/*  style={styles.avatar}*/}
-        {/*  source={{uri:this.state.items.avatar}}*/}
-        {/*  />*/}
+
+        <Image
+          style={styles.avatar}
+          source={{uri:this.state.userAvatar}}
+          />
         </TouchableOpacity>
         </View>
+      </View>
       </View>
 
 );
@@ -296,7 +303,5 @@ export default class Main extends React.Component{
         };
 
 
-{/*    );*/}
-{/*  }*/}
-{/*};*/}
+
 

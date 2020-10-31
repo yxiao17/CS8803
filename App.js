@@ -15,6 +15,7 @@ import Article from './navigation/Article'
 import Post from './navigation/Post'
 import Personal from './navigation/Personal'
 import Login from './navigation/Login'
+import Registration from './navigation/Registration';
 
 import {
 
@@ -49,6 +50,8 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Login" component={Login} options={{
+          headerShown: false,}} />
+        <Stack.Screen name="Registration" component={Registration} options={{
           headerShown: false,}} />
         <Stack.Screen
           name="Main"
