@@ -179,9 +179,6 @@ export default class Main extends React.Component{
       count: 0,
     };
     this.handleBold = this.handleBold.bind(this);
-     this.t = setInterval(() => {
-          this.setState({ count: this.state.count + 1 });
-        }, 1000);
   }
 
   handleBold() {
@@ -214,8 +211,6 @@ export default class Main extends React.Component{
     // calls the get data function
     const t = await this.getdata();
 
-
-    alert("wow" + this.state.token+this.state.cookie)
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
 
       method: 'GET',
@@ -244,12 +239,6 @@ export default class Main extends React.Component{
 
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-        <NavigationEvents
-              onWillFocus={payload => console.log('will focus', payload)}
-              onDidFocus={payload => console.log('did focus', payload)}
-              onWillBlur={payload => console.log('will blur', payload)}
-              onDidBlur={payload => console.log('did blur', payload)}
-            />
         <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "normal":"bold" }, styles.top_text]}>Explore</Text>
         <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "bold":"normal" }, styles.top_text]}>Follow</Text>
         <Icon
@@ -269,7 +258,7 @@ export default class Main extends React.Component{
            data={this.state.items}
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
-               style={{flex:1/3, aspectRatio:1}}
+               style={{flex:1/3, }}
                onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
                <Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.user.avatar}}></Image>
                 <Text>{item.article}</Text>

@@ -304,7 +304,6 @@ export default class Search extends Component{
             } catch (err) {
             console.log(err)
             }
-        alert(this.state.cookie);
       var formBody = [];
       var newPost = {
         'username': this.state.username,
@@ -321,7 +320,6 @@ export default class Search extends Component{
         formBody.push(encodeKey + '=' + encodeValue);
       }
       formBody = formBody.join("&");
-      alert(formBody);
 
       var url_post = "http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/" + this.state.username + "/posts";
       fetch(url_post, {

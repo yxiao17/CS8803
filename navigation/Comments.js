@@ -20,15 +20,61 @@ export default class Comments extends Component {
         {id:3, image: "https://bootdey.com/img/Content/avatar/avatar7.png", name:"March SoulLaComa", comment:"Can u recommend some food for us"},
         {id:4, image: "https://bootdey.com/img/Content/avatar/avatar2.png", name:"Finn DoRemiFaso",  comment:"How long have you been there?"},
         {id:5, image: "https://bootdey.com/img/Content/avatar/avatar3.png", name:"Maria More More",  comment:"Wow, thanks for sharing!"},
-      ]
+      ],
+      postId: this.props.route.params.postId,
+      cookie: '',
+      token: '',
+      item: null,
     }
   }
 
+    getCookie = async () => {
+        try {
+          // get the two saved items token -> username and cookie for headers
+          const val = await AsyncStorage.getItem("token");
+          const cook = await AsyncStorage.getItem("cookie");
+
+          if (val !== null) {
+            this.setState({token:val})
+          }
+          if (cook !== null) {
+            this.setState({cookie:cook})
+          }
+        } catch (err) {
+          console.log(err)
+        }
+
+      }
+
+  componentDidMount = async () => {
+    // await CookieManager.clearAll()
+    // calls the get data function
+    const t = await this.getCookie();
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getMockComments', {
+      method: 'GET',
+      credentials: 'include',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+            alert(JSON.stringify(responseJson));
+            this.setState({
+                items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
+            })
+      })
+  }
+
   render() {
+    console.log(JSON.stringify(this.state.items))
     return (
       <FlatList
         style={styles.root}
-        data={this.state.data}
+        data={this.state.items}
         extraData={this.state}
         ItemSeparatorComponent={() => {
           return (
@@ -43,16 +89,16 @@ export default class Comments extends Component {
           return(
             <View style={styles.container}>
               <TouchableOpacity onPress={() => {}}>
-                <Image style={styles.image} source={{uri: Notification.image}}/>
+                <Image style={styles.image} source={{uri: Notification.user.avatar}}/>
               </TouchableOpacity>
               <View style={styles.content}>
                 <View style={styles.contentHeader}>
-                  <Text  style={styles.name}>{Notification.name}</Text>
+                  <Text  style={styles.name}>{Notification.user.username}</Text>
                   <Text style={styles.time}>
-                    9:58 am
+                    {Notification.createTime.slice(0,10)}
                   </Text>
                 </View>
-                <Text rkType='primary3 mediumLine'>{Notification.comment}</Text>
+                <Text rkType='primary3 mediumLine'>{Notification.content}</Text>
               </View>
             </View>
           );
