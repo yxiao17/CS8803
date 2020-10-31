@@ -312,6 +312,7 @@ export default class Search extends Component{
         'description': this.state.curText,
         'tags': this.state.initialTags,
         'article': this.state.curText,
+        'images': this.state.photo,
       }
 
       for (var property in newPost){
