@@ -40,7 +40,7 @@ import StackNavigator from '@react-navigation/stack/src/navigators/createStackNa
 import Main from './navigation/Main'
 import Profile from './navigation/Profile'
 import Search from './navigation/Search'
-
+import Comments from './navigation/Comments'
 
 const Stack = createStackNavigator();
 
@@ -68,6 +68,11 @@ function App() {
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
                       }} />
+        <Stack.Screen name="Comments" component={Comments}
+                  // load title for article
+                              options={{ headerTitle: props => <LoadTitle {...props} />,
+                                headerTransparent: true,
+        }} />
         <Stack.Screen name="Post" component={Post}
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,

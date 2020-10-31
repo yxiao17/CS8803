@@ -1,27 +1,18 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
-import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-community/cookies';
 // add bottom navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Comments from './Comments'
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
-
-var article = {
-    title : 'Atlanta',
-    rating: '4.7',
-    likes: 3212,
-    description: 'Atlanta has been dubbed everything from the "capital of the new South" and "the next international city" to "the best place to do business." It\'s also a great place to visit. Fueled by the prosperity of local mega companies like Coca Cola and Holiday Inn, the prestige of hosting the 1996 Summer Olympic Games and the energy of young upwardly mobile types who have migrated to the city in droves - Atlanta is on fire. And this time it\'s a good thing. From world-class restaurants and a myriad of cultural attractions to a hip nightlife and sporting events galore, the city is cosmopolitan in every sense of the word. But Atlanta has also managed to maintain its historic character. Stop by the Atlanta History Center or visit the Martin Luther King Jr. Historical Site, a moving tribute to an American icon..',
-    images: [
-      'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80',
-    ]
-  }
 
 
 
@@ -103,7 +94,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   description: {
-    height: width,
+    borderRadius: 100,
+    height: width-200,
     fontSize: theme.sizes.font * 1.3,
     lineHeight: theme.sizes.font * 2,
     color: theme.colors.caption,
@@ -112,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   fixToText:{
+    height: 50,
     marginLeft: 10,
     marginRight: 10,
     flexDirection: 'row',
@@ -135,71 +128,148 @@ export default class Article extends Component{
 
        super(props);
        this.state= {
-         save: false,
-         like: false,
-         data: [],
-         user: [],
-         images: [],
+         article: this.props.route.params.article,
+         saved: this.props.route.params.article.saved,
+         liked: this.props.route.params.article.liked,
+         likes: this.props.route.params.article.likes,
+         cookie: '',
+         token: '',
        };
      }
 
 
-    componentDidMount = () => {
-        var data_get = []
-        var users_get = []
-        var images_get = []
-        fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
-          method: 'GET'
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-          console.log(responseJson);
-          for (var i = 0; i < responseJson.data.length; i++){
-            var data_i = responseJson.data[i];
-             data_get.push(data_i)
-             users_get.push(data_i.user)
-          }
-          this.setState({data:data_get[0]})
-          this.setState({user:users_get[0]})
-
-          for (var i = 0; i < data_get[0].images.length; i++){
-            images_get.push(data_get[0].images[i])
-          }
-          this.setState({images:images_get})
-          console.log(images_get.length)
-          })
-        .catch((error) => {
-          console.error(error);
-        });
-        }
-
     /*handle save in react native*/
     handleSave = () => {
-      if (this.state.save){
-        this.setState({save: false})
+      if (this.state.saved){
+        this.setState({saved: false});
+        this.favoriteApi();
       }
       else{
-      this.setState({save: true})
+      this.setState({saved: true})
+      this.defavoriteApi();
       }
     }
 
     /*handle like in react native*/
     handleLike = () => {
-      if (this.state.like){
-        this.setState({like: false})
-        article.likes = article.likes - 1;
+      if (this.state.liked){
+        this.setState({liked: false})
+        this.setState({likes: this.state.likes - 1});
+        this.delikeApi();
       }
       else{
-        this.setState({like: true})
-        article.likes = article.likes + 1;
+        this.setState({liked: true});
+        this.setState({likes: this.state.likes + 1});
+        this.likeApi();
       }
     }
+
+
+    getCookie = async () => {
+        try {
+        // get the two saved items token -> username and cookie for headers
+        const val = await AsyncStorage.getItem("token");
+        const cook = await AsyncStorage.getItem("cookie");
+
+        if (val !== null) {
+         this.setState({token:val})
+        }
+        if (cook !== null) {
+         this.setState({cookie:cook})
+        }
+        } catch (err) {
+        console.log(err)
+        }
+    }
+
+
+    likeApi = async () => {
+        this.getCookie();
+        fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/' + this.state.article.id + "/like", {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            // set the cookie inside of the headers
+            'cookie' : this.state.cookie,
+            },
+            body:{},
+
+        })
+          .then((response) => {})
+          .catch((error) => {
+            console.error(error);
+          })
+    }
+
+
+    delikeApi = async () => {
+        this.getCookie();
+        fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/' + this.state.article.id + '/delike', {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            // set the cookie inside of the headers
+            'cookie' : this.state.cookie,
+            },
+            body:{}
+        })
+        .then((response) => {})
+        .catch((error) => {
+        console.error(error);
+        })
+    }
+
+    defavoriteApi = async () => {
+             this.getCookie();
+             fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/' + this.state.article.id + '/defavorite', {
+                 method: 'POST',
+                 credentials: 'include',
+                 headers:{
+                 'Accept': 'application/x-www-form-urlencoded',
+                 'Content-Type': 'application/x-www-form-urlencoded',
+                 // set the cookie inside of the headers
+                 'cookie' : this.state.cookie,
+                 },
+                 body:{}
+             })
+             .then((response) => {})
+             .catch((error) => {
+             console.error(error);
+             })
+         }
+
+
+    favoriteApi = async () => {
+        this.getCookie();
+        fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/' + this.state.article.id + '/favorite', {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            // set the cookie inside of the headers
+            'cookie' : this.state.cookie,
+            },
+            body:{}
+        })
+        .then((response) => {})
+        .catch((error) => {
+        console.error(error);
+        })
+    }
+
+
+
 
     renderDots = () => {
         const dotPosition = Animated.divide(this.scrollX, width);
         return (
           <View style={[ styles.flex, styles.row, styles.dotsContainer ]}>
-            {article.images.map((item, index) => {
+            {this.state.article.images.map((item, index) => {
               const opacity = dotPosition.interpolate({
                 inputRange: [index-1, index, index+1],
                 outputRange: [0.5, 1, 0.5],
@@ -209,7 +279,6 @@ export default class Article extends Component{
                 <Animated.View
                   key={`step-${item}-${index}`}
                   style={[styles.dots, { opacity }]}
-
                 />
               )
             })}
@@ -251,42 +320,43 @@ export default class Article extends Component{
                         onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
                     >
                         {
-                          this.state.images.map((img, index) =>
-                            <Image
-                              key={`${index}-${img}`}
-                              source={{ uri: img }}
-                              resizeMode='cover'
-                              style={{ width, height: width-15 }}
-                            />
-                          )
+                            this.state.article.images.map((img, index) =>
+                                <Image
+                                  key={`${index}-${img}`}
+                                  source={{ uri: img }}
+                                  resizeMode='cover'
+                                  style={{ width, height: width - 15}}
+                                />
+                              )
                         }
                       </ScrollView>
                       {this.renderDots()}
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                        <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.user.avatar}} />
-                        <Text style={styles.title}> {this.state.data.title} </Text>
+                        <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}} />
+                        <Text style={styles.title}> {this.state.article.title} </Text>
                       <View style={[
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
                         ]}>
-                          {this.renderRatings(article.rating)}
-                          <Text style={{ color: theme.colors.active }}> {article.rating} </Text>
+                          {this.renderRatings(4.7)}
+                          <Text style={{ color: theme.colors.active }}> {4.7} </Text>
                           <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
-                            ({this.state.data.likes} likes)
+                            ({this.state.likes} likes)
                           </Text>
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
+                          {this.state.article.article}
                           <Text style={{color: theme.colors.active}}> Read more</Text>
-                          {this.state.data.description}
-
                           </Text>
                         </TouchableOpacity>
+
                         <Separator/>
-                        <View style={styles.fixToText} >
-                            <TouchableOpacity onPress={() => {}}>
+
+                        <View style={[styles.fixToText]} >
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments")}>
                                 <FontAwesome
                                     name='comment'
                                     color="grey"
@@ -295,14 +365,15 @@ export default class Article extends Component{
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.handleSave()}}>
                                 <FontAwesome
-                                    name={(this.state.save? "bookmark":"bookmark-o")}
+                                    name={(this.state.saved? "bookmark":"bookmark-o")}
                                     color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
+
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
-                                    name={(this.state.like? "heart":"heart-o")}
+                                    name={(this.state.liked? "heart":"heart-o")}
                                     color="grey"
                                     size={30}
                                 />

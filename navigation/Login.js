@@ -112,7 +112,7 @@ export default class Login extends Component {
 
       method: 'POST',
       headers: {
-        'Accept': 'application/x-www-form-urlencoded',
+        'Accept': 'application/jason',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Connection': 'keep-alive',
       },
@@ -153,8 +153,7 @@ export default class Login extends Component {
     })
 
       .then((responseJson) => {
-        if (responseJson.status == 200) {
-
+        if (responseJson) {
           this.props.navigation.navigate("Main");
         } else {
           alert("error!");
