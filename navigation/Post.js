@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Tags from "react-native-tags"
 import CookieManager from '@react-native-community/cookies'
 const plusIcon = require('../icons/icons8-plus-256.png');
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -173,6 +174,8 @@ export default class Search extends Component{
     location: '',
     initialTags: [],
     initialText: '',
+    token: '',
+    cookie: '',
     };
 
     handleChoosePhoto = () => {
@@ -195,9 +198,6 @@ export default class Search extends Component{
     }
     handleText = (text) => {
       this.setState({curText: text})
-    }
-    login = (email, pass) => {
-          alert('email: ' + email + ' password: ' + pass)
     }
     handlelocation = (text) => {
       this.setState({location:text })
@@ -239,31 +239,107 @@ export default class Search extends Component{
         this.setState({ initialTags: tags });
     };
 
+    getCookie = async () => {
+        try {
+        // get the two saved items token -> username and cookie for headers
+        const val = await AsyncStorage.getItem("token");
+        const cook = await AsyncStorage.getItem("cookie");
+        if (val !== null) {
+         this.setState({username:val})
+        }
+        if (cook !== null) {
+         this.setState({cookie:cook})
+        }
+        } catch (err) {
+        console.log(err)
+        }
+    }
 
 
-    PostData = () => {
 
-      fetch("http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login", {
+    getCookie = () => {
+        fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/jason',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Connection': 'keep-alive',
+          },
+          credentials: "include",
+          body: "username=test&password=password",
+        })
+          .then((response) => {
+            console.log(response.url)
+            CookieManager.get(response.url)
+              .then(cookies => {
+                console.log(cookies['JSESSIONID'])
+              //  set the cookie
+              this.setState({cookie: cookies['JSESSIONID'].value});
+              console.log(this.state.cookie)
+              //  async set item
+              //  todo: not sure if omitting await is a potential issue or not
+              AsyncStorage.setItem("cookie", cookies['JSESSIONID'].value);
+                });
+          })
+
+          .catch((error) => {
+            console.error(error);
+          });
+
+      }
 
 
+    PostData = async () => {
+        this.getCookie();
+        try {
+            // get the two saved items token -> username and cookie for headers
+            const val = await AsyncStorage.getItem("token");
+            const cook = await AsyncStorage.getItem("cookie");
+            if (val !== null) {
+             this.setState({username:val})
+            }
+            if (cook !== null) {
+             this.setState({cookie:cook})
+            }
+            } catch (err) {
+            console.log(err)
+            }
+        alert(this.state.cookie);
+      var formBody = [];
+      var newPost = {
+        'username': this.state.username,
+        'title': this.state.title,
+        'location': this.state.location,
+        'description': this.state.curText,
+        'tags': this.state.initialTags,
+        'article': this.state.curText,
+      }
+
+      for (var property in newPost){
+        var encodeKey = encodeURIComponent(property);
+        var encodeValue = encodeURIComponent(newPost[property]);
+        formBody.push(encodeKey + '=' + encodeValue);
+      }
+      formBody = formBody.join("&");
+      alert(formBody);
+
+      var url_post = "http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/" + this.state.username + "/posts";
+      fetch(url_post, {
         method: 'POST',
         credentials: "include",
         headers: {
+        'Accept': 'application/x-www-form-urlencoded',
         'Content-Type': 'application/x-www-form-urlencoded',
         'Connection': 'keep-alive',
+        'cookie': this.state.cookie,
         },
-        body: 'username=test&password=password'
+        body: formBody,
       })
       .then((response) => {
-        CookieManager.get(response.url)
-          .then(cookies => {
-            console.log('CookieManager.get =>', cookies.JSESSIONID.name);
-            alert(JSON.stringify(cookies))
-          });
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
     }
 
     render() {
@@ -272,7 +348,6 @@ export default class Search extends Component{
         return (
             <View style={styles.flex}>
                 <View style={[styles.flex, styles.content]}>
-
                     <View style={[styles.flex, styles.contentHeader]}>
                         <Image style={[styles.avatar, styles.shadow]} source={require('../propic.png')} />
                         <TextInput style={styles.title}
@@ -350,7 +425,6 @@ export default class Search extends Component{
                             color="grey"
                         />
                     </TouchableOpacity>
-
                 </View>
             </View>
         );

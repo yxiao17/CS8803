@@ -116,9 +116,11 @@ export default class Login extends Component {
 
       method: 'POST',
       headers: {
+
         // 'Accept': 'application/x-www-form-urlencoded',
         'Accept': '*/*',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+
         'Connection': 'keep-alive',
       },
       credentials: "include",
@@ -168,6 +170,7 @@ export default class Login extends Component {
       credentials: "include",
       body: formBody
     })
+
       .then((response) => {
           fetch(response.url, {
             method: 'GET',
@@ -182,6 +185,8 @@ export default class Login extends Component {
               AsyncStorage.setItem("avatar", this.state.avatar);
               if (responseJson.code == 100 ) {
                 this.props.navigation.navigate("Main");
+
+
         }
             })
       // .then((responseJson) => {

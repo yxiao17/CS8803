@@ -28,6 +28,10 @@ import CookieManager from '@react-native-community/cookies';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 
+import { NavigationEvents } from 'react-navigation';
+
+
+
 const styles = StyleSheet.create({
   flex: {
     flex: 0,
@@ -173,18 +177,21 @@ export default class Main extends React.Component{
       // declare in this state
       token:"",
       cookie:"",
-      userAvatar:""
 
+      userAvatar:""
 
     };
     this.handleBold = this.handleBold.bind(this);
+     this.t = setInterval(() => {
+          this.setState({ count: this.state.count + 1 });
+        }, 1000);
   }
+
   handleBold() {
     this.setState(state => ({
       isBold: !state.isBold,
 
     }));
-
   }
   // get data function to read the saved data to persist the user info
   getdata = async () => {
@@ -234,17 +241,15 @@ export default class Main extends React.Component{
         // alert(this.state.d);
         console.log(this.state.items)
       })
-    // alert(this.state.d);
-
 
   }
 
   render() {
-
     return (
-      <View>
 
+      <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+
         <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "normal":"bold" }, styles.top_text]}>Explore</Text>
         <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "bold":"normal" }, styles.top_text]}>Follow</Text>
         <Icon
@@ -256,6 +261,7 @@ export default class Main extends React.Component{
           />
         </View>
 
+
         <View style={styles.container}>
           {/*Here we use flatlist to access the data*/}
 
@@ -265,8 +271,9 @@ export default class Main extends React.Component{
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
                 style={{flex:1/3, //here you can use flex:1 also
-                  aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article')} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                  aspectRatio:1}} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
                 <Image style = {styles.imgMain} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
+
 
               </TouchableOpacity>
             )}} />
