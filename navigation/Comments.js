@@ -6,25 +6,23 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  FlatList
+  FlatList,
+  TextInput,
+  Button,
+  Dimensions,
 } from 'react-native';
+import * as theme from '../theme';
 
 export default class Comments extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      data:[
-        {id:1, image: "https://bootdey.com/img/Content/avatar/avatar1.png", name:"Frank Odalthh",    comment:"How much do you spend on the meal?"},
-        {id:2, image: "https://bootdey.com/img/Content/avatar/avatar6.png", name:"John DoeLink",     comment:"When is a good time for us to go there?"},
-        {id:3, image: "https://bootdey.com/img/Content/avatar/avatar7.png", name:"March SoulLaComa", comment:"Can u recommend some food for us"},
-        {id:4, image: "https://bootdey.com/img/Content/avatar/avatar2.png", name:"Finn DoRemiFaso",  comment:"How long have you been there?"},
-        {id:5, image: "https://bootdey.com/img/Content/avatar/avatar3.png", name:"Maria More More",  comment:"Wow, thanks for sharing!"},
-      ],
       postId: this.props.route.params.postId,
       cookie: '',
       token: '',
       item: null,
+      value: '',
     }
   }
 
@@ -44,6 +42,43 @@ export default class Comments extends Component {
           console.log(err)
         }
 
+      }
+
+
+      submitCommand = async () => {
+        var formBody = [];
+        var newPost = {
+          'content': this.state.value,
+        }
+        for (var property in newPost){
+          var encodeKey = encodeURIComponent(property);
+          var encodeValue = encodeURIComponent(newPost[property]);
+          formBody.push(encodeKey + '=' + encodeValue);
+        }
+        formBody = formBody.join("&");
+        alert(formBody);
+
+        var url_command = "http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/" + this.state.postId + "/comments";
+        fetch(url_command, {
+          method: 'POST',
+          credentials: "include",
+          headers: {
+          'Accept': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Connection': 'keep-alive',
+          'cookie': this.state.cookie,
+          },
+          body: formBody,
+        })
+        .then((response) => {
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+      }
+
+  handleText = (text) => {
+        this.setState({value: text})
       }
 
   componentDidMount = async () => {
@@ -69,8 +104,8 @@ export default class Comments extends Component {
   }
 
   render() {
-    console.log(JSON.stringify(this.state.items))
     return (
+    <View style={styles.page}>
       <FlatList
         style={styles.root}
         data={this.state.items}
@@ -102,17 +137,35 @@ export default class Comments extends Component {
             </View>
           );
         }}/>
+        <View style={styles.CommentContainer}>
+        <TextInput style={styles.newComments}
+           multiline
+           placeholder = 'Say something'
+           onChangeText = {this.handleText}
+           />
+         <View style={styles.buttonStyle}>
+         <Button
+            title='send'
+            onPress={this.submitCommand}
+         />
+         </View>
+        </View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  page: {
+    backgroundColor: "#ffffff",
+    flex: 1,
+  },
   root: {
     backgroundColor: "#ffffff",
-    marginTop:50,
+    marginTop: 50,
   },
   container: {
-    paddingLeft: 19,
+    paddingLeft: 16,
     paddingRight: 16,
     paddingVertical: 12,
     flexDirection: 'row',
@@ -145,4 +198,22 @@ const styles = StyleSheet.create({
     fontSize:16,
     fontWeight:"bold",
   },
+  CommentContainer: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingVertical: 20
+  },
+  newComments: {
+    backgroundColor: 'lightgrey',
+    borderRadius: 20,
+    width: 250,
+  },
+  buttonStyle: {
+    justifyContent: 'center',
+    width: 70,
+    borderRadius: 20,
+  }
 });

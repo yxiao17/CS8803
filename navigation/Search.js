@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         marginBottom: 15,
         fontWeight: 'bold',
+        width: 300,
       },
       item: {
         borderWidth: 1,
@@ -80,16 +81,13 @@ const styles = StyleSheet.create({
       topSearchItem: {
         padding: 8,
         fontSize: 15,
+      },
+      titleContainer: {
+           flexDirection: 'row',
+           justifyContent: 'space-between',
       }
 
   });
-
-
-const data = [
-                   { id: 1, label: 'The Brooklyn Bridge' },
-                   { id: 2, label: 'Atlanta' },
-                   { id: 3, label: 'Miami' },
-                 ];
 
 export default class Search extends React.Component {
 
@@ -113,24 +111,28 @@ export default class Search extends React.Component {
 
     };
 
-    componentDidMount = async() => {
-        try {
-          // get the two saved items token -> username and cookie for headers
-          const previousSearch = await AsyncStorage.getItem("searchHistory");
-          if (previousSearch !== null) {
-            this.setState({searchHistory: previousSearch})
-          }
-        } catch (err) {
-          console.log(err)
-        }
+    clearHistory = async() => {
+        await AsyncStorage.removeItem('SearchHistory')
+        this.setState({ searchHistory: []});
+    }
 
+    componentDidMount = async() => {
+        await AsyncStorage.getItem('SearchHistory')
+            .then((stores) => {
+                this.setState({ searchHistory: stores ? JSON.parse(stores) : []});
+            });
     }
 
     handleSearch = async() => {
-        var list = [];
-        list.push(this.state.search);
-        await AsyncStorage.setItem("searchHistory",list);
-        return this.props.navigation.navigate('Main');
+       let length = this.state.searchHistory.length
+       let search = {
+        id: this.state.searchHistory.length+1,
+        label: this.state.search,
+       }
+       const searches = this.state.searchHistory;
+       searches.push(search);
+       AsyncStorage.setItem('SearchHistory', JSON.stringify(searches));
+       return this.props.navigation.navigate('Main')
     }
 
 
@@ -150,9 +152,19 @@ export default class Search extends React.Component {
                 onSubmitEditing = {this.handleSearch}
               />
               <View style={styles.container}>
+                <View style={styles.titleContainer}>
                 <Text style={styles.labelText}>Recent Searches</Text>
+                <TouchableOpacity onPress={() => {this.clearHistory()}}>
+                  <FontAwesome
+                    name="trash"
+                    style={{ marginRight:15, justifyContent: 'center'}}
+                    size={23}
+                    color='grey'
+                  />
+                </TouchableOpacity>
+                </View>
                 <TagSelect
-                  data={data}
+                  data={this.state.searchHistory}
                   itemStyle={styles.item}
                   ref={(tag) => {
                     this.tag = tag;

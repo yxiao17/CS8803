@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
-import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator } from 'react-native'
+import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator, TextInput } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
@@ -105,8 +105,8 @@ const styles = StyleSheet.create({
   },
   fixToText:{
     height: 50,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 50,
+    marginRight: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
-  }
+  },
 });
 
 const Separator = () => {
@@ -308,7 +308,7 @@ export default class Article extends Component{
     render() {
         return (
             <View style={styles.flex}>
-                <View style = {[styles.flex]}>
+                <View >
                     <ScrollView
                         horizontal
                         pagingEnabled
@@ -325,7 +325,7 @@ export default class Article extends Component{
                                   key={`${index}-${img}`}
                                   source={{ uri: img }}
                                   resizeMode='cover'
-                                  style={{ width, height: width - 15}}
+                                  style={{ width, height: width - 30}}
                                 />
                               )
                         }
@@ -352,7 +352,7 @@ export default class Article extends Component{
                           <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
-
+                        </View>
                         <Separator/>
 
                         <View style={[styles.fixToText]} >
@@ -380,7 +380,6 @@ export default class Article extends Component{
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View>
             </View>
         );
     }
