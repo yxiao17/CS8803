@@ -5,7 +5,6 @@ import {
   Image,
   ImageBackground,
   ScrollView,
-  SafeAreaView,
   StyleSheet,
   Text, TouchableHighlight,
   TouchableOpacity, TouchableOpacityComponent,
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: 'column',
   },
-
   row: {
     flexDirection: 'row',
   },
@@ -53,23 +51,23 @@ const styles = StyleSheet.create({
   },
   scrollview:{
     height: height-90,
-    top : -theme.sizes.base * 2,
     bottom: 30,
+    top: theme.sizes.margin * 1.5,
   },
   avatar: {
     width: theme.sizes.padding-5 ,
     height: theme.sizes.padding-5 ,
-    paddingVertical: theme.sizes.margin + 5,
-    borderRadius: theme.sizes.padding  ,
-    resizeMode: 'contain',
 
+    borderRadius: theme.sizes.padding  ,
+    // alignItems: 'flex-end',
+    bottom:-15,
+    resizeMode: 'contain',
+    padding: theme.sizes.padding/3,
 
 
   },
   container: {
-    top : theme.sizes.base * 2,
-    bottom: 0,
-
+    bottom:40,
   },
   locations: {
     flex: 3,
@@ -90,7 +88,7 @@ const styles = StyleSheet.create({
   add: {
     alignSelf: 'center',
     backgroundColor: 'transparent',
-    paddingVertical: theme.sizes.padding/1.75,
+    padding: theme.sizes.padding/3,
     paddingHorizontal: -theme.sizes.padding,
 
   },
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   separator:{
-    marginVertical: -20,
+    marginVertical: -15,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -179,6 +177,9 @@ export default class Main extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
+      isBold:true,
+      isLoading:true,
+
       d: "",
       items: "",
       // declare in this state
@@ -187,9 +188,15 @@ export default class Main extends React.Component{
       userAvatar:""
 
     };
-
+    this.handleBold = this.handleBold.bind(this);
   }
 
+  handleBold() {
+    this.setState(state => ({
+      isBold: !state.isBold,
+
+    }));
+  }
   // get data function to read the saved data to persist the user info
   getdata = async () => {
     try {
@@ -245,27 +252,36 @@ export default class Main extends React.Component{
     return (
 
       <View>
+        {/*<View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>*/}
 
-
+        {/*  <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "normal":"bold" }, styles.top_text]}>Explore</Text>*/}
+        {/*  <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "bold":"normal" }, styles.top_text]}>Follow</Text>*/}
+        {/*  <Icon*/}
+        {/*    name="search"*/}
+        {/*    size={theme.sizes.font * 1.5}*/}
+        {/*    color={theme.colors.caption}*/}
+        {/*    style={styles.button}*/}
+        {/*    onPress={() => this.props.navigation.navigate('Search')}*/}
+        {/*  />*/}
+        {/*</View>*/}
+        <View style={styles.container}>
           {/*Here we use flatlist to access the data*/}
-          <SafeAreaView style={styles.container}>
-        <ScrollView style={styles.scrollview}>
-          <FlatList
-            data={this.state.items}
-            renderItem={({item}) =>  {   return (
-              <TouchableOpacity
-                style={{flex:1/3, //here you can use flex:1 also
-                 }} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
-                <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
-               <Text style={{alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
-              </TouchableOpacity>
+          <ScrollView style={styles.scrollview}>
+            <FlatList
+              data={this.state.items}
+              renderItem={({item}) =>  {   return (
+                <TouchableOpacity
+                  style={{flex:1/3, //here you can use flex:1 also
+                  }} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                  <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
-            )}} />
-        </ScrollView>
-          </SafeAreaView>
+                  <Text style={{alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
+                </TouchableOpacity>
 
-        <View>
+              )}} />
+          </ScrollView>
+        </View>
         <Separator/>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <Icon
@@ -275,29 +291,29 @@ export default class Main extends React.Component{
             style={styles.add}
             onPress={() => this.props.navigation.navigate('Main')}
           />
-        <Icon
-          name="plus-circle"
-          size={theme.sizes.font * 2.5}
-          color={theme.colors.black}
-          style={styles.add}
-          onPress={() => this.props.navigation.navigate('Post')}
-        />
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {article: this.state.items})}>
-
-        <Image
-          style={styles.avatar}
-          source={{uri:this.state.userAvatar}}
+          <Icon
+            name="plus-circle"
+            size={theme.sizes.font * 2.5}
+            color={theme.colors.black}
+            style={styles.add}
+            onPress={() => this.props.navigation.navigate('Post')}
           />
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
 
-        </TouchableOpacity>
-        </View>
+            <Image
+              style={styles.avatar}
+
+              source={{uri:this.state.userAvatar}}
+            />
+
+          </TouchableOpacity>
         </View>
 
       </View>
 
-);
-        }
-        };
+    );
+  }
+};
 
 
 

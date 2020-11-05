@@ -8,7 +8,8 @@ import {
   ScrollView,
   FlatList
 } from 'react-native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-community/cookies';
 export default class Comments extends Component {
 
   constructor(props) {
@@ -50,7 +51,8 @@ export default class Comments extends Component {
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getCookie();
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getMockComments', {
+
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/'+this.state.postId+'/comments', {
       method: 'GET',
       credentials: 'include',
       headers:{
@@ -62,7 +64,7 @@ export default class Comments extends Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-            alert(JSON.stringify(responseJson));
+            // alert(JSON.stringify(responseJson));
             this.setState({
                 items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
             })

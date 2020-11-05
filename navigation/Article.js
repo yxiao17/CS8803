@@ -1,11 +1,23 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
-import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator } from 'react-native'
+import {
+  Text,
+  StyleSheet,
+  View,
+  Animated,
+  Image,
+  Dimensions,
+  ScrollView,
+  TouchableOpacity,
+  Navigator,
+  TouchableHighlight,
+} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CookieManager from '@react-native-community/cookies';
+import Profile from './Profile';
 // add bottom navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Comments from './Comments'
@@ -135,6 +147,7 @@ export default class Article extends Component{
          cookie: '',
          token: '',
        };
+       console.log(this.state.article)
      }
 
 
@@ -334,8 +347,11 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                        <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}} />
-                        <Text style={styles.title}> {this.state.article.title} </Text>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')} style={{flex:1 //here you can use flex:1 also
+                      }} >
+                        <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
+                      </TouchableOpacity>
+                        <Text onPress={() => this.props.navigation.navigate('Profile')} style={styles.title}> {this.state.article.title} </Text>
                       <View style={[
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }

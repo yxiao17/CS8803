@@ -43,9 +43,23 @@ import Profile from './navigation/Profile'
 import Search from './navigation/Search'
 import Comments from './navigation/Comments'
 
-const Stack = createStackNavigator();
+import Explore from './navigation/Explore';
+console.disableYellowBox = true;
 
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+const Stack = createStackNavigator();
+const Tab = createMaterialTopTabNavigator();
+
+const MainNavigate = () => (
+<Tab.Navigator>
+
+  <Tab.Screen name="Explore" component={Explore} />
+  <Tab.Screen name="Following" component={Main} />
+  <Tab.Screen name="Seach" component={Search} />
+</Tab.Navigator>
+);
 function App() {
+// const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -55,11 +69,12 @@ function App() {
           headerShown: false,}} />
         <Stack.Screen
           name="Main"
-          component={Main}
+          component={MainNavigate}
           options={{
             headerShown: false, // change this to `false`
           }}
         />
+
         <Stack.Screen name="Profile" component={Profile}  options={{
           headerTransparent: true,}}/>
         <Stack.Screen name="Personal" component={Personal} options={{
