@@ -16,6 +16,7 @@ import Post from './navigation/Post'
 import Personal from './navigation/Personal'
 import Login from './navigation/Login'
 import Registration from './navigation/Registration';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
 
@@ -44,20 +45,51 @@ import Search from './navigation/Search'
 import Comments from './navigation/Comments'
 
 import Explore from './navigation/Explore';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 console.disableYellowBox = true;
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Stack = createStackNavigator();
+
 const Tab = createMaterialTopTabNavigator();
+const TabBottom = createBottomTabNavigator();
+const shouldTabBarVisible = (navigation) => {
+  try {
+    return navigation.route.state.index < 1;
+  } catch (e) {
+    return true;
+  }
+};
+const TabNavigator = (navigation) => (
+  <TabBottom.Navigator tabBarOptions={{showLabel:"true"}}>
 
-const MainNavigate = () => (
-<Tab.Navigator>
+    <Tab.Screen name="Home" component={Main}
+                options={{
+      tabBarLabel: 'Home',
+      tabBarIcon: ({ color, size }) => (
+        <Icon name="home" color={color} size={size} />
+      ),
+    }}/>
+    <Tab.Screen name="Post" component={Post} options={{
+      tabBarVisible: shouldTabBarVisible(navigation),
+      tabBarLabel: 'Post',
+      tabBarIcon: ({ color, size }) => (
+        <Icon name="plus-circle" color={color} size={size} />
+      ),
+    }}/>
+    <Tab.Screen name="User" component={Profile} options={{
+    tabBarLabel: 'User',
+    tabBarIcon: ({ color, size }) => (
+      <Icon name="user" color={color} size={size} />
+    ),
+  }}/>
 
-  <Tab.Screen name="Explore" component={Explore} />
-  <Tab.Screen name="Following" component={Main} />
-  <Tab.Screen name="Seach" component={Search} />
-</Tab.Navigator>
-);
+  </TabBottom.Navigator>
+)
+
+
+
+
 function App() {
 // const App = () => {
   return (
@@ -69,14 +101,14 @@ function App() {
           headerShown: false,}} />
         <Stack.Screen
           name="Main"
-          component={MainNavigate}
+          component={TabNavigator}
           options={{
             headerShown: false, // change this to `false`
           }}
         />
 
-        <Stack.Screen name="Profile" component={Profile}  options={{
-          headerTransparent: true,}}/>
+        <Stack.Screen name="Profile" component={TabNavigator}  options={{
+          headerShown:false,}}/>
         <Stack.Screen name="Personal" component={Personal} options={{
           headerTransparent: true,}} />
         <Stack.Screen name="Search" component={Search}
@@ -86,6 +118,7 @@ function App() {
           // load title for article
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
+
                       }} />
         <Stack.Screen name="Comments" component={Comments}
                   // load title for article
@@ -95,6 +128,8 @@ function App() {
         <Stack.Screen name="Post" component={Post}
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
+                        headerShown:true
+
                       }}/>
       </Stack.Navigator>
     </NavigationContainer>

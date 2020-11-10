@@ -14,13 +14,13 @@ import {
 import * as theme from '../theme';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import mocks from '../RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import Profile from './Profile';
 import Search from './Search';
 import Article from './Article';
+
 import Post from './Post';
 import React from 'react';
 import {Button} from 'react-native-elements';
@@ -30,6 +30,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 
 import { NavigationEvents } from 'react-navigation';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import Explore from './Explore';
 
 
 
@@ -173,8 +175,18 @@ const styles = StyleSheet.create({
 const Separator = () => {
   return <View style={styles.separator} />;
 }
+const Tab = createMaterialTopTabNavigator();
+const TabNavigator = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="Explore" component={Explore} />
+    <Tab.Screen name="Following" component={Home} />
+    <Tab.Screen name="Seach" component={Search} />
 
-export default class Main extends React.Component{
+
+  </Tab.Navigator>
+)
+
+class Home extends React.Component{
 
   constructor(props) {
     super(props);
@@ -218,7 +230,7 @@ export default class Main extends React.Component{
     // calls the get data function
     const t = await this.getdata();
 
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/getmockdata-2', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/recommendation', {
 
       method: 'GET',
       credentials: 'include',
@@ -246,7 +258,7 @@ export default class Main extends React.Component{
 
       <View>
 
-
+      {/*<TabNavigator/>*/}
           {/*Here we use flatlist to access the data*/}
           <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollview}>
@@ -265,33 +277,6 @@ export default class Main extends React.Component{
         </ScrollView>
           </SafeAreaView>
 
-        <View>
-        <Separator/>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Icon
-            name="home"
-            size={theme.sizes.font * 2.5}
-            color={theme.colors.black}
-            style={styles.add}
-            onPress={() => this.props.navigation.navigate('Main')}
-          />
-        <Icon
-          name="plus-circle"
-          size={theme.sizes.font * 2.5}
-          color={theme.colors.black}
-          style={styles.add}
-          onPress={() => this.props.navigation.navigate('Post')}
-        />
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {article: this.state.items})}>
-
-        <Image
-          style={styles.avatar}
-          source={{uri:this.state.userAvatar}}
-          />
-
-        </TouchableOpacity>
-        </View>
-        </View>
 
       </View>
 
@@ -299,6 +284,13 @@ export default class Main extends React.Component{
         }
         };
 
+export default class Main extends React.Component{
+  render() {
+    return (
+      <TabNavigator/>
+    );
+  }
+}
 
 
 

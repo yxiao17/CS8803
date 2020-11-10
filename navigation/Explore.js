@@ -21,6 +21,7 @@ import Profile from './Profile';
 import Search from './Search';
 import Article from './Article';
 import Post from './Post';
+import Main from './Main';
 import React from 'react';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,6 +30,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 
 import { NavigationEvents } from 'react-navigation';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 
 
@@ -57,12 +59,9 @@ const styles = StyleSheet.create({
   avatar: {
     width: theme.sizes.padding-5 ,
     height: theme.sizes.padding-5 ,
-
+    paddingVertical: theme.sizes.margin + 5,
     borderRadius: theme.sizes.padding  ,
-    // alignItems: 'flex-end',
-    bottom:-15,
     resizeMode: 'contain',
-    padding: theme.sizes.padding/3,
 
 
   },
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   separator:{
-    marginVertical: -15,
+    marginVertical: -20,
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -168,11 +167,9 @@ const styles = StyleSheet.create({
 
 });
 
-const Separator = () => {
-  return <View style={styles.separator} />;
-}
 
-export default class Main extends React.Component{
+
+export default class Explore extends React.Component{
 
   constructor(props) {
     super(props);
@@ -252,18 +249,7 @@ export default class Main extends React.Component{
     return (
 
       <View>
-        {/*<View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>*/}
 
-        {/*  <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "normal":"bold" }, styles.top_text]}>Explore</Text>*/}
-        {/*  <Text onPress={() => {this.handleBold()}} style={[{fontWeight: this.state.isBold? "bold":"normal" }, styles.top_text]}>Follow</Text>*/}
-        {/*  <Icon*/}
-        {/*    name="search"*/}
-        {/*    size={theme.sizes.font * 1.5}*/}
-        {/*    color={theme.colors.caption}*/}
-        {/*    style={styles.button}*/}
-        {/*    onPress={() => this.props.navigation.navigate('Search')}*/}
-        {/*  />*/}
-        {/*</View>*/}
         <View style={styles.container}>
           {/*Here we use flatlist to access the data*/}
 
@@ -281,32 +267,6 @@ export default class Main extends React.Component{
 
               )}} />
           </ScrollView>
-        </View>
-        <Separator/>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Icon
-            name="home"
-            size={theme.sizes.font * 2.5}
-            color={theme.colors.black}
-            style={styles.add}
-            onPress={() => this.props.navigation.navigate('Main')}
-          />
-          <Icon
-            name="plus-circle"
-            size={theme.sizes.font * 2.5}
-            color={theme.colors.black}
-            style={styles.add}
-            onPress={() => this.props.navigation.navigate('Post')}
-          />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
-
-            <Image
-              style={styles.avatar}
-
-              source={{uri:this.state.userAvatar}}
-            />
-
-          </TouchableOpacity>
         </View>
 
       </View>
