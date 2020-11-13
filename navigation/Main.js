@@ -282,13 +282,12 @@ export default class Main extends React.Component{
           style={styles.add}
           onPress={() => this.props.navigation.navigate('Post')}
         />
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {article: this.state.items})}>
 
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile', {article: this.state.items})}>
         <Image
           style={styles.avatar}
           source={{uri:this.state.userAvatar}}
           />
-
         </TouchableOpacity>
         </View>
         </View>

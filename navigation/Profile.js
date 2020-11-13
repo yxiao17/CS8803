@@ -110,11 +110,11 @@ export default class Profile extends Component {
       cookie:"",
     };
 
-
     this.call();
 
   }
   getdata = async () => {
+
     try {
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
@@ -160,7 +160,6 @@ export default class Profile extends Component {
   }
 
   render() {
-
     return (
       <View>
       <View style={styles.container}>
@@ -180,6 +179,7 @@ export default class Profile extends Component {
           </View>
         <ScrollView >
           <Text>{this.state.token}</Text>
+          <Text>{JSON.stringify(this.props)}</Text>
           {/*<FlatList*/}
           {/*  data={this.state.items}*/}
           {/*  renderItem={({item}) =>  {   return (*/}
