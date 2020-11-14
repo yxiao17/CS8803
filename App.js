@@ -114,7 +114,8 @@ function App() {
           headerShown:false,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{
-                        headerShown:false,}}/>
+                        headerShown:false,
+                      }}/>
         <Stack.Screen name="Article" component={Article}
           // load title for article
                       options={{ headerTitle: props => <LoadTitle {...props} />,
