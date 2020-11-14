@@ -77,7 +77,10 @@ class Head extends React.Component {
     this.state = {
       token:"",
       userAvatar:"",
+      userid:this.props.match.params.user,
+
     };
+    alert(this.state.userid)
     this.getdata();
   }
   getdata = async () => {
@@ -111,7 +114,7 @@ class Head extends React.Component {
             <Text style={{}}>Following:{this.state.token}</Text>
             <Text style={{ marginRight: 5}}>Likes:{this.state.token}</Text>
           </View>
-          </View>
+        </View>
       </View>
 
 
@@ -129,8 +132,8 @@ class Posts extends React.Component {
       items: "",
       token:"",
       cookie:"",
-    };
 
+    };
 
 
     this.call();
@@ -189,7 +192,7 @@ class Posts extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-               onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
@@ -212,9 +215,10 @@ class Saved extends React.Component {
       token:"",
       cookie:"",
 
+
     };
-
-
+    alert(this.props.route.params)
+    console.log(this.state.username);
 
     this.call();
 
@@ -241,7 +245,7 @@ class Saved extends React.Component {
 
 
     await this.getdata();
-
+    alert(this.state.username)
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
       method: 'GET',
       credentials: 'include',
@@ -264,22 +268,22 @@ class Saved extends React.Component {
   render() {
     return (
 
-        <ScrollView style={styles.scrollview}>
-          <FlatList
-            data={this.state.items}
-            columnWrapperStyle={{justifyContent:"space-between", padding:theme.sizes.base}}
-            contentContainerStyle={{flex:1}}
-            numColumns={2}
-            renderItem={({item}) =>  {   return (
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
-                <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
+      <ScrollView style={styles.scrollview}>
+        <FlatList
+          data={this.state.items}
+          columnWrapperStyle={{justifyContent:"space-between", padding:theme.sizes.base}}
+          contentContainerStyle={{flex:1}}
+          numColumns={2}
+          renderItem={({item}) =>  {   return (
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
-                <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
-              </TouchableOpacity>
+              <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
+            </TouchableOpacity>
 
-            )}} />
-        </ScrollView>
+          )}} />
+      </ScrollView>
 
     );
   }
@@ -309,4 +313,3 @@ class Profile extends React.Component {
 }
 
 export default Profile;
-

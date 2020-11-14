@@ -18,6 +18,7 @@ import * as theme from '../theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CookieManager from '@react-native-community/cookies';
 import Profile from './Profile';
+import otherProfile from './othersProfile'
 // add bottom navigation bar
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Comments from './Comments'
@@ -70,9 +71,9 @@ const styles = StyleSheet.create({
     height: width,
   },
   avatar: {
-    position: 'absolute',
-    top: -theme.sizes.margin,
-    right: theme.sizes.margin,
+    // position: 'absolute',
+    // top: -theme.sizes.margin * 2,
+    // right: theme.sizes.margin /2,
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
     borderRadius: theme.sizes.padding,
@@ -144,10 +145,11 @@ export default class Article extends Component{
          saved: this.props.route.params.article.saved,
          liked: this.props.route.params.article.liked,
          likes: this.props.route.params.article.likes,
+         username: this.props.route.params.article.user.username,
          cookie: '',
          token: '',
        };
-       console.log(this.state.article)
+
      }
 
 
@@ -347,11 +349,11 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')} style={{flex:1 //here you can use flex:1 also
-                      }} >
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", {user: this.state.username})} >
                         <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
+
                       </TouchableOpacity>
-                        <Text onPress={() => this.props.navigation.navigate('Profile')} style={styles.title}> {this.state.article.title} </Text>
+                        <Text style={styles.title}>{this.state.article.title} </Text>
                       <View style={[
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }

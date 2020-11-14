@@ -13,7 +13,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Article from './navigation/Article'
 import Post from './navigation/Post'
-import Personal from './navigation/Personal'
 import Login from './navigation/Login'
 import Registration from './navigation/Registration';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -43,7 +42,7 @@ import Main from './navigation/Main'
 import Profile from './navigation/Profile'
 import Search from './navigation/Search'
 import Comments from './navigation/Comments'
-
+import othersProfile from './navigation/othersProfile'
 import Explore from './navigation/Explore';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 console.disableYellowBox = true;
@@ -61,26 +60,28 @@ const shouldTabBarVisible = (navigation) => {
   }
 };
 const TabNavigator = (navigation) => (
-  <TabBottom.Navigator tabBarOptions={{showLabel:"true"}}>
+  <TabBottom.Navigator tabBarOptions={{showLabel:false,showIcon: true}}>
 
     <Tab.Screen name="Home" component={Main}
                 options={{
       tabBarLabel: 'Home',
       tabBarIcon: ({ color, size }) => (
-        <Icon name="home" color={color} size={size} />
+        <Icon name="home" color={color} size={30} />
       ),
     }}/>
     <Tab.Screen name="Post" component={Post} options={{
+
       tabBarVisible: shouldTabBarVisible(navigation),
-      tabBarLabel: 'Post',
+      // tabBarLabel: 'Post',
       tabBarIcon: ({ color, size }) => (
-        <Icon name="plus-circle" color={color} size={size} />
+        <Icon name="plus-circle" color={'#900C3F'} size={45} />
       ),
     }}/>
     <Tab.Screen name="User" component={Profile} options={{
-    tabBarLabel: 'User',
+    // tabBarLabel: 'User',
+
     tabBarIcon: ({ color, size }) => (
-      <Icon name="user" color={color} size={size} />
+      <Icon name="user" color={color} size={30} />
     ),
   }}/>
 
@@ -109,8 +110,8 @@ function App() {
 
         <Stack.Screen name="Profile" component={TabNavigator}  options={{
           headerShown:false,}}/>
-        <Stack.Screen name="Personal" component={Personal} options={{
-          headerTransparent: true,}} />
+        <Stack.Screen name="othersProfile" component={othersProfile}  options={{
+          headerShown:false,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{
                         headerShown:false,}}/>
@@ -128,7 +129,7 @@ function App() {
         <Stack.Screen name="Post" component={Post}
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
-                        headerShown:true
+
 
                       }}/>
       </Stack.Navigator>
