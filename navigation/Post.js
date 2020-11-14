@@ -309,6 +309,7 @@ export default class Search extends Component{
             } catch (err) {
             console.log(err)
             }
+
       var formBody = [];
       var newPost = {
         'username': this.state.username,
@@ -323,6 +324,7 @@ export default class Search extends Component{
       for (var property in newPost){
         var encodeKey = encodeURIComponent(property);
         var encodeValue = encodeURIComponent(newPost[property]);
+
         formBody.push(encodeKey + '=' + encodeValue);
       }
       formBody = formBody.join("&");
