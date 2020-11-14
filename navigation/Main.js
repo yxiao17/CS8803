@@ -278,6 +278,9 @@ class Home extends React.Component{
           </SafeAreaView>
 
 
+
+
+
       </View>
 
 );

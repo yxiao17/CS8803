@@ -137,6 +137,7 @@ class Posts extends React.Component {
 
   }
   getdata = async () => {
+
     try {
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
@@ -180,6 +181,7 @@ class Posts extends React.Component {
   }
 
   render() {
+
     return (
       <ScrollView style={styles.scrollview}>
         <FlatList
@@ -262,6 +264,7 @@ class Saved extends React.Component {
       })
   }
   render() {
+
     return (
 
         <ScrollView style={styles.scrollview}>
@@ -280,6 +283,8 @@ class Saved extends React.Component {
 
             )}} />
         </ScrollView>
+
+
 
     );
   }
