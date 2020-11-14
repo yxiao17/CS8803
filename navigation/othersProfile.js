@@ -77,10 +77,10 @@ class Head extends React.Component {
     this.state = {
       token:"",
       userAvatar:"",
-      userid:this.props.match.params.user,
+      // userid:this.props.route.params.user,
 
     };
-    alert(this.state.userid)
+    alert(this.props)
     this.getdata();
   }
   getdata = async () => {

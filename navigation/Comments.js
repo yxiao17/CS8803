@@ -10,6 +10,7 @@ import {
   TextInput,
   Button,
   Dimensions,
+  Keyboard,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -32,6 +33,7 @@ export default class Comments extends Component {
       value: '',
 
     }
+    this.textInput = React.createRef();
   }
 
     getCookie = async () => {
@@ -64,7 +66,6 @@ export default class Comments extends Component {
           formBody.push(encodeKey + '=' + encodeValue);
         }
         formBody = formBody.join("&");
-        alert(formBody);
 
         var url_command = "http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/" + this.state.postId + "/comments";
         fetch(url_command, {
@@ -83,13 +84,20 @@ export default class Comments extends Component {
         .catch((error) => {
           console.error(error);
         })
+        this.textInput.current.clear();
+        this.setState({items: null});
+        this.getInitialData();
       }
 
   handleText = (text) => {
         this.setState({value: text})
       }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    this.getInitialData();
+  }
+
+  getInitialData = async () => {
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getCookie();
@@ -115,6 +123,7 @@ export default class Comments extends Component {
             })
       })
   }
+
 
   render() {
     console.log(JSON.stringify(this.state.items))
@@ -156,6 +165,7 @@ export default class Comments extends Component {
            multiline
            placeholder = 'Say something'
            onChangeText = {this.handleText}
+           ref={this.textInput}
            />
          <View style={styles.buttonStyle}>
          <Button

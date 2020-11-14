@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
       item: {
         borderWidth: 1,
         borderColor: 'lightgrey',
-        borderRadius: 20
+        borderRadius: 20,
       },
       label: {
         color: '#333'
@@ -125,10 +125,7 @@ export default class Search extends React.Component {
 
     handleSearch = async() => {
        let length = this.state.searchHistory.length
-       let search = {
-        id: this.state.searchHistory.length+1,
-        label: this.state.search,
-       }
+       let search = this.state.search
        const searches = this.state.searchHistory;
        searches.push(search);
        AsyncStorage.setItem('SearchHistory', JSON.stringify(searches));
@@ -151,6 +148,8 @@ export default class Search extends React.Component {
                 showLoading = 'true'
                 onSubmitEditing = {this.handleSearch}
               />
+
+
               <View style={styles.container}>
                 <View style={styles.titleContainer}>
                 <Text style={styles.labelText}>Recent Searches</Text>
@@ -162,7 +161,9 @@ export default class Search extends React.Component {
                     color='grey'
                   />
                 </TouchableOpacity>
-                </View>
+               </View>
+               </View>
+                <View style={{marginLeft:10, marginRight: 10,}}>
                 <TagSelect
                   data={this.state.searchHistory}
                   itemStyle={styles.item}
@@ -170,8 +171,9 @@ export default class Search extends React.Component {
                     this.tag = tag;
                   }}
                 />
-              </View>
-              </View>
+                </View>
+                </View>
+
         );
     }
 }
