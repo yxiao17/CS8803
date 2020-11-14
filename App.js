@@ -112,7 +112,7 @@ function App() {
           headerShown:false,}}/>
         <Stack.Screen name="othersProfile" component={othersProfile}  options={{
           headerTitle: props => <LoadTitle {...props} />,
-          headerShown:false,}}/>
+          headerTransparent:true,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{
                         headerShown:false,

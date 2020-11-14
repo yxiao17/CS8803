@@ -508,7 +508,7 @@ export default class Article extends Component{
                         <Separator/>
 
                         <View style={[styles.fixToText]} >
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments",{postId: this.state.article.id})}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments",{postId: this.state.article.id,user:this.state.user})}>
                                 <FontAwesome
                                     name='comment'
                                     color="black"
