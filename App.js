@@ -111,6 +111,7 @@ function App() {
         <Stack.Screen name="Profile" component={TabNavigator}  options={{
           headerShown:false,}}/>
         <Stack.Screen name="othersProfile" component={othersProfile}  options={{
+          headerTitle: props => <LoadTitle {...props} />,
           headerShown:false,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{

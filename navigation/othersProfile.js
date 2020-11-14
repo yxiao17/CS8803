@@ -8,7 +8,7 @@ import {
   Dimensions,
   ScrollView,
   TextPropTypes,
-  FlatList,
+  FlatList, Button,
 } from 'react-native';
 import * as theme from '../theme';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,6 +19,7 @@ import {  createStackNavigator, createAppContainer } from 'react-navigation';
 import Explore from './Explore';
 import Main from './Main';
 import Search from './Search';
+import CookieManager from '@react-native-community/cookies'
 const styles = StyleSheet.create({
   scrollview: {
 
@@ -71,58 +72,47 @@ const styles = StyleSheet.create({
 });
 
 // HEAD
-class Head extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      token:"",
-      userAvatar:"",
-      // userid:this.props.route.params.user,
-
-    };
-    alert(this.props)
-    this.getdata();
-  }
-  getdata = async () => {
-    try {
-      // get the two saved items token -> username and cookie for headers
-      const val = await AsyncStorage.getItem("token");
-      const avatar = await AsyncStorage.getItem("avatar");
-      if (val !== null) {
-        this.setState({token:val})
-      }
-      if (avatar !== null) {
-        this.setState({userAvatar:avatar})
-      }
-
-    } catch (err) {
-      console.log(err)
-    }
-
-  }
-  render() {
-    return (
-      <View>
-        <View style={styles.container}>
-          <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
-          <View style={styles.name}>
-            <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.token}</Text>
-
-
-
-            <Text style={{ }}>Followers:{this.state.token}</Text>
-            <Text style={{}}>Following:{this.state.token}</Text>
-            <Text style={{ marginRight: 5}}>Likes:{this.state.token}</Text>
-          </View>
-        </View>
-      </View>
-
-
-    );
-  }
-}
-
-
+// class Head extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       token:"",
+//       userAvatar:"",
+//       user:this.props.route.params.name
+//
+//
+//     };
+//     alert("hi"+this.state.user)
+//     this.getdata();
+//   }
+//   getdata = async () => {
+//     try {
+//       // get the two saved items token -> username and cookie for headers
+//       const val = await AsyncStorage.getItem("token");
+//       const avatar = await AsyncStorage.getItem("avatar");
+//       if (val !== null) {
+//         this.setState({token:val})
+//       }
+//       if (avatar !== null) {
+//         this.setState({userAvatar:avatar})
+//       }
+//
+//     } catch (err) {
+//       console.log(err)
+//     }
+//
+//   }
+//   render() {
+//
+//     return (
+//
+//
+//
+//     );
+//   }
+// }
+//
+//
 // POST
 class Posts extends React.Component {
   constructor(props) {
@@ -130,8 +120,8 @@ class Posts extends React.Component {
     this.state = {
       data: "",
       items: "",
-      token:"",
-      cookie:"",
+      username: "",
+
 
     };
 
@@ -142,34 +132,25 @@ class Posts extends React.Component {
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
-      const val = await AsyncStorage.getItem("token");
-      const cook = await AsyncStorage.getItem("cookie");
-
-      if (val !== null) {
-        this.setState({token:val})
+      const username = await AsyncStorage.getItem("username");
+      if (username !== null) {
+        this.setState({username:username})
       }
-      if (cook !== null) {
-        this.setState({cookie:cook})
-      }
-      console.log(this.state.token)
     } catch (err) {
       console.log(err)
     }
-
   }
   call = async () => {
-
-
     await this.getdata();
 
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.username + '/posts', {
       method: 'GET',
       credentials: 'include',
       headers:{
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
-        'cookie' : this.state.cookie,
+
       }
     })
       .then((response) => response.json())
@@ -210,15 +191,15 @@ class Saved extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+
       data: "",
       items: "",
       token:"",
-      cookie:"",
+      username:"",
 
 
     };
-    alert(this.props.route.params)
-    console.log(this.state.username);
+
 
     this.call();
 
@@ -226,34 +207,27 @@ class Saved extends React.Component {
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
-      const val = await AsyncStorage.getItem("token");
-      const cook = await AsyncStorage.getItem("cookie");
-
-      if (val !== null) {
-        this.setState({token:val})
+      const username = await AsyncStorage.getItem("username");
+      if (username !== null) {
+        this.setState({username:username})
       }
-      if (cook !== null) {
-        this.setState({cookie:cook})
-      }
-      console.log(this.state.token)
     } catch (err) {
       console.log(err)
     }
-
   }
   call = async () => {
 
 
     await this.getdata();
-    alert(this.state.username)
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
+
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.username+ '/posts', {
       method: 'GET',
       credentials: 'include',
       headers:{
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
-        'cookie' : this.state.cookie,
+
       }
     })
       .then((response) => response.json())
@@ -266,6 +240,7 @@ class Saved extends React.Component {
       })
   }
   render() {
+
     return (
 
       <ScrollView style={styles.scrollview}>
@@ -301,15 +276,41 @@ const TabNavigator = () => (
 )
 
 
-class Profile extends React.Component {
+class othersProfile extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        token: "",
+        user: this.props.route.params.user,
+        username:this.props.route.params.user.username,
+        userAvatar:this.props.route.params.user.avatar,
+      };
+
+    };
+    saveData = async () => {
+      AsyncStorage.setItem("username", this.state.username);
+    };
   render() {
+    this.saveData();
     return (
       <View style={{ flex: 1 }}>
-        <Head />
+        <View>
+          <View style={styles.container}>
+            <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
+            <View style={styles.name}>
+              <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.username}</Text>
+              <Text style={{ }}>Followers:{this.state.user.username}</Text>
+              <Text style={{}}>Following:{this.state.user.username}</Text>
+              <Text style={{ marginRight: 5}}>Likes:{this.state.user.username}</Text>
+              <Button style={{borderRadius: 10}} title={"follow"}>Follow</Button>
+            </View>
+          </View>
+
+        </View>
         <TabNavigator/>
       </View>
     );
   }
 }
 
-export default Profile;
+export default othersProfile;

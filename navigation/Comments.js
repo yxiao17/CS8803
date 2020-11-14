@@ -24,7 +24,7 @@ export default class Comments extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      name:this.props.route.params.name,
       postId: this.props.route.params.postId,
       cookie: '',
       token: '',
@@ -33,6 +33,7 @@ export default class Comments extends Component {
       value: '',
 
     }
+    alert(this.state.name + this.state.postId)
     this.textInput = React.createRef();
   }
 
@@ -126,6 +127,7 @@ export default class Comments extends Component {
 
 
   render() {
+
     console.log(JSON.stringify(this.state.items))
     return (
     <View style={styles.page}>

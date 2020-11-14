@@ -201,7 +201,7 @@ export default class Article extends Component{
          saved: this.props.route.params.article.saved,
          liked: this.props.route.params.article.liked,
          likes: this.props.route.params.article.likes,
-         username: this.props.route.params.article.user.username,
+         user: this.props.route.params.article.user,
          cookie: '',
          token: '',
          oneDollar: 'white',
@@ -486,7 +486,7 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", {user: this.state.username})} >
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
                         <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
 
                       </TouchableOpacity>
