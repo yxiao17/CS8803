@@ -172,6 +172,7 @@ export default class Main extends React.Component{
 
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       isBold:true,
       isLoading:true,
@@ -181,14 +182,20 @@ export default class Main extends React.Component{
       // declare in this state
       token:"",
       cookie:"",
-      userAvatar:""
-
+      userAvatar:"",
+      active: 0,
     };
     this.handleBold = this.handleBold.bind(this);
      this.t = setInterval(() => {
           this.setState({ count: this.state.count + 1 });
         }, 1000);
   }
+
+   handler() {
+    this.setState({items: ''});
+    this.componentDidMount();
+   }
+
 
   handleBold() {
     this.setState(state => ({
@@ -249,7 +256,6 @@ export default class Main extends React.Component{
 
   render() {
     return (
-
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
 
@@ -267,14 +273,13 @@ export default class Main extends React.Component{
 
         <View style={styles.container}>
           {/*Here we use flatlist to access the data*/}
-
         <ScrollView style={styles.scrollview}>
           <FlatList
             data={this.state.items}
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
                 style={{flex:1/3, //here you can use flex:1 also
-                 }} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                 }} onPress={() => this.props.navigation.navigate('Article',{article: item, onGoBack: ()=> this.handler(),})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
                 <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
 
@@ -296,7 +301,7 @@ export default class Main extends React.Component{
           size={theme.sizes.font * 2.5}
           color={theme.colors.black}
           style={styles.add}
-          onPress={() => this.props.navigation.navigate('Post')}
+          onPress={() => this.props.navigation.navigate('Post',{avatar: this.state.userAvatar, onGoBack: ()=> this.handler(),})}
         />
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Profile')}>
 

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   avatar: {
     position: 'absolute',
     top: 0,
-    right: theme.sizes.margin,
+    right: 0,
     width: theme.sizes.padding *2,
     height: theme.sizes.padding * 2,
     borderRadius: theme.sizes.padding,
@@ -167,7 +167,10 @@ const styles = StyleSheet.create({
 });
 
 export default class Search extends Component{
-    state = {
+
+    constructor(props) {
+    super(props);
+    this.state = {
     curText: '',
     title: '',
     photo: ['https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80'],
@@ -177,6 +180,7 @@ export default class Search extends Component{
     token: '',
     cookie: '',
     };
+    }
 
     handleChoosePhoto = () => {
         const options = {
@@ -209,6 +213,7 @@ export default class Search extends Component{
     submitPost = () => {
       alert("successfully submitted!");
       this.PostData();
+      this.props.route.params.onGoBack();
     }
 
     renderImages() {
@@ -304,7 +309,6 @@ export default class Search extends Component{
             } catch (err) {
             console.log(err)
             }
-        alert(this.state.cookie);
       var formBody = [];
       var newPost = {
         'username': this.state.username,
@@ -313,6 +317,7 @@ export default class Search extends Component{
         'description': this.state.curText,
         'tags': this.state.initialTags,
         'article': this.state.curText,
+        'images': this.state.photo,
       }
 
       for (var property in newPost){
@@ -321,7 +326,6 @@ export default class Search extends Component{
         formBody.push(encodeKey + '=' + encodeValue);
       }
       formBody = formBody.join("&");
-      alert(formBody);
 
       var url_post = "http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/" + this.state.username + "/posts";
       fetch(url_post, {
@@ -349,7 +353,7 @@ export default class Search extends Component{
             <View style={styles.flex}>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                        <Image style={[styles.avatar, styles.shadow]} source={require('../propic.png')} />
+                        <Image style={[styles.avatar, styles.shadow]} source={{uri:this.props.route.params.avatar}}/>
                         <TextInput style={styles.title}
                         underlineColorAndroid = 'grey'
                         placeholder = 'Title'

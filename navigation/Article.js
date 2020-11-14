@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
-import { Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator, TextInput } from 'react-native'
+import { Alert, Text, StyleSheet, View, Animated, Image, Dimensions, ScrollView, TouchableOpacity, Navigator, TextInput } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as theme from '../theme';
@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Comments from './Comments'
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
+import Modal from 'react-native-modalbox';
 
 const { width, height } = Dimensions.get('window');
 
@@ -51,7 +52,6 @@ const styles = StyleSheet.create({
   contentHeader: {
     backgroundColor: 'transparent',
     padding: theme.sizes.padding,
-
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
     marginTop: -theme.sizes.padding / 2,
@@ -115,6 +115,57 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.grey,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
+
+  modal4: {
+      height: 350,
+  },
+
+  modalContent: {
+    marginLeft: 50,
+    marginRight: 50,
+    alignItems: 'center',
+  },
+
+  rewardButtons: {
+    marginTop: 50,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: -30,
+  },
+
+  rewardButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+    borderWidth: 1,
+    height: 50,
+    width: 50,
+    marginLeft: 30,
+  },
+
+  rewardButtonText:{
+    fontSize: 50,
+  },
+
+  rewardAvatar:{
+    top: 30,
+    justifyContent: 'center',
+    width: theme.sizes.padding * 2.5,
+    height: theme.sizes.padding * 2.5,
+    borderRadius: theme.sizes.padding * 2.5,
+  },
+
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: width - 50,
+  },
+
+  modalButton: {
+    width : 150,
+  },
+
+
 });
 
 const Separator = () => {
@@ -134,19 +185,29 @@ export default class Article extends Component{
          likes: this.props.route.params.article.likes,
          cookie: '',
          token: '',
+         oneDollar: 'white',
+         twoDollar: 'white',
+         threeDollar: 'white',
+         fiveDollar: 'white',
+         oneDollarText: 'black',
+         twoDollarText: 'black',
+         threeDollarText: 'black',
+         fiveDollarText: 'black',
+         visibleModal: 'true',
        };
      }
-
 
     /*handle save in react native*/
     handleSave = () => {
       if (this.state.saved){
         this.setState({saved: false});
-        this.favoriteApi();
+        this.defavoriteApi();
+        this.props.route.params.onGoBack();
       }
       else{
       this.setState({saved: true})
-      this.defavoriteApi();
+      this.favoriteApi();
+      this.props.route.params.onGoBack();
       }
     }
 
@@ -162,6 +223,76 @@ export default class Article extends Component{
         this.setState({likes: this.state.likes + 1});
         this.likeApi();
       }
+      this.props.route.params.onGoBack();
+    }
+
+    handleOneReward = () => {
+        this.setState({oneDollar: theme.colors.active});
+        this.setState({twoDollar: "white"});
+        this.setState({threeDollar: 'white'});
+        this.setState({fiveDollar: 'white'});
+        this.setState({oneDollarText: 'white'})
+        this.setState({twoDollarText: 'black'})
+        this.setState({threeDollarText: 'black'})
+        this.setState({fiveDollarText: 'black'})
+    }
+
+    handleTwoReward = () => {
+        this.setState({twoDollar: theme.colors.active});
+        this.setState({oneDollar: "white"});
+        this.setState({threeDollar: 'white'});
+        this.setState({fiveDollar: 'white'});
+
+        this.setState({twoDollarText: 'white'})
+        this.setState({oneDollarText: 'black'})
+        this.setState({threeDollarText: 'black'})
+        this.setState({fiveDollarText: 'black'})
+    }
+
+    handleThreeReward = () => {
+        this.setState({threeDollar: theme.colors.active});
+        this.setState({oneDollar: "white"});
+        this.setState({twoDollar: 'white'});
+        this.setState({fiveDollar: 'white'});
+
+        this.setState({threeDollarText: 'white'})
+        this.setState({oneDollarText: 'black'})
+        this.setState({twoDollarText: 'black'})
+        this.setState({fiveDollarText: 'black'})
+    }
+
+    handleFiveReward = () => {
+        this.setState({fiveDollar: theme.colors.active});
+        this.setState({oneDollar: "white"});
+        this.setState({twoDollar: 'white'});
+        this.setState({threeDollar: 'white'});
+
+        this.setState({fiveDollarText: 'white'})
+        this.setState({oneDollarText: 'black'})
+        this.setState({twoDollarText: 'black'})
+        this.setState({threeDollarText: 'black'})
+    }
+
+    handleModalClose = () => {
+        this.setState({fiveDollar: 'white'});
+        this.setState({oneDollar: 'white'});
+        this.setState({twoDollar: 'white'});
+        this.setState({threeDollar: 'white'});
+
+        this.setState({fiveDollarText: 'black'})
+        this.setState({oneDollarText: 'black'})
+        this.setState({twoDollarText: 'black'})
+        this.setState({threeDollarText: 'black'})
+        this.refs.modal7.close()
+    }
+
+
+    handleCustomerAmount(){
+        return(
+        <View>
+            <Text>I like</Text>
+        </View>
+        )
     }
 
 
@@ -287,6 +418,7 @@ export default class Article extends Component{
       }
 
 
+
     renderRatings = (rating) => {
         const stars = new Array(5).fill(0);
         return (
@@ -340,16 +472,13 @@ export default class Article extends Component{
                           styles.row,
                           { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
                         ]}>
-                          {this.renderRatings(4.7)}
-                          <Text style={{ color: theme.colors.active }}> {4.7} </Text>
-                          <Text style={{ marginLeft: 8, color: theme.colors.caption }}>
-                            ({this.state.likes} likes)
+                          <Text style={{ marginLeft: 8, color: theme.colors.active }}>
+                            {this.state.likes} likes
                           </Text>
                       </View>
                         <TouchableOpacity>
                           <Text style={styles.description}>
                           {this.state.article.article}
-                          <Text style={{color: theme.colors.active}}> Read more</Text>
                           </Text>
                         </TouchableOpacity>
                         </View>
@@ -359,14 +488,14 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments",{postId: this.state.article.id})}>
                                 <FontAwesome
                                     name='comment'
-                                    color="grey"
+                                    color="black"
                                     size={30}
                                 />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.handleSave()}}>
                                 <FontAwesome
                                     name={(this.state.saved? "bookmark":"bookmark-o")}
-                                    color="grey"
+                                    color="black"
                                     size={30}
                                 />
                             </TouchableOpacity>
@@ -374,12 +503,77 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
                                     name={(this.state.liked? "heart":"heart-o")}
-                                    color="grey"
+                                    color="black"
+                                    size={30}
+                                />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => this.refs.modal7.open()}>
+                                <FontAwesome
+                                    name={"dollar"}
+                                    color="black"
                                     size={30}
                                 />
                             </TouchableOpacity>
                         </View>
                     </View>
+                    <Modal ref={"modal7"} style={[styles.modal, styles.modal4]} position={"center"}
+                     animationType="slide"
+                     transparent={true}
+                     visible={false}
+                    >
+                      <View style={styles.modalContent}>
+                        <Text style={{fontSize: 18, marginTop:20}}> Give a reward for {this.state.article.user.username}'s sharing </Text>
+                        <Image style={[styles.rewardAvatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}/>
+                        <View style={styles.rewardButtons}>
+
+                            <TouchableOpacity
+                                style={[{backgroundColor:this.state.oneDollar},styles.rewardButton]}
+                                onPress={()=>{this.handleOneReward()}}
+                            >
+                            <Text style={{color: this.state.oneDollarText}}>$1</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[{backgroundColor:this.state.twoDollar},styles.rewardButton]}
+                                onPress={()=>{this.handleTwoReward()}}
+                            >
+                            <Text style={{color: this.state.twoDollarText}}>$2</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[{backgroundColor:this.state.threeDollar},styles.rewardButton]}
+                                onPress={()=>{this.handleThreeReward()}}
+                            >
+                            <Text style={{color: this.state.threeDollarText}}>$3</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[{backgroundColor:this.state.fiveDollar},styles.rewardButton]}
+                                onPress={()=>{this.handleFiveReward()}}
+                            >
+                            <Text style={{color: this.state.fiveDollarText}}>$5</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity
+                            onPress={()=> {this.handleCustomerAmount()}}
+                        >
+                        <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
+                        </TouchableOpacity>
+                        <View style={styles.modalButtons}>
+                        <View style={styles.modalButton}>
+                        <Button title='CANCEL'
+                            onPress={() => this.handleModalClose()}
+                        />
+                        </View>
+                        <View style={styles.modalButton}>
+                        <Button title='DONE'
+                            onPress={() => this.handleModalClose()}
+                        />
+                        </View>
+                        </View>
+                      </View>
+                    </Modal>
             </View>
         );
     }
