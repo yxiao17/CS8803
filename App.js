@@ -79,7 +79,6 @@ const TabNavigator = (navigation) => (
     }}/>
     <Tab.Screen name="User" component={Profile} options={{
     // tabBarLabel: 'User',
-
     tabBarIcon: ({ color, size }) => (
       <Icon name="user" color={color} size={30} />
     ),

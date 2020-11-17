@@ -127,8 +127,6 @@ export default class Comments extends Component {
 
 
   render() {
-
-    console.log(JSON.stringify(this.state.items))
     return (
     <View style={styles.page}>
       <FlatList
@@ -147,7 +145,8 @@ export default class Comments extends Component {
           const Notification = item.item;
           return(
             <View style={styles.container}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", {user:Notification.user})}>
+              <TouchableOpacity onPress={() => Notification.user.username === this.state.token ? this.props.navigation.navigate("Profile", {screen:"User"}) :
+                this.props.navigation.navigate("othersProfile", {user:Notification.user})}>
                 <Image style={styles.image} source={{uri: Notification.user.avatar}}/>
               </TouchableOpacity>
               <View style={styles.content}>

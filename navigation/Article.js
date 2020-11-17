@@ -458,6 +458,7 @@ export default class Article extends Component{
       }
 
     render() {
+      this.getCookie();
         return (
             <View style={styles.flex}>
                 <View >
@@ -486,7 +487,8 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
+                      <TouchableOpacity onPress={() => this.state.user.username === this.state.token ?
+                        this.props.navigation.navigate("Profile", { screen :'User'}) : this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
                         <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
 
                       </TouchableOpacity>

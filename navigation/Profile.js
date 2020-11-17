@@ -75,26 +75,57 @@ class Head extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      cook:"",
       token:"",
       userAvatar:"",
+      followers:"",
+      following:"",
     };
-    this.getdata();
+
+
   }
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
       const avatar = await AsyncStorage.getItem("avatar");
+      const cook = await AsyncStorage.getItem("cookie");
       if (val !== null) {
         this.setState({token:val})
       }
       if (avatar !== null) {
         this.setState({userAvatar:avatar})
       }
-
+      if (cook !== null) {
+        this.setState({cookie:cook})
+      }
     } catch (err) {
       console.log(err)
     }
+
+  }
+
+  componentDidMount = async () => {
+    await this.getdata();
+    console.log(this.state.token)
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.token+'/getFollowCount', {
+      method: 'GET',
+      credentials: 'include',
+        headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+    }
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson)
+      this.setState({
+        following: responseJson.data["followingCount"],
+        followers: responseJson.data["followerCount"]
+    })
+    })
 
   }
   render() {
@@ -105,10 +136,8 @@ class Head extends React.Component {
           <View style={styles.name}>
             <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.token}</Text>
 
-
-
-            <Text style={{ }}>Followers:{this.state.token}</Text>
-            <Text style={{}}>Following:{this.state.token}</Text>
+            <Text style={{ }}>Followers:{this.state.followers}</Text>
+            <Text style={{}}>Following:{this.state.following}</Text>
             <Text style={{ marginRight: 5}}>Likes:{this.state.token}</Text>
           </View>
           </View>
@@ -130,11 +159,7 @@ class Posts extends React.Component {
       token:"",
       cookie:"",
     };
-
-
-
     this.call();
-
   }
   getdata = async () => {
 
@@ -149,7 +174,7 @@ class Posts extends React.Component {
       if (cook !== null) {
         this.setState({cookie:cook})
       }
-      console.log(this.state.token)
+
     } catch (err) {
       console.log(err)
     }
@@ -176,7 +201,7 @@ class Posts extends React.Component {
         this.setState({
           items: responseJson.data
         })
-        console.log("items " + JSON.stringify(this.state.items))
+
       })
   }
 
@@ -216,8 +241,6 @@ class Saved extends React.Component {
 
     };
 
-
-
     this.call();
 
   }
@@ -226,24 +249,18 @@ class Saved extends React.Component {
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
       const cook = await AsyncStorage.getItem("cookie");
-
       if (val !== null) {
         this.setState({token:val})
       }
       if (cook !== null) {
         this.setState({cookie:cook})
       }
-      console.log(this.state.token)
     } catch (err) {
       console.log(err)
     }
-
   }
   call = async () => {
-
-
     await this.getdata();
-
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
       method: 'GET',
       credentials: 'include',
@@ -260,7 +277,7 @@ class Saved extends React.Component {
         this.setState({
           items: responseJson.data
         })
-        console.log("items " + JSON.stringify(this.state.items))
+
       })
   }
   render() {

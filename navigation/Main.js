@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
 
 
 const Tab = createMaterialTopTabNavigator();
-const TabNavigator = () => (
+const TabNavigator = (navigation) => (
   <Tab.Navigator>
     <Tab.Screen name="Explore" component={Explore} />
     <Tab.Screen name="Following" component={Home} />

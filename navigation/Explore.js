@@ -17,7 +17,6 @@ import mocks from '../RecommendeMock';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
-import Profile from './Profile';
 import Search from './Search';
 import Article from './Article';
 import Post from './Post';

@@ -159,7 +159,6 @@ class Posts extends React.Component {
         this.setState({
           items: responseJson.data
         })
-        console.log("items " + JSON.stringify(this.state.items))
       })
   }
 
@@ -208,8 +207,12 @@ class Saved extends React.Component {
     try {
       // get the two saved items token -> username and cookie for headers
       const username = await AsyncStorage.getItem("username");
+      const token = await AsyncStorage.getItem("token");
       if (username !== null) {
         this.setState({username:username})
+      }
+      if (token !== null) {
+        this.setState({token:token})
       }
     } catch (err) {
       console.log(err)
@@ -236,9 +239,9 @@ class Saved extends React.Component {
         this.setState({
           items: responseJson.data
         })
-        console.log("items " + JSON.stringify(this.state.items))
       })
   }
+
   render() {
 
     return (
@@ -284,14 +287,107 @@ class othersProfile extends React.Component {
         user: this.props.route.params.user,
         username:this.props.route.params.user.username,
         userAvatar:this.props.route.params.user.avatar,
+        followed:false,
+        following:"",
+        followers:""
+
       };
 
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
     };
+  getdata = async () => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+
+      if (token !== null) {
+        this.setState({token:token})
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  componentDidMount = async () => {
+    await this.getdata();
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.username+'/getFollowCount', {
+      method: 'GET',
+      credentials: 'include',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({
+          following: responseJson.data["followingCount"],
+          followers: responseJson.data["followerCount"]
+        })
+        // alert(this.state.d);
+        console.log("test"+this.state.d+this.state.following)
+      })
+
+  }
+  handleFollow= () => {
+    if (this.state.followed) {
+      this.setState({followed: false});
+      this.setState({followers: this.state.followers + 1});
+      this.followApi();
+    } else {
+
+      this.setState({followed: true});
+      this.setState({followers: this.state.followers - 1});
+      this.UnfollowApi();
+
+
+    }
+  }
+  followApi = async () => {
+    this.getdata();
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/follow' + this.state.username , {
+      method: 'POST',
+      credentials: 'include',
+      headers:{
+        'Accept': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+      },
+      body:{},
+
+    })
+      .then((response) => {})
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+  UnfollowApi = async () => {
+    this.getdata();
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/unfollow' + this.state.username , {
+      method: 'POST',
+      credentials: 'include',
+      headers:{
+        'Accept': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+      },
+      body:{},
+
+    })
+      .then((response) => {})
+      .catch((error) => {
+        console.error(error);
+      })
+  }
   render() {
     this.saveData();
+
     return (
       <View style={{ flex: 1 }}>
         <View>
@@ -299,10 +395,13 @@ class othersProfile extends React.Component {
             <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
             <View style={styles.name}>
               <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.username}</Text>
-              <Text style={{ }}>Followers:{this.state.user.username}</Text>
-              <Text style={{}}>Following:{this.state.user.username}</Text>
+              <Text>Followers:{this.state.followers}</Text>
+              <Text>Following:{this.state.following}</Text>
               <Text style={{ marginRight: 5}}>Likes:{this.state.user.username}</Text>
-              <Button style={{borderRadius: 10}} title={"follow"}>Follow</Button>
+              {/*{this.followButton()}*/}
+              <Button onPress={() => this.handleFollow() } style={{borderRadius: 10}} title={this.state.followed ?  "unfollow":"follow"}>Follow</Button>
+
+
             </View>
           </View>
 
