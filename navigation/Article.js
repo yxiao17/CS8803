@@ -213,6 +213,7 @@ export default class Article extends Component{
          threeDollarText: 'black',
          fiveDollarText: 'black',
          visibleModal: 'true',
+         selected: false,
        };
 
      }
@@ -308,11 +309,8 @@ export default class Article extends Component{
 
 
     handleCustomerAmount(){
-        return(
-        <View>
-            <Text>I like</Text>
-        </View>
-        )
+        this.setState({selected: true});
+
     }
 
 
@@ -437,26 +435,6 @@ export default class Article extends Component{
         )
       }
 
-
-
-    renderRatings = (rating) => {
-        const stars = new Array(5).fill(0);
-        return (
-          stars.map((_, index) => {
-            const activeStar = Math.floor(rating) >= (index + 1);
-            return (
-              <FontAwesome
-                name="star"
-                key={`star-${index}`}
-                size={theme.sizes.font}
-                color={theme.colors[activeStar ? 'active' : 'gray']}
-                style={{ marginRight: 4 }}
-              />
-            )
-          })
-        )
-      }
-
     render() {
         return (
             <View style={styles.flex}>
@@ -511,14 +489,14 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments",{postId: this.state.article.id,user:this.state.user})}>
                                 <FontAwesome
                                     name='comment'
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.handleSave()}}>
                                 <FontAwesome
                                     name={(this.state.saved? "bookmark":"bookmark-o")}
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
@@ -526,16 +504,16 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
                                     name={(this.state.liked? "heart":"heart-o")}
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => this.refs.modal7.open()}>
                                 <FontAwesome
-                                    name={"dollar"}
-                                    color="black"
-                                    size={30}
+                                    name={"gift"}
+                                    color="grey"
+                                    size={35}
                                 />
                             </TouchableOpacity>
                         </View>
@@ -546,7 +524,7 @@ export default class Article extends Component{
                      visible={false}
                     >
                       <View style={styles.modalContent}>
-                        <Text style={{fontSize: 18, marginTop:20}}> Give a reward for {this.state.article.user.username}'s sharing </Text>
+                        <Text style={{fontSize: 15, marginTop:20}}> Give a reward for {this.state.article.user.username}'s sharing </Text>
                         <Image style={[styles.rewardAvatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}/>
                         <View style={styles.rewardButtons}>
 
@@ -582,6 +560,7 @@ export default class Article extends Component{
                             onPress={()=> {this.handleCustomerAmount()}}
                         >
                         <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
+
                         </TouchableOpacity>
                         <View style={styles.modalButtons}>
                         <View style={styles.modalButton}>

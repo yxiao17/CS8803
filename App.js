@@ -16,6 +16,7 @@ import Post from './navigation/Post'
 import Login from './navigation/Login'
 import Registration from './navigation/Registration';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SearchResult from './navigation/SearchResult';
 
 import {
 
@@ -131,8 +132,10 @@ function App() {
         <Stack.Screen name="Post" component={Post}
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
-
-
+                      }}/>
+        <Stack.Screen name="SearchResult" component={SearchResult}
+                      options={{ headerTitle: props => <LoadTitle {...props} />,
+                        headerTransparent: true,
                       }}/>
       </Stack.Navigator>
     </NavigationContainer>

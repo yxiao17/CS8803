@@ -179,6 +179,7 @@ export default class Post extends Component{
     initialText: '',
     token: '',
     cookie: '',
+    avatar: '',
     };
     }
 
@@ -195,6 +196,10 @@ export default class Post extends Component{
             }
             console.log("response", response);
         })
+    }
+
+    componentDidMount = async () => {
+        this.getAvatar();
     }
 
     handleTitle = (text) => {
@@ -262,6 +267,7 @@ export default class Post extends Component{
 
 
 
+
     getCookieOriginal = () => {
         fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
           method: 'POST',
@@ -293,6 +299,17 @@ export default class Post extends Component{
 
       }
 
+    getAvatar = async() => {
+        try{
+            const tempAvatar = await AsyncStorage.getItem("avatar");
+            if (tempAvatar !== null){
+                this.setState({avatar: tempAvatar});
+            }
+        } catch(err){
+            console.log(err)
+        }
+
+    }
 
     PostData = async () => {
         this.getCookie();
@@ -355,7 +372,7 @@ export default class Post extends Component{
             <View style={styles.flex}>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                        <Image style={[styles.avatar, styles.shadow]} source={{uri:this.props.route.params.avatar}}/>
+                        <Image style={[styles.avatar, styles.shadow]} source={{uri:this.state.avatar}}/>
                         <TextInput style={styles.title}
                         underlineColorAndroid = 'grey'
                         placeholder = 'Title'

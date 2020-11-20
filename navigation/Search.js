@@ -19,6 +19,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Article from './Article';
 import Post from './Post';
 import React from 'react';
+import SearchResult from './SearchResult';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 const { width, height } = Dimensions.get('window');
 const contactData = require('../mocks/contact.json');
@@ -93,6 +94,7 @@ export default class Search extends React.Component {
 
     constructor(){
         super()
+        this.handler = this.handler.bind(this);
         this.state = {
             search: '',
             selectedIndex: 0,
@@ -110,6 +112,12 @@ export default class Search extends React.Component {
         this.setState({ search });
 
     };
+
+    handler(){
+        this.setState({search:''});
+        this.componentDidMount();
+    }
+
 
     clearHistory = async() => {
         await AsyncStorage.removeItem('SearchHistory')
@@ -129,7 +137,7 @@ export default class Search extends React.Component {
        const searches = this.state.searchHistory;
        searches.push(search);
        AsyncStorage.setItem('SearchHistory', JSON.stringify(searches));
-       return this.props.navigation.navigate('Main')
+       return this.props.navigation.navigate('SearchResult',{onGoBack: ()=> this.handler(),});
     }
 
 

@@ -20,8 +20,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Profile from './Profile';
 import Search from './Search';
 import Article from './Article';
-
-import Post from './Post';
+import Post from './Main';
 import React from 'react';
 import {Button} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -173,17 +172,7 @@ const styles = StyleSheet.create({
 });
 
 
-const Tab = createMaterialTopTabNavigator();
-const TabNavigator = (navigation) => (
-  <Tab.Navigator>
-    <Tab.Screen name="Explore" component={Explore} />
-    <Tab.Screen name="Following" component={Home} />
-    <Tab.Screen name="Search" component={Search} />
-  </Tab.Navigator>
-)
-
-
-class Home extends React.Component{
+export default class SearchResult extends React.Component{
 
   constructor(props) {
     super(props);
@@ -226,6 +215,7 @@ class Home extends React.Component{
   componentDidMount = async () => {
     // await CookieManager.clearAll()
     // calls the get data function
+    this.props.route.params.onGoBack();
     const t = await this.getdata();
 
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/recommendation', {
@@ -279,20 +269,10 @@ class Home extends React.Component{
     </View>
 
 
-
-
-
 );
-        }
-        };
-
-export default class Main extends React.Component{
-  render() {
-    return (
-      <TabNavigator/>
-    );
-  }
 }
+};
+
 
 
 
