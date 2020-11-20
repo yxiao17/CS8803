@@ -187,6 +187,7 @@ class Home extends React.Component{
 
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       d: "",
       items: "",
@@ -221,6 +222,11 @@ class Home extends React.Component{
       console.log(err)
     }
 
+  }
+
+  handler(){
+      this.setState({items:''});
+      this.componentDidMount();
   }
 
   componentDidMount = async () => {
@@ -266,7 +272,7 @@ class Home extends React.Component{
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
                 style={{flex:1/3, //here you can use flex:1 also
-                 }} onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                 }} onPress={() => this.props.navigation.navigate('Article',{article: item, onGoBack: ()=> this.handler()})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
                 <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
                <Text style={{alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>

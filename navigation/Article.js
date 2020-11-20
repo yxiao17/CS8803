@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
 
-
 import {
   Alert,
   Text,
@@ -14,6 +13,7 @@ import {
   TouchableOpacity,
   Navigator,
   TouchableHighlight,
+  TextInput,
 } from 'react-native';
 
 
@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
     borderRadius: theme.sizes.padding,
+    marginTop: -60,
+    marginLeft: width - 130,
+
   },
   shadow: {
     shadowColor: theme.colors.black,
@@ -194,7 +197,6 @@ export default class Article extends Component{
 
      scrollX = new Animated.Value(0);
      constructor(props) {
-
        super(props);
        this.state= {
          article: this.props.route.params.article,
@@ -214,11 +216,17 @@ export default class Article extends Component{
          fiveDollarText: 'black',
          visibleModal: 'true',
          selected: false,
+         customerAmount: '',
        };
 
      }
 
     /*handle save in react native*/
+
+    handleAmount = (text) =>{
+        this.setState({customerAmount: text})
+    }
+
     handleSave = () => {
       if (this.state.saved){
         this.setState({saved: false});
@@ -435,6 +443,31 @@ export default class Article extends Component{
         )
       }
 
+
+    renderReward = () => {
+        if (!this.state.selected){
+        return (
+            <View>
+               <TouchableOpacity onPress={()=> {this.handleCustomerAmount()}}>
+               <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
+               </TouchableOpacity>
+          </View>
+        )}
+        else{
+            return(
+                <TextInput
+                  style={{ marginVertical:15, fontSize: 15, color: 'grey', justifyContent:'center' }}
+                  placeholder = 'Enter customer amount here'
+                  onChangeText={this.handleAmount}
+                />
+            )
+        }
+
+      }
+
+
+
+
     render() {
         return (
             <View style={styles.flex}>
@@ -556,12 +589,7 @@ export default class Article extends Component{
                             <Text style={{color: this.state.fiveDollarText}}>$5</Text>
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            onPress={()=> {this.handleCustomerAmount()}}
-                        >
-                        <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
-
-                        </TouchableOpacity>
+                        {this.renderReward()}
                         <View style={styles.modalButtons}>
                         <View style={styles.modalButton}>
                         <Button title='CANCEL'

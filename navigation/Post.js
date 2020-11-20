@@ -9,6 +9,8 @@ import Tags from "react-native-tags"
 import CookieManager from '@react-native-community/cookies'
 const plusIcon = require('../icons/icons8-plus-256.png');
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFS from 'react-native-fs';
+import ImgToBase64 from 'react-native-image-base64';
 
 const { width, height } = Dimensions.get('window');
 
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     fixUploadImages:{
-            marginTop: 15,
+     marginTop: 15,
 
     },
     plusIconStyle:{
@@ -173,17 +175,43 @@ export default class Post extends Component{
     this.state = {
     curText: '',
     title: '',
-    photo: ['https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=800&q=80'],
+    photo: [],
     location: '',
     initialTags: [],
     initialText: '',
     token: '',
     cookie: '',
     avatar: '',
+    photoUrl:[],
     };
     }
 
-    handleChoosePhoto = () => {
+    postImageGetUrl = (img) => {
+
+    var data = new FormData();
+    data.append("key", "d00b213c9dfedf8b18907316a685f791");
+    data.append("image", img);
+    fetch('https://api.imgbb.com/1/upload', {
+    method: 'POST',
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+    },
+    body:data,
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        var tempUrls = this.state.photoUrl;
+        tempUrls.push(responseJson.data.url);
+        this.setState({"photoUrl": tempUrls});
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+    }
+
+    handleChoosePhoto = async() => {
         const options = {
             noData: true
         }
@@ -192,6 +220,10 @@ export default class Post extends Component{
                 this.setState({
                 photo: this.state.photo.concat([response.uri]),
                     })
+
+                ImgToBase64.getBase64String(response.uri)
+                  .then(base64String => this.postImageGetUrl(base64String))
+                  .catch(err => console.log(err));
 
             }
             console.log("response", response);
@@ -217,8 +249,9 @@ export default class Post extends Component{
 
     submitPost = () => {
       alert("successfully submitted!");
-      this.PostData();
-      this.props.route.params.onGoBack();
+     // this.PostData();
+      return this.props.navigation.navigate('Home');
+     // this.props.route.params.onGoBack();
     }
 
     renderImages() {
@@ -335,7 +368,7 @@ export default class Post extends Component{
         'description': this.state.curText,
         'tags': this.state.initialTags,
         'article': this.state.curText,
-        'images': this.state.photo,
+        'images': this.state.photoUrl,
       }
 
       for (var property in newPost){
@@ -440,7 +473,6 @@ export default class Post extends Component{
                         />
                     </TouchableOpacity>
                     </View>
-
                     <TouchableOpacity>
                         <Button
                             title="Submit"
