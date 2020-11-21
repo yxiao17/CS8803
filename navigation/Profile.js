@@ -153,16 +153,38 @@ class Head extends React.Component {
 class Posts extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       data: "",
       items: "",
       token:"",
       cookie:"",
     };
+
+    this.call();
+
+    if(this.props.navigation.isFocused){
+    this.call();
+    }
+  }
+
+  componentDidMount() {
+        this.props.navigation.addListener('didFocus', this.onScreenFocus)
+        alert(JSON.stringify(this.props.navigation.isFocused()));
+  }
+
+  onScreenFocus = () => {
     this.call();
   }
-  getdata = async () => {
 
+
+  handler(){
+     this.setState({items:''});
+     this.call();
+
+  }
+
+  getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
@@ -180,6 +202,9 @@ class Posts extends React.Component {
     }
 
   }
+
+
+
   call = async () => {
 
 
@@ -216,7 +241,7 @@ class Posts extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-               onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+               onPress={() => this.props.navigation.navigate('Article',{article: item,onGoBack:()=> this.handler(), })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
@@ -233,6 +258,7 @@ class Posts extends React.Component {
 class Saved extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       data: "",
       items: "",
@@ -259,7 +285,16 @@ class Saved extends React.Component {
       console.log(err)
     }
   }
+
+
+    handler(){
+      this.setState({items:''});
+      this.call();
+    }
+
   call = async () => {
+
+
     await this.getdata();
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
       method: 'GET',
@@ -281,9 +316,7 @@ class Saved extends React.Component {
       })
   }
   render() {
-
     return (
-
         <ScrollView style={styles.scrollview}>
           <FlatList
             data={this.state.items}
@@ -292,7 +325,7 @@ class Saved extends React.Component {
             numColumns={2}
             renderItem={({item}) =>  {   return (
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+                onPress={() => this.props.navigation.navigate('Article',{article: item, onGoBack: ()=> this.handler()})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
                 <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
                 <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>

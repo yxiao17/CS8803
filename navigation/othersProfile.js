@@ -385,6 +385,14 @@ class othersProfile extends React.Component {
         console.error(error);
       })
   }
+  followButton() {
+    this.getdata();
+    if (this.state.token == this.state.username) {
+      return null
+    } else {
+      return <Button onPress={() => this.handleFollow() } style={{borderRadius: 10}} title={this.state.followed ?  "unfollow":"follow"}>Follow</Button>
+    }
+  }
   render() {
     this.saveData();
 
@@ -398,8 +406,8 @@ class othersProfile extends React.Component {
               <Text>Followers:{this.state.followers}</Text>
               <Text>Following:{this.state.following}</Text>
               <Text style={{ marginRight: 5}}>Likes:{this.state.user.username}</Text>
-              {/*{this.followButton()}*/}
-              <Button onPress={() => this.handleFollow() } style={{borderRadius: 10}} title={this.state.followed ?  "unfollow":"follow"}>Follow</Button>
+              {this.followButton()}
+
 
 
             </View>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'react-native-elements';
 
-
 import {
   Alert,
   Text,
@@ -14,6 +13,7 @@ import {
   TouchableOpacity,
   Navigator,
   TouchableHighlight,
+  TextInput,
 } from 'react-native';
 
 
@@ -82,6 +82,9 @@ const styles = StyleSheet.create({
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
     borderRadius: theme.sizes.padding,
+    marginTop: -60,
+    marginLeft: width - 130,
+
   },
   shadow: {
     shadowColor: theme.colors.black,
@@ -194,7 +197,6 @@ export default class Article extends Component{
 
      scrollX = new Animated.Value(0);
      constructor(props) {
-
        super(props);
        this.state= {
          article: this.props.route.params.article,
@@ -213,11 +215,18 @@ export default class Article extends Component{
          threeDollarText: 'black',
          fiveDollarText: 'black',
          visibleModal: 'true',
+         selected: false,
+         customerAmount: '',
        };
 
      }
 
     /*handle save in react native*/
+
+    handleAmount = (text) =>{
+        this.setState({customerAmount: text})
+    }
+
     handleSave = () => {
       if (this.state.saved){
         this.setState({saved: false});
@@ -308,11 +317,8 @@ export default class Article extends Component{
 
 
     handleCustomerAmount(){
-        return(
-        <View>
-            <Text>I like</Text>
-        </View>
-        )
+        this.setState({selected: true});
+
     }
 
 
@@ -438,24 +444,29 @@ export default class Article extends Component{
       }
 
 
-
-    renderRatings = (rating) => {
-        const stars = new Array(5).fill(0);
+    renderReward = () => {
+        if (!this.state.selected){
         return (
-          stars.map((_, index) => {
-            const activeStar = Math.floor(rating) >= (index + 1);
-            return (
-              <FontAwesome
-                name="star"
-                key={`star-${index}`}
-                size={theme.sizes.font}
-                color={theme.colors[activeStar ? 'active' : 'gray']}
-                style={{ marginRight: 4 }}
-              />
+            <View>
+               <TouchableOpacity onPress={()=> {this.handleCustomerAmount()}}>
+               <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
+               </TouchableOpacity>
+          </View>
+        )}
+        else{
+            return(
+                <TextInput
+                  style={{ marginVertical:15, fontSize: 15, color: 'grey', justifyContent:'center' }}
+                  placeholder = 'Enter customer amount here'
+                  onChangeText={this.handleAmount}
+                />
             )
-          })
-        )
+        }
+
       }
+
+
+
 
     render() {
       this.getCookie();
@@ -487,8 +498,7 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                      <TouchableOpacity onPress={() => this.state.user.username === this.state.token ?
-                        this.props.navigation.navigate("Profile", { screen :'User'}) : this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
+                      <TouchableOpacity onPress={() =>  this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
                         <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
 
                       </TouchableOpacity>
@@ -513,14 +523,14 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => this.props.navigation.navigate("Comments",{postId: this.state.article.id,user:this.state.user})}>
                                 <FontAwesome
                                     name='comment'
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this.handleSave()}}>
                                 <FontAwesome
                                     name={(this.state.saved? "bookmark":"bookmark-o")}
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
@@ -528,16 +538,16 @@ export default class Article extends Component{
                             <TouchableOpacity onPress={() => {this.handleLike()}}>
                                 <FontAwesome
                                     name={(this.state.liked? "heart":"heart-o")}
-                                    color="black"
+                                    color="grey"
                                     size={30}
                                 />
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={() => this.refs.modal7.open()}>
                                 <FontAwesome
-                                    name={"dollar"}
-                                    color="black"
-                                    size={30}
+                                    name={"gift"}
+                                    color="grey"
+                                    size={35}
                                 />
                             </TouchableOpacity>
                         </View>
@@ -548,7 +558,7 @@ export default class Article extends Component{
                      visible={false}
                     >
                       <View style={styles.modalContent}>
-                        <Text style={{fontSize: 18, marginTop:20}}> Give a reward for {this.state.article.user.username}'s sharing </Text>
+                        <Text style={{fontSize: 15, marginTop:20}}> Give a reward for {this.state.article.user.username}'s sharing </Text>
                         <Image style={[styles.rewardAvatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}/>
                         <View style={styles.rewardButtons}>
 
@@ -580,11 +590,7 @@ export default class Article extends Component{
                             <Text style={{color: this.state.fiveDollarText}}>$5</Text>
                             </TouchableOpacity>
                         </View>
-                        <TouchableOpacity
-                            onPress={()=> {this.handleCustomerAmount()}}
-                        >
-                        <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
-                        </TouchableOpacity>
+                        {this.renderReward()}
                         <View style={styles.modalButtons}>
                         <View style={styles.modalButton}>
                         <Button title='CANCEL'

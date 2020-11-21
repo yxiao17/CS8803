@@ -145,7 +145,7 @@ export default class Comments extends Component {
           const Notification = item.item;
           return(
             <View style={styles.container}>
-              <TouchableOpacity onPress={() => Notification.user.username === this.state.token ? this.props.navigation.navigate("Profile", {screen:"User"}) :
+              <TouchableOpacity onPress={() =>
                 this.props.navigation.navigate("othersProfile", {user:Notification.user})}>
                 <Image style={styles.image} source={{uri: Notification.user.avatar}}/>
               </TouchableOpacity>
