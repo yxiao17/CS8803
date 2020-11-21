@@ -392,7 +392,6 @@ class othersProfile extends React.Component {
     } else {
       return <Button onPress={() => this.handleFollow() } style={{borderRadius: 10}} title={this.state.followed ?  "unfollow":"follow"}>Follow</Button>
     }
-    this.props.route.params.onGoBack();
   }
   render() {
     this.saveData();
