@@ -288,10 +288,11 @@ class othersProfile extends React.Component {
         username:this.props.route.params.user.username,
         userAvatar:this.props.route.params.user.avatar,
         followed:false,
-        following:"",
-        followers:""
+        following:0,
+        followers:0
 
       };
+      this.saveData();
 
     };
     saveData = async () => {
@@ -337,19 +338,17 @@ class othersProfile extends React.Component {
     if (this.state.followed) {
       this.setState({followed: false});
       this.setState({followers: this.state.followers + 1});
-      this.followApi();
+      this.UnfollowApi();
     } else {
 
       this.setState({followed: true});
       this.setState({followers: this.state.followers - 1});
-      this.UnfollowApi();
-
-
+      this.followApi();
     }
   }
-  followApi = async () => {
+  followApi = () => {
     this.getdata();
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/follow' + this.state.username , {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/follow/' + this.state.username , {
       method: 'POST',
       credentials: 'include',
       headers:{
@@ -360,15 +359,17 @@ class othersProfile extends React.Component {
       },
       body:{},
 
+
     })
       .then((response) => {})
       .catch((error) => {
         console.error(error);
       })
   }
-  UnfollowApi = async () => {
+
+  UnfollowApi = () => {
     this.getdata();
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/unfollow' + this.state.username , {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/unfollow/' + this.state.username , {
       method: 'POST',
       credentials: 'include',
       headers:{
@@ -394,7 +395,7 @@ class othersProfile extends React.Component {
     }
   }
   render() {
-    this.saveData();
+
 
     return (
       <View style={{ flex: 1 }}>

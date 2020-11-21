@@ -469,7 +469,7 @@ export default class Article extends Component{
 
 
     render() {
-      this.getCookie();
+
         return (
             <View style={styles.flex}>
                 <View >
