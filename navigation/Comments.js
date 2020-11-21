@@ -23,8 +23,8 @@ export default class Comments extends Component {
 
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
-
       postId: this.props.route.params.postId,
       cookie: '',
       token: '',
@@ -36,6 +36,11 @@ export default class Comments extends Component {
 
     this.textInput = React.createRef();
   }
+
+    handler(){
+        this.setState({items:''})
+        this.getInitialData();
+    }
 
     getCookie = async () => {
         try {
@@ -98,12 +103,11 @@ export default class Comments extends Component {
     this.getInitialData();
   }
 
+
   getInitialData = async () => {
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getCookie();
-
-
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/' + this.state.postId+ '/comments', {
 
       method: 'GET',
@@ -146,7 +150,7 @@ export default class Comments extends Component {
           return(
             <View style={styles.container}>
               <TouchableOpacity onPress={() =>
-                this.props.navigation.navigate("othersProfile", {user:Notification.user})}>
+                this.props.navigation.navigate("othersProfile",{onGoBack: ()=> this.handler(), user:Notification.user})}>
                 <Image style={styles.image} source={{uri: Notification.user.avatar}}/>
               </TouchableOpacity>
               <View style={styles.content}>

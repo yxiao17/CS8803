@@ -344,12 +344,15 @@ class othersProfile extends React.Component {
       this.setState({followed: true});
       this.setState({followers: this.state.followers - 1});
       this.followApi();
+
     }
   }
   followApi = () => {
     this.getdata();
+
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/follow/' + this.state.username , {
       method: 'POST',
+
       credentials: 'include',
       headers:{
         'Accept': 'application/x-www-form-urlencoded',
@@ -369,8 +372,10 @@ class othersProfile extends React.Component {
 
   UnfollowApi = () => {
     this.getdata();
+
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/unfollow/' + this.state.username , {
       method: 'POST',
+
       credentials: 'include',
       headers:{
         'Accept': 'application/x-www-form-urlencoded',
@@ -393,6 +398,7 @@ class othersProfile extends React.Component {
     } else {
       return <Button onPress={() => this.handleFollow() } style={{borderRadius: 10}} title={this.state.followed ?  "unfollow":"follow"}>Follow</Button>
     }
+    this.props.route.params.onGoBack();
   }
   render() {
 
