@@ -45,6 +45,7 @@ import Search from './navigation/Search'
 import Comments from './navigation/Comments'
 import othersProfile from './navigation/othersProfile'
 import Explore from './navigation/Explore';
+import Follow from './navigation/Follow'
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 console.disableYellowBox = true;
 
@@ -136,6 +137,10 @@ function App() {
                       options={{ headerTitle: props => <LoadTitle {...props} />,
                         headerTransparent: true,
                       }}/>
+        <Stack.Screen name="Follow" component={Follow}
+          options={{ headerTitle: props => <LoadTitle {...props} />,
+          headerTransparent: true,
+        }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

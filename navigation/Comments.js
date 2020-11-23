@@ -29,7 +29,6 @@ export default class Comments extends Component {
       cookie: '',
       token: '',
       item: null,
-
       value: '',
 
     }

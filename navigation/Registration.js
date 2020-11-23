@@ -32,7 +32,9 @@ const RegisterFields = t.struct({
   // email: t.String,
   username: t.String,
   password: t.String,
-  avatar: t.String,
+  confirm: t.String,
+  email: t.String,
+  gender: t.enums({1: 'Male', 0: 'Female'}, 'gender'),
 });
 
 const styles = StyleSheet.create({
@@ -67,12 +69,18 @@ const options = {
     username: {
       placeholder: 'username',
       error: 'Insert a valid username'
-    }
-    ,
-    avatar: {
-      placeholder: 'profile pic link',
-      error: 'Insert a valid link'
     },
+    confirm:{
+      placeholder:'confirm password',
+      // error: "Password different!",
+      secureTextEntry: true
+    } ,
+    email:{
+      placeholder: 'email'
+    },
+    gender:{
+      placeholder: "gender"
+    }
   }
 };
 export default class Registration extends Component{
@@ -82,12 +90,14 @@ export default class Registration extends Component{
       buttonState: true,
       value: {},
       token: "",
-      cookie: ""
+      cookie: "",
+      avatar:""
 
     }
   }
   _onSubmit = async () => {
     const value = this.refs.form.getValue();
+
     try {
       //set the token to username
       this.setState({token: value.username});
@@ -103,19 +113,20 @@ export default class Registration extends Component{
       var encodedValue = encodeURIComponent(value[property]);
       formBody.push(encodedKey + "=" + encodedValue);
     }
+    formBody.push("avatar=https://i.dlpng.com/static/png/5066008-circled-user-icon-user-profile-icon-png-png-image-transparent-profile-icon-png-820_860_preview.png")
     formBody = formBody.join("&");
-
-
+    console.log(formBody)
     if (value) { // if validation fails, value will be null
-      console.log(value);
+      console.log("val"+value);
       // cDM function used to get the user login info
       this.componentDidMount(formBody);
       // call the save data function to add the cookie info in by using asyncstorage
 
+    }
 
     }
-  }
-  componentDidMount =(formBody) => {
+
+  componentDidMount=(formBody) => {
     fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/register', {
 
       method: 'POST',
@@ -130,7 +141,7 @@ export default class Registration extends Component{
 
       .then((responseJson) => {
         console.log(responseJson)
-        if (responseJson.status !== 500) {
+        if (responseJson.status -= 100) {
 
           this.props.navigation.navigate("Login");
         }
@@ -168,6 +179,7 @@ export default class Registration extends Component{
           value={this.state.value}
           onChange={this.onChange}
         />
+
         <View style={styles.button}>
           {/*<Button>*/}
           <Button  onPress={this._onSubmit.bind(this)}
