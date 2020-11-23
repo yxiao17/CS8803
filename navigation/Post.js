@@ -249,7 +249,7 @@ export default class Post extends Component{
 
     submitPost = () => {
       alert("successfully submitted!");
-     // this.PostData();
+      this.PostData();
       return this.props.navigation.navigate('Home');
      // this.props.route.params.onGoBack();
     }
@@ -393,6 +393,7 @@ export default class Post extends Component{
         body: formBody,
       })
       .then((response) => {
+        console.log(response);
       })
       .catch((error) => {
         console.error(error);

@@ -231,6 +231,7 @@ class Head extends React.Component {
     console.log(this.state.followerList)
     // this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
+
   following = () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
       method: 'GET',
@@ -266,9 +267,11 @@ class Head extends React.Component {
           </View>
           </View>
           <View style={styles.info}>
-            <Text onPress={()=>this.followers()} style={styles.text} >Followers:{this.state.followers}</Text>
 
+            <Text onPress={()=>this.followers()} style={styles.text} >Followers:{this.state.followers}</Text>
             <Text onPress={()=>this.following()} style={styles.text} >Following:{this.state.following}</Text>
+            {/*<Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>*/}
+            {/*<Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>*/}
 
           </View>
       </View>
@@ -299,8 +302,7 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-        this.props.navigation.addListener('didFocus', this.onScreenFocus)
-
+        this.props.navigation.addListener('didFocus', this.onScreenFocus);
   }
 
   onScreenFocus = () => {

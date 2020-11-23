@@ -592,11 +592,14 @@ export default class Article extends Component{
                             {this.state.likes} likes
                           </Text>
                       </View>
+
+                      <ScrollView>
                         <TouchableOpacity>
                           <Text style={styles.description}>
                           {this.state.article.article}
                           </Text>
                         </TouchableOpacity>
+                        </ScrollView>
                         </View>
                         <Separator/>
 
