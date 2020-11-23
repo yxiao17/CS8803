@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   info:{
     flexDirection:"row",
     alignItems: "center",
-    left: theme.sizes.padding
+    left: theme.sizes.padding,
   },
   text:{
     paddingHorizontal: theme.sizes.padding/2,
@@ -425,7 +425,7 @@ class othersProfile extends React.Component {
       return <View style={styles.info}>
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
         <Text onPress={()=>this.following()} style={styles.text}>Following:{this.state.following}</Text>
-        <Button type="outline"  onPress={() => this.handleFollow() } color={"red"} title={this.state.followed ?   "unfollow" : "follow"}>Follow</Button>
+        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={this.state.followed ?   "unfollow" : "follow"}>Follow</Button>
       </View>
 
 

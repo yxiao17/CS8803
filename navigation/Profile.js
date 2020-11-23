@@ -230,6 +230,7 @@ class Head extends React.Component {
       })
     this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
+
   following = () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
       method: 'GET',
@@ -265,8 +266,8 @@ class Head extends React.Component {
           </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.text} onPress={()=>this.followers()} >Followers:{this.state.followers}</Text>
-            <Text style={styles.text} onPress={()=>this.following()} >Following:{this.state.following}</Text>
+            <Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>
+            <Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>
           </View>
       </View>
 
