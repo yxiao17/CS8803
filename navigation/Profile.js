@@ -170,7 +170,7 @@ class Posts extends React.Component {
 
   componentDidMount() {
         this.props.navigation.addListener('didFocus', this.onScreenFocus)
-        alert(JSON.stringify(this.props.navigation.isFocused()));
+     //   alert(JSON.stringify(this.props.navigation.isFocused()));
   }
 
   onScreenFocus = () => {
