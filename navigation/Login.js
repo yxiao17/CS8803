@@ -177,10 +177,11 @@ export default class Login extends Component {
           })
             .then((response) => response.json())
             .then((responseJson) => {
-              this.setState({
-                avatar: responseJson.data.avatar,
-              })
-              AsyncStorage.setItem("avatar", this.state.avatar);
+              console.log(responseJson)
+              // this.setState({
+              //   avatar: responseJson.data.avatar,
+              // })
+              // AsyncStorage.setItem("avatar", this.state.avatar);
               if (responseJson.code == 100 ) {
                 this.props.navigation.navigate("Main");
 

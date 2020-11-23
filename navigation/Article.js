@@ -72,8 +72,11 @@ const styles = StyleSheet.create({
     padding: theme.sizes.padding,
     borderTopLeftRadius: theme.sizes.radius,
     borderTopRightRadius: theme.sizes.radius,
-    marginTop: -theme.sizes.padding / 2,
+    marginTop: -theme.sizes.padding * 2 ,
     height: width,
+  },
+  Header: {
+    marginLeft: width-130,
   },
   avatar: {
     // position: 'absolute',
@@ -82,8 +85,8 @@ const styles = StyleSheet.create({
     width: theme.sizes.padding * 2,
     height: theme.sizes.padding * 2,
     borderRadius: theme.sizes.padding,
-    marginTop: -60,
-    marginLeft: width - 130,
+    // marginTop: -60,
+    // marginLeft: width - 130,
 
   },
   shadow: {
@@ -498,10 +501,11 @@ export default class Article extends Component{
                 </View>
                 <View style={[styles.flex, styles.content]}>
                     <View style={[styles.flex, styles.contentHeader]}>
-                      <TouchableOpacity onPress={() =>  this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
+                      <View style={styles.Header}>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate("othersProfile", { user:this.state.user})} >
                         <Image style={[styles.avatar, styles.shadow]} source={{uri: this.state.article.user.avatar}}  />
-
                       </TouchableOpacity>
+                      </View>
                         <Text style={styles.title}>{this.state.article.title} </Text>
                       <View style={[
                           styles.row,
