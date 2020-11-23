@@ -21,6 +21,7 @@ import Main from './Main';
 import Search from './Search';
 import ImagePicker from 'react-native-image-picker';
 import ImgToBase64 from 'react-native-image-base64';
+import Follow from './Follow'
 const styles = StyleSheet.create({
   scrollview: {
 
@@ -206,7 +207,51 @@ class Head extends React.Component {
       return <Icon name="mars" color="blue" size={15}/>
     }
 }
+  followers = () => {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token + '/getFollower', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie': this.state.cookie,
+      },
 
+
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.state.followerList = responseJson.data
+        console.log(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    this.props.navigation.navigate("Follow", {follow: this.state.followerList})
+  }
+  following = () => {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie': this.state.cookie,
+      },
+
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.state.followingList = responseJson.data
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    console.log(this.state.followingList)
+    this.props.navigation.navigate("Follow", {follow: this.state.followingList})
+  }
   render() {
     return (
       <View>
@@ -220,8 +265,8 @@ class Head extends React.Component {
           </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.text}>Followers:{this.state.followers}</Text>
-            <Text style={styles.text}>Following:{this.state.following}</Text>
+            <Text style={styles.text} onPress={()=>this.followers()} >Followers:{this.state.followers}</Text>
+            <Text style={styles.text} onPress={()=>this.following()} >Following:{this.state.following}</Text>
           </View>
       </View>
 
