@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     height: width-200,
     fontSize: theme.sizes.font * 1.3,
     lineHeight: theme.sizes.font * 2,
-    color: theme.colors.caption,
+    color: 'grey',
   },
   button:{
     backgroundColor: "white"
@@ -569,7 +569,7 @@ export default class Article extends Component{
                                   key={`${index}-${img}`}
                                   source={{ uri: img }}
                                   resizeMode='cover'
-                                  style={{ width, height: width - 30}}
+                                  style={{ width, height: width - 80}}
                                 />
                               )
                         }
