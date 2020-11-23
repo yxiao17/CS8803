@@ -267,7 +267,9 @@ class othersProfile extends React.Component {
         followers:0,
         gender:"",
         items:"",
-        followingList: ""
+        followingList: "",
+        followerList: "",
+        avatar:""
 
       };
       this.saveData();
@@ -433,7 +435,7 @@ class othersProfile extends React.Component {
     // this.props.route.params.onGoBack();
   }
   getUserinfo = async () => {
-    await this.getdata();
+   this.getdata();
     console.log(this.state.token)
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.username, {
       method: 'GET',
@@ -447,8 +449,10 @@ class othersProfile extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
+        avatar = responseJson.data.avatar,
         this.state.gender = responseJson.data.gender
       })
+    console.log("ava" + this.state.avatar)
   }
   genderIcon () {
     if (this.state.gender == 0) {

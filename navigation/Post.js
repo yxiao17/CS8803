@@ -338,6 +338,7 @@ export default class Post extends Component{
             if (tempAvatar !== null){
                 this.setState({avatar: tempAvatar});
             }
+            console.log(this.state.avatar)
         } catch(err){
             console.log(err)
         }

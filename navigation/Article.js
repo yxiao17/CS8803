@@ -326,7 +326,6 @@ export default class Article extends Component{
         var data = new FormData();
         data.append("uploader", this.state.article.user.username);
         data.append("value", val);
-        alert(this.state.cookie)
 
         fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/reward', {
           method: 'POST',
@@ -340,7 +339,8 @@ export default class Article extends Component{
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            alert(JSON.stringify(responseJson.message))
+            Alert.alert('Reward', JSON.stringify(responseJson.message));
+
         })
         .catch((error) => {
           console.error(error);

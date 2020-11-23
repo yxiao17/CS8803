@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   container: {
     top : theme.sizes.base * 2,
     bottom: 0,
+    marginTop: 20,
 
   },
   locations: {

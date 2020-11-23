@@ -40,9 +40,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection:"row",
     // left: theme.sizes.padding ,
-
   },
-
 
   propic: {
     width: width/4,
@@ -51,7 +49,12 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
 
   },
+  infoList:{
+  alignItems: 'flex-start',
+  marginLeft: 10,
+  marginTop: 20,
 
+  },
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -93,6 +96,11 @@ class Head extends React.Component {
       following:"",
       gender:"",
       photoUrl:[],
+      followingList:"",
+      followerList:"",
+      balance:'',
+      email:'',
+
     };
 
     this.getUserinfo();
@@ -195,6 +203,8 @@ class Head extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
           console.log(responseJson)
+          this.state.email = response.email,
+          this.state.balance = response.coin,
           this.state.gender = responseJson.gender,
           this.state.avatar = responseJson.avatar
           })
@@ -217,8 +227,6 @@ class Head extends React.Component {
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
       },
-
-
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -228,7 +236,8 @@ class Head extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-    this.props.navigation.navigate("Follow", {follow: this.state.followerList})
+    console.log(this.state.followerList)
+    // this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
 
   following = () => {
@@ -260,14 +269,21 @@ class Head extends React.Component {
           <TouchableOpacity onPress={this.handleChoosePhoto}>
           <Image style={styles.propic} source={{uri:this.state.avatar}} />
           </TouchableOpacity>
+          <View style={styles.infoList}>
           <View style={styles.name}>
             <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.token}</Text>
             {this.genderIcon()}
           </View>
+          <Text style={{fontWeight: '700', fontSize: 20}}>Balance: {this.state.balance}</Text>
+          </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>
-            <Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>
+
+            <Text onPress={()=>this.followers()} style={styles.text} >Followers:{this.state.followers}</Text>
+            <Text onPress={()=>this.following()} style={styles.text} >Following:{this.state.following}</Text>
+            {/*<Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>*/}
+            {/*<Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>*/}
+
           </View>
       </View>
 
