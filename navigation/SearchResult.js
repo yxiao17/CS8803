@@ -184,6 +184,7 @@ export default class SearchResult extends React.Component{
       cookie:"",
       userAvatar:"",
       active: 0,
+      search: this.props.route.params.query,
     };
 
 
@@ -216,9 +217,7 @@ export default class SearchResult extends React.Component{
     // await CookieManager.clearAll()
     // calls the get data function
     this.props.route.params.onGoBack();
-    const t = await this.getdata();
-
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/recommendation', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/search/searchByContent/' + this.state.search, {
 
       method: 'GET',
       credentials: 'include',
@@ -239,7 +238,9 @@ export default class SearchResult extends React.Component{
         console.log(this.state.items)
       })
 
-  }
+
+    };
+
 
   render() {
     return (

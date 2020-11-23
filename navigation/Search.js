@@ -105,16 +105,17 @@ export default class Search extends React.Component {
 
 
     updateIndex (selectedIndex) {
+        alert(JSON.stringify(this.ref.itemsSelected));
         this.setState({selectedIndex});
     }
 
     updateSearch = (search) => {
         this.setState({ search });
-
     };
 
     handler(){
         this.setState({search:''});
+
         this.componentDidMount();
     }
 
@@ -125,6 +126,7 @@ export default class Search extends React.Component {
     }
 
     componentDidMount = async() => {
+       this.tag.close();
         await AsyncStorage.getItem('SearchHistory')
             .then((stores) => {
                 this.setState({ searchHistory: stores ? JSON.parse(stores) : []});
@@ -137,7 +139,11 @@ export default class Search extends React.Component {
        const searches = this.state.searchHistory;
        searches.push(search);
        AsyncStorage.setItem('SearchHistory', JSON.stringify(searches));
-       return this.props.navigation.navigate('SearchResult',{onGoBack: ()=> this.handler(),});
+       return this.props.navigation.navigate('SearchResult',{query: this.state.search, onGoBack: ()=> this.handler(),});
+    }
+
+    handleTagSelected = (tag) => {
+        return this.props.navigation.navigate('SearchResult',{query:tag , onGoBack: ()=> this.handler(),});
     }
 
 
@@ -174,10 +180,12 @@ export default class Search extends React.Component {
                 <View style={{marginLeft:10, marginRight: 10,}}>
                 <TagSelect
                   data={this.state.searchHistory}
+                  max={1}
                   itemStyle={styles.item}
                   ref={(tag) => {
                     this.tag = tag;
                   }}
+                  onItemPress={()=> this.handleTagSelected(this.tag.itemsSelected)}
                 />
                 </View>
                 </View>

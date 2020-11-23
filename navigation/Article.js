@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
 
   modal4: {
-      height: 350,
+      height: 380,
   },
 
   modalContent: {
@@ -177,9 +177,11 @@ const styles = StyleSheet.create({
   },
 
   modalButtons: {
+
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: width - 50,
+    marginTop: 20
   },
 
   modalButton: {
@@ -217,6 +219,7 @@ export default class Article extends Component{
          visibleModal: 'true',
          selected: false,
          customerAmount: '',
+         finalSubmit: '',
        };
 
      }
@@ -256,6 +259,7 @@ export default class Article extends Component{
     }
 
     handleOneReward = () => {
+        this.setState({finalSubmit: '1'});
         this.setState({oneDollar: theme.colors.active});
         this.setState({twoDollar: "white"});
         this.setState({threeDollar: 'white'});
@@ -267,6 +271,7 @@ export default class Article extends Component{
     }
 
     handleTwoReward = () => {
+        this.setState({finalSubmit: '2'});
         this.setState({twoDollar: theme.colors.active});
         this.setState({oneDollar: "white"});
         this.setState({threeDollar: 'white'});
@@ -279,6 +284,7 @@ export default class Article extends Component{
     }
 
     handleThreeReward = () => {
+        this.setState({finalSubmit: '3'});
         this.setState({threeDollar: theme.colors.active});
         this.setState({oneDollar: "white"});
         this.setState({twoDollar: 'white'});
@@ -291,6 +297,7 @@ export default class Article extends Component{
     }
 
     handleFiveReward = () => {
+        this.setState({finalSubmit: '5'});
         this.setState({fiveDollar: theme.colors.active});
         this.setState({oneDollar: "white"});
         this.setState({twoDollar: 'white'});
@@ -302,7 +309,48 @@ export default class Article extends Component{
         this.setState({threeDollarText: 'black'})
     }
 
+
+
+    submitReward = () => {
+        var val = '';
+        if(this.state.selected){
+            val = this.state.customerAmount
+        }
+        else{
+            val = this.state.finalSubmit;
+        }
+
+        var data = new FormData();
+        data.append("uploader", this.state.article.user.username);
+        data.append("value", val);
+        alert(this.state.cookie)
+
+        fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/reward', {
+          method: 'POST',
+          credentials: "include",
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            'cookie' : this.state.cookie,
+          },
+          body: data
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            alert(JSON.stringify(responseJson.message))
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+    }
+
     handleModalClose = () => {
+
+        this.setState({customerAmount: ''});
+        this.setState({finalSubmit:''});
+        this.setState({selected: false});
+
         this.setState({fiveDollar: 'white'});
         this.setState({oneDollar: 'white'});
         this.setState({twoDollar: 'white'});
@@ -314,6 +362,27 @@ export default class Article extends Component{
         this.setState({threeDollarText: 'black'})
         this.refs.modal7.close()
     }
+
+    handleModalSubmit = () => {
+
+        this.submitReward();
+
+        this.setState({selected: false});
+        this.setState({finalSubmit: ''});
+        this.setState({customerAmount: ''});
+        this.setState({fiveDollar: 'white'});
+        this.setState({oneDollar: 'white'});
+        this.setState({twoDollar: 'white'});
+        this.setState({threeDollar: 'white'});
+
+        this.setState({fiveDollarText: 'black'})
+        this.setState({oneDollarText: 'black'})
+        this.setState({twoDollarText: 'black'})
+        this.setState({threeDollarText: 'black'})
+        this.refs.modal7.close()
+    }
+
+
 
 
     handleCustomerAmount(){
@@ -445,6 +514,7 @@ export default class Article extends Component{
 
 
     renderReward = () => {
+        if (this.state.finalSubmit == ''){
         if (!this.state.selected){
         return (
             <View>
@@ -462,6 +532,13 @@ export default class Article extends Component{
                 />
             )
         }
+    }
+    else{
+        return(
+            <View>
+            </View>
+        )
+    }
 
       }
 
@@ -599,7 +676,7 @@ export default class Article extends Component{
                         </View>
                         <View style={styles.modalButton}>
                         <Button title='DONE'
-                            onPress={() => this.handleModalClose()}
+                            onPress={() => this.handleModalSubmit()}
                         />
                         </View>
                         </View>
