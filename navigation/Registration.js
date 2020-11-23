@@ -102,7 +102,8 @@ export default class Registration extends Component{
       //set the token to username
       this.setState({token: value.username});
       await AsyncStorage.setItem("token",value.username)
-
+      this.setState({avatar:"https://i.dlpng.com/static/png/5066008-circled-user-icon-user-profile-icon-png-png-image-transparent-profile-icon-png-820_860_preview.png"});
+      await AsyncStorage.setItem("avatar","https://i.dlpng.com/static/png/5066008-circled-user-icon-user-profile-icon-png-png-image-transparent-profile-icon-png-820_860_preview.png")
     } catch (err) {
       // console.log(err)
       // alert(err)

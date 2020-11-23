@@ -125,7 +125,6 @@ class Posts extends React.Component {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
-
       }
     })
       .then((response) => response.json())
@@ -282,9 +281,12 @@ class othersProfile extends React.Component {
   getdata = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-
+      const avatar = await AsyncStorage.getItem("avatar");
       if (token !== null) {
         this.setState({token:token})
+      }
+      if (avatar !== null) {
+        this.setState({avatar:avatar})
       }
     } catch (err) {
       console.log(err)
@@ -464,9 +466,10 @@ class othersProfile extends React.Component {
   avatar() {
     if (this.state.username == this.state.token) {
       return <TouchableOpacity onPress={this.handleChoosePhoto}>
-        <Image style={styles.propic} source={{uri:this.state.avatar}} />
+        <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
       </TouchableOpacity>
-    } else {
+    }
+      else {
       return <Image style={styles.propic} source={{uri:this.state.userAvatar}} />
     }
   }
