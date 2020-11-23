@@ -141,12 +141,13 @@ export default class Registration extends Component{
 
       .then((responseJson) => {
         console.log(responseJson)
-        if (responseJson.status -= 100) {
+        if (responseJson.status == 406) {
 
           this.props.navigation.navigate("Login");
         }
         else {
           console.log("login error")
+          alert("login error")
         }
       })
 

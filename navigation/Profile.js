@@ -93,6 +93,8 @@ class Head extends React.Component {
       following:"",
       gender:"",
       photoUrl:[],
+      followingList:"",
+      followerList:""
     };
 
     this.getUserinfo();
@@ -217,8 +219,6 @@ class Head extends React.Component {
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
       },
-
-
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -228,7 +228,8 @@ class Head extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-    this.props.navigation.navigate("Follow", {follow: this.state.followerList})
+    console.log(this.state.followerList)
+    // this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
   following = () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
@@ -265,8 +266,10 @@ class Head extends React.Component {
           </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.text} onPress={()=>this.followers()} >Followers:{this.state.followers}</Text>
-            <Text style={styles.text} onPress={()=>this.following()} >Following:{this.state.following}</Text>
+            <Text onPress={()=>this.followers()} style={styles.text} >Followers:{this.state.followers}</Text>
+
+            <Text onPress={()=>this.following()} style={styles.text} >Following:{this.state.following}</Text>
+
           </View>
       </View>
 
