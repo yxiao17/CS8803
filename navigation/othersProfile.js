@@ -303,7 +303,7 @@ class othersProfile extends React.Component {
       };
 
     this.saveData();
-    this.getUserinfo();
+
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
@@ -346,7 +346,7 @@ class othersProfile extends React.Component {
         // alert(this.state.d);
         console.log("test"+this.state.d+this.state.following)
       })
-
+    this.getUserinfo();
   }
   handleFollow= async () => {
     if (this.state.followed) {
@@ -468,8 +468,8 @@ class othersProfile extends React.Component {
     }
     // this.props.route.params.onGoBack();
   }
-  getUserinfo = async () => {
-   await this.getdata();
+  getUserinfo =  () => {
+   this.getdata();
     console.log(this.state.username);
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.username, {
       method: 'GET',
@@ -483,11 +483,11 @@ class othersProfile extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("ava" + responseJson)
 
-          this.setState({avatar :responseJson.data.avatar,
-          gender :responseJson.data.gender,
-            balance: responseJson.coin})
+          this.setState({
+            avatar :responseJson.avatar,
+            gender :responseJson.gender,
+            balance: responseJson.coin })
       })
 
   }
