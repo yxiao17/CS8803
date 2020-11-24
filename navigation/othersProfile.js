@@ -271,12 +271,11 @@ class othersProfile extends React.Component {
         avatar:""
 
       };
-      this.saveData();
+
 
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
-      AsyncStorage.setItem("followed", this.state.followed)
     };
   getdata = async () => {
     try {
@@ -422,18 +421,27 @@ class othersProfile extends React.Component {
   }
 
   followButton() {
-    this.getdata();
+
     if (this.state.token == this.state.username) {
       return <View style={styles.infoWObbutton}>
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
         <Text onPress={()=>this.following()}style={styles.text}>Following:{this.state.following}</Text>
       </View>
-    } else {
+    } else if (this.state.followed == true && this.state.token != this.state.username){
 
       return <View style={styles.info}>
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
         <Text onPress={()=>this.following()} style={styles.text}>Following:{this.state.following}</Text>
-        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={this.state.followed ?   "unfollow" : "follow"}>Follow</Button>
+        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={ "unfollow"}>Follow</Button>
+      </View>
+
+
+    } else if (this.state.followed ==false && this.state.token != this.state.username){
+
+      return <View style={styles.info}>
+        <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
+        <Text onPress={()=>this.following()} style={styles.text}>Following:{this.state.following}</Text>
+        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={ "follow"}>Follow</Button>
       </View>
 
 
