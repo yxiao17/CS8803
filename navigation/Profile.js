@@ -104,6 +104,7 @@ class Head extends React.Component {
     };
 
     this.getUserinfo();
+    this.componentDidMount();
   }
   getdata = async () => {
     try {
@@ -157,7 +158,6 @@ class Head extends React.Component {
           .then(base64String => this.postImageGetUrl(base64String))
           .catch(err => console.log(err));
       }
-      console.log("response", response);
     })
     this.updateImage();
   }
@@ -180,7 +180,6 @@ class Head extends React.Component {
       },body: data,
     })
       .then((response) => {
-        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -203,17 +202,17 @@ class Head extends React.Component {
       }
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson)
+
         this.setState({
           following: responseJson.data["followingCount"],
           followers: responseJson.data["followerCount"]
         })
+        console.log("foo" + this.state.followers)
       })
   })}
 
     getUserinfo = async () => {
       await this.getdata();
-      console.log(this.state.token)
       fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.token, {
         method: 'GET',
         credentials: 'include',
@@ -226,13 +225,11 @@ class Head extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log(responseJson)
-          this.state.email = response.email,
-          this.state.balance = response.coin,
-          this.state.gender = responseJson.gender,
-          this.state.avatar = responseJson.avatar
+
+          this.setState({balance: responseJson.coin}),
+          this.setState({gender: responseJson.gender}),
+          this.setState({avatar: responseJson.avatar})
           })
-      console.log(this.state.avatar)
         }
   genderIcon () {
     if (this.state.gender == 0) {
@@ -255,7 +252,6 @@ class Head extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.state.followerList = responseJson.data
-        console.log(responseJson);
       })
       .catch((error) => {
         console.error(error);
@@ -283,7 +279,7 @@ class Head extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-    console.log(this.state.followingList)
+
     this.props.navigation.navigate("Follow", {follow: this.state.followingList})
   }
   render() {
@@ -413,7 +409,6 @@ class Posts extends React.Component {
             <TouchableOpacity
                onPress={() => this.props.navigation.navigate('Article',{article: item,onGoBack:()=> this.handler(), })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
-
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
             </TouchableOpacity>
 
@@ -463,7 +458,6 @@ class Saved extends React.Component {
     }
 
   call = async () => {
-
 
     await this.getdata();
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
