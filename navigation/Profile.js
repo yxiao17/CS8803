@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
 // HEAD
 class Head extends React.Component {
   constructor(props) {
-    super(props);
+  super(props);
+
     this.state = {
       cook:"",
       token:"",
@@ -123,6 +124,7 @@ class Head extends React.Component {
     }
 
   }
+
 
   postImageGetUrl = (img) => {
     var data = new FormData();
@@ -337,17 +339,14 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-        this.props.navigation.addListener('didFocus', this.onScreenFocus);
-  }
-
-  onScreenFocus = () => {
-    this.call();
+        this.props.navigation.addListener('didFocus',this.handler);
   }
 
 
   handler(){
      this.setState({items:''});
      this.call();
+     this.props.forceUpdate;
 
   }
 
@@ -424,6 +423,7 @@ class Posts extends React.Component {
 class Saved extends React.Component {
   constructor(props) {
     super(props);
+    this.update = this.update.bind(this);
     this.handler = this.handler.bind(this);
     this.state = {
       data: "",
@@ -436,6 +436,20 @@ class Saved extends React.Component {
     this.call();
 
   }
+
+
+    componentDidMount() {
+      this.didFocusListener = this.props.navigation.addListener('didFocus', this.handler());
+     }
+
+    update(){
+        this.forceUpdate();
+    }
+
+
+
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -455,6 +469,7 @@ class Saved extends React.Component {
 
     handler(){
       this.setState({items:''});
+      alert(1);
       this.call();
     }
 

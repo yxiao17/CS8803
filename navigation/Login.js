@@ -89,6 +89,7 @@ export default class Login extends Component {
     const value = this.refs.form.getValue();
     try {
       //set the token to username
+
       this.setState({token: value.username});
       await AsyncStorage.setItem("token",value.username)
       this.setState({email: value.email});
@@ -97,6 +98,8 @@ export default class Login extends Component {
       await AsyncStorage.setItem("gender",value.gender)
       this.setState({coin: value.coin});
       await AsyncStorage.setItem("coin",value.coin)
+      this.setState({avatar: value.avatar});
+      await AsyncStorage.setItem("avatar", value.avatar)
 
     } catch (err) {
       // console.log(err)
