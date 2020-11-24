@@ -116,7 +116,6 @@ class Head extends React.Component {
 
   }
   postImageGetUrl = (img) => {
-
     var data = new FormData();
     data.append("key", "d00b213c9dfedf8b18907316a685f791");
     data.append("image", img);
@@ -137,7 +136,6 @@ class Head extends React.Component {
       .catch((error) => {
         console.error(error);
       });
-
   }
   handleChoosePhoto = async() => {
     const options = {
@@ -152,11 +150,38 @@ class Head extends React.Component {
         ImgToBase64.getBase64String(response.uri)
           .then(base64String => this.postImageGetUrl(base64String))
           .catch(err => console.log(err));
-
       }
       console.log("response", response);
     })
+    this.updateImage();
   }
+  updateImage() {
+    var data = new FormData();
+    data.append("username", this.state.token);
+    data.append("gender", this.state.gender);
+    data.append("email", this.state.email);
+    data.append("avtar", this.state.photoUrl);
+    data.append("coin", this.state.coin)
+
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/update', {
+      method: "PUT",
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie': this.state.cookie,
+      },body: data,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
+
 
   componentDidMount = async () => {
     await this.getdata();
@@ -170,7 +195,6 @@ class Head extends React.Component {
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
       }
-    })
       .then((response) => response.json())
       .then((responseJson) => {
         console.log(responseJson)
@@ -179,7 +203,7 @@ class Head extends React.Component {
           followers: responseJson.data["followerCount"]
         })
       })
-  }
+  })}
 
     getUserinfo = async () => {
       await this.getdata();
@@ -267,9 +291,12 @@ class Head extends React.Component {
           </View>
           </View>
           <View style={styles.info}>
-
-            <Text onPress={()=>this.followers()} style={styles.text} >Followers:{this.state.followers}</Text>
-            <Text onPress={()=>this.following()} style={styles.text} >Following:{this.state.following}</Text>
+            <TouchableOpacity onPress={()=>this.followers()}>
+            <Text  style={styles.text} >Followers:{this.state.followers}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>this.following()}>
+            <Text  style={styles.text} >Following:{this.state.following}</Text>
+            </TouchableOpacity>
             {/*<Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>*/}
             {/*<Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>*/}
 

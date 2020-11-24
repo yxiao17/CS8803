@@ -194,7 +194,6 @@ class Home extends React.Component{
       // declare in this state
       token:"",
       cookie:"",
-
       active: 0,
     };
 
@@ -208,6 +207,7 @@ class Home extends React.Component{
       const val = await AsyncStorage.getItem("token");
       const cook = await AsyncStorage.getItem("cookie");
       const avatar = await AsyncStorage.getItem("avatar");
+
 
       console.log(avatar,val);
       if (val !== null) {

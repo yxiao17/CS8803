@@ -276,17 +276,21 @@ class othersProfile extends React.Component {
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
-      // AsyncStorage.setItem("followed", this.state.followed)
+      AsyncStorage.setItem("followed", this.state.followed)
     };
   getdata = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
       const avatar = await AsyncStorage.getItem("avatar");
+      const followed = await AsyncStorage.getItem("followed");
       if (token !== null) {
         this.setState({token:token})
       }
       if (avatar !== null) {
         this.setState({avatar:avatar})
+      }
+      if (followed!== null) {
+        this.setState({followed:followed})
       }
     } catch (err) {
       console.log(err)
