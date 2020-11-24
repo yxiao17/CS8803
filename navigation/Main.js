@@ -207,12 +207,15 @@ class Home extends React.Component{
       // get the two saved items token -> username and cookie for headers
       const val = await AsyncStorage.getItem("token");
       const cook = await AsyncStorage.getItem("cookie");
+      const avatar = await AsyncStorage.getItem("avatar");
 
       console.log(avatar,val);
       if (val !== null) {
         this.setState({token:val})
       }
-
+      if (avatar !== null) {
+        this.setState({avatar:avatar})
+      }
       if (cook !== null) {
         this.setState({cookie:cook})
       }
