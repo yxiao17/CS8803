@@ -87,7 +87,8 @@ const styles = StyleSheet.create({
 // HEAD
 class Head extends React.Component {
   constructor(props) {
-    super(props);
+  super(props);
+
     this.state = {
       cook:"",
       token:"",
@@ -124,6 +125,7 @@ class Head extends React.Component {
 
   }
 
+
   postImageGetUrl = (img) => {
     var data = new FormData();
     data.append("key", "d086ed635a22615e22b698dfaf132365");
@@ -139,7 +141,6 @@ class Head extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({"photoUrl": responseJson.data.url});
-        alert(this.state.photoUrl)
       })
       .catch((error) => {
         console.error(error);
@@ -179,7 +180,6 @@ class Head extends React.Component {
       body: data,
     })
       .then((response) => {
-        alert(JSON.stringify(response))
       })
       .catch((error) => {
         console.error(error);
@@ -337,17 +337,14 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-        this.props.navigation.addListener('didFocus', this.onScreenFocus);
-  }
-
-  onScreenFocus = () => {
-    this.call();
+        this.props.navigation.addListener('didFocus',this.handler);
   }
 
 
   handler(){
      this.setState({items:''});
      this.call();
+     this.props.forceUpdate;
 
   }
 
@@ -424,6 +421,7 @@ class Posts extends React.Component {
 class Saved extends React.Component {
   constructor(props) {
     super(props);
+    this.update = this.update.bind(this);
     this.handler = this.handler.bind(this);
     this.state = {
       data: "",
@@ -436,6 +434,20 @@ class Saved extends React.Component {
     this.call();
 
   }
+
+
+    componentDidMount() {
+      this.didFocusListener = this.props.navigation.addListener('didFocus', this.handler());
+     }
+
+    update(){
+        this.forceUpdate();
+    }
+
+
+
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers

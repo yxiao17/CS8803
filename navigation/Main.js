@@ -233,10 +233,12 @@ class Home extends React.Component{
 
   }
 
+
   componentDidMount = async () => {
     // await CookieManager.clearAll()
     // calls the get data function
     const t = await this.getdata();
+    this.props.navigation.addListener('didFocus');
 
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/following', {
 

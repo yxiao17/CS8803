@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
   },
   description: {
     borderRadius: 100,
-    height: width-200,
     fontSize: theme.sizes.font * 1.3,
     lineHeight: theme.sizes.font * 2,
     color: 'grey',
