@@ -104,7 +104,7 @@ class Head extends React.Component {
     };
 
     this.getUserinfo();
-    this.componentDidMount();
+    this.follow();
   }
   getdata = async () => {
     try {
@@ -188,7 +188,7 @@ class Head extends React.Component {
 
 
 
-  componentDidMount = async () => {
+    follow = async () => {
     await this.getdata();
     console.log(this.state.token)
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token + '/getFollowCount', {
@@ -199,17 +199,16 @@ class Head extends React.Component {
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
-      }
-      .then((response) => response.json())
+      }}).then((response) => response.json())
       .then((responseJson) => {
-
+        console.log("As"+responseJson.data)
         this.setState({
           following: responseJson.data["followingCount"],
           followers: responseJson.data["followerCount"]
         })
         console.log("foo" + this.state.followers)
-      })
-  })}
+      })}
+
 
     getUserinfo = async () => {
       await this.getdata();
@@ -229,7 +228,9 @@ class Head extends React.Component {
           this.setState({balance: responseJson.coin}),
           this.setState({gender: responseJson.gender}),
           this.setState({avatar: responseJson.avatar})
+
           })
+
         }
   genderIcon () {
     if (this.state.gender == 0) {
@@ -473,7 +474,7 @@ class Saved extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
        this.setState({items:responseJson.data})
-        console.log(this.state.items)
+
       })
 
   }
