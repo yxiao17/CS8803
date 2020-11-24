@@ -24,6 +24,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
 import Follow from './Follow'
+import OthersArticle from './OthersArticle'
+
 const styles = StyleSheet.create({
   scrollview: {
 
@@ -52,7 +54,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
 
   },
-
+  infoList:{
+    flexDirection:"column",
+    top:30
+  },
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -94,6 +99,7 @@ const styles = StyleSheet.create({
 class Posts extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       data: "",
       items: "",
@@ -106,11 +112,17 @@ class Posts extends React.Component {
 
   }
 
-  handler(){
-    this.setState({items:''});
-    this.call();
 
-  }
+    handler(){
+       this.setState({items:''});
+       this.call();
+       this.props.forceUpdate;
+
+    }
+
+
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -154,7 +166,9 @@ class Posts extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Article',{article: item,onGoBack:()=> this.handler(), })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+
+              onPress={() => this.props.navigation.navigate('OthersArticle',{article: item, onGoBack: ()=> this.handler() })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
             </TouchableOpacity>
@@ -170,6 +184,7 @@ class Posts extends React.Component {
 class Saved extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
 
       data: "",
@@ -180,10 +195,17 @@ class Saved extends React.Component {
 
     };
 
-
     this.call();
+  }
+
+  handler(){
+     this.setState({items:''});
+     this.call();
+     this.props.forceUpdate;
 
   }
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -235,7 +257,7 @@ class Saved extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              onPress={() => this.props.navigation.navigate('OthersArticle',{article: item, onGoBack: ()=> this.handler()})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
@@ -275,11 +297,13 @@ class othersProfile extends React.Component {
         items:"",
         followingList: "",
         followerList: "",
-        avatar:""
+        avatar:"",
+        balance:""
 
       };
 
     this.saveData();
+    this.getUserinfo();
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
@@ -287,13 +311,13 @@ class othersProfile extends React.Component {
   getdata = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
-      const avatar = await AsyncStorage.getItem("avatar");
+      // const avatar = await AsyncStorage.getItem("avatar");
       if (token !== null) {
         this.setState({token:token})
       }
-      if (avatar !== null) {
-        this.setState({avatar:avatar})
-      }
+      // if (avatar !== null) {
+      //   this.setState({avatar:avatar})
+      // }
 
     } catch (err) {
       console.log(err)
@@ -445,8 +469,8 @@ class othersProfile extends React.Component {
     // this.props.route.params.onGoBack();
   }
   getUserinfo = async () => {
-   this.getdata();
-    console.log(this.state.token)
+   await this.getdata();
+    console.log(this.state.username);
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.username, {
       method: 'GET',
       credentials: 'include',
@@ -459,10 +483,13 @@ class othersProfile extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        avatar = responseJson.data.avatar,
-        this.state.gender = responseJson.data.gender
+        console.log("ava" + responseJson)
+
+          this.setState({avatar :responseJson.data.avatar,
+          gender :responseJson.data.gender,
+            balance: responseJson.coin})
       })
-    console.log("ava" + this.state.avatar)
+
   }
   genderIcon () {
     if (this.state.gender == 0) {
@@ -488,11 +515,14 @@ class othersProfile extends React.Component {
         <View>
           <View style={styles.container}>
             {this.avatar()}
+            <View style={styles.infoList}>
             <View style={styles.name}>
               <Text style={{fontWeight: '700', fontSize: 20}}>{this.state.username}</Text>
               {this.genderIcon()}
             </View>
-          </View>
+              <Text>Balance: {this.state.balance}</Text>
+            </View>
+        </View>
             {this.followButton()}
         </View>
         <TabNavigator/>
