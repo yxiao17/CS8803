@@ -24,6 +24,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Button } from 'react-native-elements';
 import Follow from './Follow'
+import OthersArticle from './OthersArticle'
+
 const styles = StyleSheet.create({
   scrollview: {
 
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
 class Posts extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       data: "",
       items: "",
@@ -105,6 +108,16 @@ class Posts extends React.Component {
     this.call();
 
   }
+
+    handler(){
+       this.setState({items:''});
+       this.call();
+       this.props.forceUpdate;
+
+    }
+
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -148,7 +161,7 @@ class Posts extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              onPress={() => this.props.navigation.navigate('OthersArticle',{article: item, onGoBack: ()=> this.handler() })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
@@ -165,6 +178,7 @@ class Posts extends React.Component {
 class Saved extends React.Component {
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
 
       data: "",
@@ -175,10 +189,17 @@ class Saved extends React.Component {
 
     };
 
-
     this.call();
+  }
+
+  handler(){
+     this.setState({items:''});
+     this.call();
+     this.props.forceUpdate;
 
   }
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -230,7 +251,7 @@ class Saved extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              onPress={() => this.props.navigation.navigate('OthersArticle',{article: item, onGoBack: ()=> this.handler()})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
 
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
