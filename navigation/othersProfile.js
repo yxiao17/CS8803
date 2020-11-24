@@ -105,6 +105,12 @@ class Posts extends React.Component {
     this.call();
 
   }
+
+  handler(){
+    this.setState({items:''});
+    this.call();
+
+  }
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -148,9 +154,8 @@ class Posts extends React.Component {
           numColumns={2}
           renderItem={({item}) =>  {   return (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Article',{article: item})} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
+              onPress={() => this.props.navigation.navigate('Article',{article: item,onGoBack:()=> this.handler(), })} hitSlop={{top: -25, bottom: -25, left: -35, right: -30}}>
               <Image style = {styles.img} resizeMode='cover' source={{ uri: item.images[0]}}></Image>
-
               <Text style={{ alignSelf:"center", fontWeight:"bold"}}>{item.title}</Text>
             </TouchableOpacity>
 

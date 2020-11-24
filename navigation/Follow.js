@@ -140,13 +140,19 @@ class Follow extends React.Component {
     }
     console.log("a"+this.state.follow)
   }
-  follow () {
-    if (this.state.follow == "") {
-      return <View style={styles.root}>
-        <Text style={{alignSelf: 'center'}}>It's empty!</Text>
-      </View>
-    } else {
-      return  <View>
+  // follow =  () => {
+  //   if (this.state.follow) {
+  //     return
+  //   } else {
+  //     return <View style={styles.root}>
+  //       <Text style={{alignSelf: 'center'}}>It's empty!</Text>
+  //     </View>
+  //
+  //   }
+  // }
+  render() {
+    return (
+      <View>
         <FlatList
           style={styles.root}
           data={this.state.follow}
@@ -167,13 +173,6 @@ class Follow extends React.Component {
                 </View>
               </View>
             )}} />
-      </View>
-    }
-  }
-  render() {
-    return (
-      <View>
-      {this.follow()}
       </View>
        )
       }
