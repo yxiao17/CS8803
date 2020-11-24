@@ -141,7 +141,6 @@ class Head extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({"photoUrl": responseJson.data.url});
-        alert(this.state.photoUrl)
       })
       .catch((error) => {
         console.error(error);
@@ -181,7 +180,6 @@ class Head extends React.Component {
       body: data,
     })
       .then((response) => {
-        alert(JSON.stringify(response))
       })
       .catch((error) => {
         console.error(error);
@@ -469,7 +467,6 @@ class Saved extends React.Component {
 
     handler(){
       this.setState({items:''});
-      alert(1);
       this.call();
     }
 

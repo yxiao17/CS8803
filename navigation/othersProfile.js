@@ -347,7 +347,7 @@ class othersProfile extends React.Component {
 
 
     })
-      .then((response) => {alert(JSON.stringify(response))})
+      .then((response) => {})
       .catch((error) => {
         console.error(error);
       })
