@@ -184,6 +184,7 @@ export default class Post extends Component{
     avatar: '',
     photoUrl:[],
     };
+    this.avatar()
     }
 
     postImageGetUrl = (img) => {
@@ -288,7 +289,7 @@ export default class Post extends Component{
         const val = await AsyncStorage.getItem("token");
         const cook = await AsyncStorage.getItem("cookie");
         if (val !== null) {
-         this.setState({username:val})
+         this.setState({token:val})
         }
         if (cook !== null) {
          this.setState({cookie:cook})
@@ -298,10 +299,30 @@ export default class Post extends Component{
         }
     }
 
+  avatar = async () => {
+     await this.getCookie();
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/'+this.state.token, {
+      method: 'GET',
+      credentials: 'include',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        // set the cookie inside of the headers
+        'cookie' : this.state.cookie,
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson)
+        this.setState({avatar:responseJson.avatar})
+
+      })
+
+  }
 
 
 
-    getCookieOriginal = () => {
+  getCookieOriginal = () => {
         fetch('http://Cs8803ProjectServer-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/login', {
           method: 'POST',
           headers: {
@@ -332,18 +353,18 @@ export default class Post extends Component{
 
       }
 
-    getAvatar = async() => {
-        try{
-            const tempAvatar = await AsyncStorage.getItem("avatar");
-            if (tempAvatar !== null){
-                this.setState({avatar: tempAvatar});
-            }
-            console.log(this.state.avatar)
-        } catch(err){
-            console.log(err)
-        }
-
-    }
+    // getAvatar = async() => {
+    //     try{
+    //         const tempAvatar = await AsyncStorage.getItem("avatar");
+    //         if (tempAvatar !== null){
+    //             this.setState({avatar: tempAvatar});
+    //         }
+    //         console.log(this.state.avatar)
+    //     } catch(err){
+    //         console.log(err)
+    //     }
+    //
+    // }
 
     PostData = async () => {
         this.getCookie();

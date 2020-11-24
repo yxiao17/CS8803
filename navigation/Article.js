@@ -551,8 +551,7 @@ export default class Article extends Component{
 
 
 
-
-    render() {
+render() {
 
         return (
             <View style={styles.flex}>
