@@ -225,9 +225,12 @@ class Home extends React.Component{
 
   }
 
-  handler(){
-      this.setState({items:''});
+  handler = () => {
+
+      this.setState({items: ''});
+      this.setState({d: ''});
       this.componentDidMount();
+
   }
 
   componentDidMount = async () => {
@@ -253,7 +256,7 @@ class Home extends React.Component{
           items:responseJson.data, //parse the first layer and get all the data under 'data' in JSON
         })
         // alert(this.state.d);
-        console.log(this.state.items)
+        console.error(error)
       })
 
   }

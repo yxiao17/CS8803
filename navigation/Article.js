@@ -339,7 +339,6 @@ export default class Article extends Component{
         })
         .then((response) => response.json())
         .then((responseJson) => {
-            Alert.alert('Reward', JSON.stringify(responseJson.message));
 
         })
         .catch((error) => {
@@ -421,12 +420,14 @@ export default class Article extends Component{
             'Accept': 'application/x-www-form-urlencoded',
             'Content-Type': 'application/x-www-form-urlencoded',
             // set the cookie inside of the headers
-            'cookie' : this.state.cookie,
+             'cookie' : this.state.cookie,
             },
             body:{},
 
         })
-          .then((response) => {})
+          .then((response) => {
+
+          })
           .catch((error) => {
             console.error(error);
           })
@@ -446,7 +447,9 @@ export default class Article extends Component{
             },
             body:{}
         })
-        .then((response) => {})
+        .then((response) => {
+
+        })
         .catch((error) => {
         console.error(error);
         })

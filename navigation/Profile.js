@@ -139,10 +139,12 @@ class Head extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({"photoUrl": responseJson.data.url});
+        alert(this.state.photoUrl)
       })
       .catch((error) => {
         console.error(error);
       });
+
   }
 
   handleChoosePhoto = async() => {
@@ -162,10 +164,9 @@ class Head extends React.Component {
     this.updateImage();
   }
 
-  updateImage() {
+  updateImage = () => {
     var data = new FormData();
     data.append("avatar", this.state.photoUrl);
-
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/update', {
       method: "PUT",
       credentials: 'include',
@@ -178,6 +179,7 @@ class Head extends React.Component {
       body: data,
     })
       .then((response) => {
+        alert(JSON.stringify(response))
       })
       .catch((error) => {
         console.error(error);
