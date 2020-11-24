@@ -95,11 +95,12 @@ class Head extends React.Component {
       followers:"",
       following:"",
       gender:"",
-      photoUrl:[],
+      photoUrl:'',
       followingList:"",
       followerList:"",
       balance:'',
       email:'',
+      photo:'',
 
     };
 
@@ -122,9 +123,10 @@ class Head extends React.Component {
     }
 
   }
+
   postImageGetUrl = (img) => {
     var data = new FormData();
-    data.append("key", "d00b213c9dfedf8b18907316a685f791");
+    data.append("key", "d086ed635a22615e22b698dfaf132365");
     data.append("image", img);
     fetch('https://api.imgbb.com/1/upload', {
       method: 'POST',
@@ -136,14 +138,13 @@ class Head extends React.Component {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        var tempUrls = this.state.photoUrl;
-        tempUrls.push(responseJson.data.url);
-        this.setState({"photoUrl": tempUrls});
+        this.setState({"photoUrl": responseJson.data.url});
       })
       .catch((error) => {
         console.error(error);
       });
   }
+
   handleChoosePhoto = async() => {
     const options = {
       noData: true
@@ -151,9 +152,8 @@ class Head extends React.Component {
     ImagePicker.launchImageLibrary(options, response => {
       if (response.uri){
         this.setState({
-          photo: this.state.photo.concat([response.uri]),
+          photo: response.uri,
         })
-
         ImgToBase64.getBase64String(response.uri)
           .then(base64String => this.postImageGetUrl(base64String))
           .catch(err => console.log(err));
@@ -161,13 +161,10 @@ class Head extends React.Component {
     })
     this.updateImage();
   }
+
   updateImage() {
     var data = new FormData();
-    data.append("username", this.state.token);
-    data.append("gender", this.state.gender);
-    data.append("email", this.state.email);
-    data.append("avtar", this.state.photoUrl);
-    data.append("coin", this.state.coin)
+    data.append("avatar", this.state.photoUrl);
 
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/update', {
       method: "PUT",
@@ -177,7 +174,8 @@ class Head extends React.Component {
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
-      },body: data,
+      },
+      body: data,
     })
       .then((response) => {
       })

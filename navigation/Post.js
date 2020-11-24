@@ -189,7 +189,7 @@ export default class Post extends Component{
     postImageGetUrl = (img) => {
 
     var data = new FormData();
-    data.append("key", "d00b213c9dfedf8b18907316a685f791");
+    data.append("key", "d086ed635a22615e22b698dfaf132365");
     data.append("image", img);
     fetch('https://api.imgbb.com/1/upload', {
     method: 'POST',
