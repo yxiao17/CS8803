@@ -98,6 +98,7 @@ class Posts extends React.Component {
       data: "",
       items: "",
       username: "",
+
     };
 
 
@@ -116,7 +117,7 @@ class Posts extends React.Component {
     }
   }
   call = async () => {
-    await this.getdata();
+     await this.getdata();
 
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.username + '/posts', {
       method: 'GET',
@@ -133,6 +134,7 @@ class Posts extends React.Component {
         this.setState({
           items: responseJson.data
         })
+        console.log(this.state.items+this.state.username+"ok")
       })
   }
 
@@ -272,7 +274,7 @@ class othersProfile extends React.Component {
 
       };
 
-
+    this.saveData();
     };
     saveData = async () => {
       AsyncStorage.setItem("username", this.state.username);
@@ -281,16 +283,13 @@ class othersProfile extends React.Component {
     try {
       const token = await AsyncStorage.getItem("token");
       const avatar = await AsyncStorage.getItem("avatar");
-      const followed = await AsyncStorage.getItem("followed");
       if (token !== null) {
         this.setState({token:token})
       }
       if (avatar !== null) {
         this.setState({avatar:avatar})
       }
-      if (followed!== null) {
-        this.setState({followed:followed})
-      }
+
     } catch (err) {
       console.log(err)
     }
@@ -334,7 +333,7 @@ class othersProfile extends React.Component {
 
     }
   }
-  followApi = () => {
+  followApi = async () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/follow/' + this.state.username , {
       method: 'POST',
       credentials: 'include',
@@ -348,13 +347,13 @@ class othersProfile extends React.Component {
 
 
     })
-      .then((response) => {console.log(response)})
+      .then((response) => {alert(JSON.stringify(response))})
       .catch((error) => {
         console.error(error);
       })
   }
 
-  UnfollowApi = () => {
+  UnfollowApi = async () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/unfollow/' + this.state.username , {
       method: 'POST',
       credentials: 'include',
@@ -427,21 +426,13 @@ class othersProfile extends React.Component {
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
         <Text onPress={()=>this.following()}style={styles.text}>Following:{this.state.following}</Text>
       </View>
-    } else if (this.state.followed == true && this.state.token != this.state.username){
+    } else {
 
       return <View style={styles.info}>
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
         <Text onPress={()=>this.following()} style={styles.text}>Following:{this.state.following}</Text>
-        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={ "unfollow"}>Follow</Button>
-      </View>
-
-
-    } else if (this.state.followed ==false && this.state.token != this.state.username){
-
-      return <View style={styles.info}>
-        <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
-        <Text onPress={()=>this.following()} style={styles.text}>Following:{this.state.following}</Text>
-        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={ "follow"}>Follow</Button>
+        <Button type="outline"  onPress={() => this.handleFollow() }  color={"red"} title={ this.state.followed ? "unfollow":
+        "follow"}>Follow</Button>
       </View>
 
 

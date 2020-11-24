@@ -238,7 +238,7 @@ class Home extends React.Component{
     // calls the get data function
     const t = await this.getdata();
 
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/recommendation', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/post/following', {
 
       method: 'GET',
       credentials: 'include',
