@@ -268,7 +268,7 @@ class Head extends React.Component {
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
-      },
+      }
 
     })
       .then((response) => response.json())
