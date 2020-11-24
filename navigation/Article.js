@@ -201,6 +201,7 @@ const Separator = () => {
 export default class Article extends Component{
 
      scrollX = new Animated.Value(0);
+
      constructor(props) {
        super(props);
        this.state= {
