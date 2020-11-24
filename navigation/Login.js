@@ -77,7 +77,10 @@ export default class Login extends Component {
       token :"",
       cookie: "",
       avatar:"",
-      code:""
+      code:"",
+      email:"",
+      gender:"",
+      coin:""
 
 
     }
@@ -88,6 +91,12 @@ export default class Login extends Component {
       //set the token to username
       this.setState({token: value.username});
       await AsyncStorage.setItem("token",value.username)
+      this.setState({email: value.email});
+      await AsyncStorage.setItem("email",value.email)
+      this.setState({gender: value.gender});
+      await AsyncStorage.setItem("gender",value.gender)
+      this.setState({coin: value.coin});
+      await AsyncStorage.setItem("coin",value.coin)
 
     } catch (err) {
       // console.log(err)
@@ -120,7 +129,6 @@ export default class Login extends Component {
         // 'Accept': 'application/x-www-form-urlencoded',
         'Accept': '*/*',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-
         'Connection': 'keep-alive',
       },
       credentials: "include",
