@@ -147,11 +147,12 @@ export default class Registration extends Component{
           this.props.navigation.navigate("Login");
         }
         else {
-          console.log("login error")
+          console.log("login error");
         }
       })
 
       .catch((error) => {
+        alert("error!")
         console.error(error);
         alert(error);
       });

@@ -412,8 +412,6 @@ class othersProfile extends React.Component {
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
       },
-
-
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -436,7 +434,6 @@ class othersProfile extends React.Component {
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
       },
-
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -445,12 +442,12 @@ class othersProfile extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-    console.log(this.state.followingList)
+
     this.props.navigation.navigate("Follow", {follow: this.state.followingList})
+    console.log(this.state.followingList)
   }
 
   followButton() {
-
     if (this.state.token == this.state.username) {
       return <View style={styles.infoWObbutton}>
         <Text onPress={()=>this.followers()} style={styles.text}>Followers:{this.state.followers}</Text>
