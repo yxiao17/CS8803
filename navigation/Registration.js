@@ -159,8 +159,6 @@ export default class Registration extends Component{
 
 
 
-
-
   onChange = () => {
     const value = this.refs.form.getValue();
     if(value) {
