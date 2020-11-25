@@ -148,11 +148,12 @@ export default class Registration extends Component{
         }
         else {
           console.log("login error")
-          alert("login error")
+
         }
       })
 
       .catch((error) => {
+        alert("error!")
         console.error(error);
       });
   }

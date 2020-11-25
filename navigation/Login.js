@@ -192,7 +192,6 @@ export default class Login extends Component {
 
               if (responseJson.code == 100 ) {
                 this.props.navigation.navigate("Main");
-
         }
             })
 

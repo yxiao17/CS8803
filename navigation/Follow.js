@@ -138,7 +138,7 @@ class Follow extends React.Component {
     this.state = {
       follow: this.props.route.params.follow
     }
-    console.log("a"+this.state.follow)
+    console.log("aaaaa"+this.state.follow)
   }
   // follow =  () => {
   //   if (this.state.follow) {

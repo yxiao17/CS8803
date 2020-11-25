@@ -83,9 +83,17 @@ const styles = StyleSheet.create({
     marginHorizontal: theme.sizes.margin/2,
   }
 });
+const Tab = createMaterialTopTabNavigator();
+const TabNavigator = () => (
+  <Tab.Navigator>
 
+    <Tab.Screen name="Posts" component={Posts} />
+    <Tab.Screen name="Saved" component={Saved} />
+
+  </Tab.Navigator>
+)
 // HEAD
-class Head extends React.Component {
+class Profile extends React.Component {
   constructor(props) {
   super(props);
 
@@ -107,6 +115,7 @@ class Head extends React.Component {
 
     this.getUserinfo();
     this.follow();
+
   }
   getdata = async () => {
     try {
@@ -239,7 +248,7 @@ class Head extends React.Component {
       return <Icon name="mars" color="blue" size={15}/>
     }
 }
-  followers = () => {
+  followers = async () => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token + '/getFollower', {
       method: 'GET',
       credentials: 'include',
@@ -258,11 +267,11 @@ class Head extends React.Component {
         console.error(error);
       })
     console.log(this.state.followerList)
-    // this.props.navigation.navigate("Follow", {follow: this.state.followerList})
+    this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
 
   following = () => {
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token + '/getFollowingUsers', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -270,8 +279,7 @@ class Head extends React.Component {
         'Content-Type': 'application/json',
         // set the cookie inside of the headers
         'cookie': this.state.cookie,
-      }
-
+      },
     })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -282,9 +290,12 @@ class Head extends React.Component {
       })
 
     this.props.navigation.navigate("Follow", {follow: this.state.followingList})
+    console.log(this.state.followingList)
   }
+
   render() {
     return (
+      <View style={{flex:1}}>
       <View>
         <View style={styles.container}>
           <TouchableOpacity onPress={this.handleChoosePhoto}>
@@ -298,17 +309,23 @@ class Head extends React.Component {
           <Text style={{fontWeight: '700', fontSize: 20}}>Balance: {this.state.balance}</Text>
           </View>
           </View>
+
           <View style={styles.info}>
+
             <TouchableOpacity onPress={()=>this.followers()}>
             <Text  style={styles.text} >Followers:{this.state.followers}</Text>
+              <Text>{this.state.followingList}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>this.following()}>
-            <Text  style={styles.text} >Following:{this.state.following}</Text>
-            </TouchableOpacity>
+
+            <Text onPress={()=> this.following()}  style={styles.text} >Following:{this.state.following}</Text>
+
             {/*<Text style={styles.text} onPress={()=>this.following()}>Followers:{this.state.followers}</Text>*/}
             {/*<Text style={styles.text} onPress={()=>this.followers()}>Following:{this.state.following}</Text>*/}
 
           </View>
+
+      </View>
+        <TabNavigator/>
       </View>
 
 
@@ -519,27 +536,19 @@ class Saved extends React.Component {
 }
 
 
-const Tab = createMaterialTopTabNavigator();
-const TabNavigator = () => (
-  <Tab.Navigator>
-
-    <Tab.Screen name="Posts" component={Posts} />
-    <Tab.Screen name="Saved" component={Saved} />
-
-  </Tab.Navigator>
-)
 
 
-class Profile extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <Head />
-        <TabNavigator/>
-      </View>
-    );
-  }
-}
+
+// class Profile extends React.Component {
+//   render() {
+//     return (
+//       <View style={{ flex: 1 }}>
+//         <Head />
+//
+//       </View>
+//     );
+//   }
+// }
 
 export default Profile;
 
