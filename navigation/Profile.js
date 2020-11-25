@@ -88,7 +88,6 @@ const styles = StyleSheet.create({
 class Head extends React.Component {
   constructor(props) {
   super(props);
-
     this.state = {
       cook:"",
       token:"",
@@ -261,7 +260,7 @@ class Head extends React.Component {
     // this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
 
-  following = () => {
+  following = (navigation) => {
     fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/user/' + this.state.token+ '/getFollowingUsers', {
       method: 'GET',
       credentials: 'include',
@@ -280,8 +279,6 @@ class Head extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-
-    this.props.navigation.navigate("Follow", {follow: this.state.followingList})
   }
   render() {
     return (

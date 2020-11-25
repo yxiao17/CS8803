@@ -246,6 +246,12 @@ export default class Article extends Component{
       }
     }
 
+    handler(){
+        this.setState({items:''});
+
+        this.componentDidMount();
+    }
+
     /*handle like in react native*/
     handleLike = () => {
       if (this.state.liked){
@@ -383,8 +389,6 @@ export default class Article extends Component{
         this.setState({threeDollarText: 'black'})
         this.refs.modal7.close()
     }
-
-
 
 
     handleCustomerAmount(){

@@ -64,7 +64,6 @@ const shouldTabBarVisible = (navigation) => {
 };
 const TabNavigator = (navigation) => (
   <TabBottom.Navigator tabBarOptions={{showLabel:false,showIcon: true}}>
-
     <Tab.Screen name="Home" component={Main}
                 options={{
       tabBarLabel: 'Home',
@@ -86,7 +85,6 @@ const TabNavigator = (navigation) => (
       <Icon name="user" color={color} size={30} />
     ),
   }}/>
-
   </TabBottom.Navigator>
 )
 
@@ -114,7 +112,7 @@ function App() {
           headerShown:false,}}/>
         <Stack.Screen name="othersProfile" component={othersProfile}  options={{
           headerTitle: props => <LoadTitle {...props} />,
-          headerTransparent:true,}}/>
+          headerTransparent:false,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{
                         headerShown:false,

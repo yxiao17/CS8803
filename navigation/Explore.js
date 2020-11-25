@@ -168,10 +168,14 @@ const styles = StyleSheet.create({
 
 
 
+
+
+
 export default class Explore extends React.Component{
 
   constructor(props) {
     super(props);
+    this.handler = this.handler.bind(this);
     this.state = {
       isBold:true,
       isLoading:true,
@@ -193,6 +197,16 @@ export default class Explore extends React.Component{
 
     }));
   }
+
+    handler = () => {
+
+        this.setState({items: ''});
+        this.setState({d: ''});
+        this.componentDidMount();
+
+    }
+
+
   // get data function to read the saved data to persist the user info
   getdata = async () => {
     try {
@@ -215,6 +229,11 @@ export default class Explore extends React.Component{
     }
 
   }
+
+
+
+
+
 
   componentDidMount = async () => {
     // await CookieManager.clearAll()

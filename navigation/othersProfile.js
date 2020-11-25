@@ -423,6 +423,7 @@ class othersProfile extends React.Component {
       .catch((error) => {
         console.error(error);
       })
+
     this.props.navigation.navigate("Follow", {follow: this.state.followerList})
   }
   following = () => {
