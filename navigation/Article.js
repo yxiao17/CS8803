@@ -537,7 +537,7 @@ export default class Article extends Component{
             return(
                 <TextInput
                   style={{ marginVertical:15, fontSize: 15, color: 'grey', justifyContent:'center' }}
-                  placeholder = 'Enter customer amount here'
+                  placeholder = 'Enter customize amount here'
                   onChangeText={this.handleAmount}
                 />
             )

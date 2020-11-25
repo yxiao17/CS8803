@@ -109,10 +109,10 @@ function App() {
         />
 
         <Stack.Screen name="Profile" component={TabNavigator}  options={{
-          headerShown:false,}}/>
+          headerShown:true,}}/>
         <Stack.Screen name="othersProfile" component={othersProfile}  options={{
           headerTitle: props => <LoadTitle {...props} />,
-          headerTransparent:false,}}/>
+          headerTransparent:true,}}/>
         <Stack.Screen name="Search" component={Search}
                       options={{
                         headerShown:false,

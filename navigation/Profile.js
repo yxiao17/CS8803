@@ -488,7 +488,7 @@ class Saved extends React.Component {
   call = async () => {
 
     await this.getdata();
-    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/' + this.state.token + '/posts', {
+    fetch('http://cs8803projectserver-env.eba-ekap6gi3.us-east-1.elasticbeanstalk.com/api/posts/favorites', {
       method: 'GET',
       credentials: 'include',
       headers:{
