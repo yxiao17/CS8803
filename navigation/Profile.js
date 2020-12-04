@@ -116,6 +116,9 @@ class Profile extends React.Component {
     this.follow();
 
   }
+
+
+
   getdata = async () => {
     try {
       // get the two saved items token -> username and cookie for headers
@@ -193,6 +196,7 @@ class Profile extends React.Component {
         console.error(error);
       })
   }
+
 
 
 
@@ -291,7 +295,11 @@ class Profile extends React.Component {
     console.log(this.state.followingList)
   }
 
+
+
   render() {
+
+
     return (
       <View style={{flex:1}}>
       <View>
@@ -348,11 +356,19 @@ class Posts extends React.Component {
 
     if(this.props.navigation.isFocused){
     this.call();
+    alert(1);
     }
   }
 
   componentDidMount() {
-        this.props.navigation.addListener('didFocus',this.handler);
+        this._unsubscribe = this.props.navigation.addListener('focus', () => {
+            this.handler();})
+            alert(2);
+  }
+
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
 

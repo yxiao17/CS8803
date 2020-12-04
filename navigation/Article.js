@@ -529,7 +529,7 @@ export default class Article extends Component{
         return (
             <View>
                <TouchableOpacity onPress={()=> {this.handleCustomerAmount()}}>
-               <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customer amount </Text>
+               <Text style={{fontSize: 15, marginVertical: 15, color: theme.colors.active }}> Enter customize amount </Text>
                </TouchableOpacity>
           </View>
         )}

@@ -64,7 +64,7 @@ const shouldTabBarVisible = (navigation) => {
 };
 const TabNavigator = (navigation) => (
   <TabBottom.Navigator tabBarOptions={{showLabel:false,showIcon: true}}>
-    <Tab.Screen name="Home" component={Main}
+    <Tab.Screen name="Main" component={Main}
                 options={{
       tabBarLabel: 'Home',
       tabBarIcon: ({ color, size }) => (
@@ -72,14 +72,13 @@ const TabNavigator = (navigation) => (
       ),
     }}/>
     <Tab.Screen name="Post" component={Post} options={{
-
       tabBarVisible: shouldTabBarVisible(navigation),
       // tabBarLabel: 'Post',
       tabBarIcon: ({ color, size }) => (
         <Icon name="plus-circle" color={'#900C3F'} size={45} />
       ),
     }}/>
-    <Tab.Screen name="User" component={Profile} options={{
+    <Tab.Screen name="Profile" component={Profile} options={{
     // tabBarLabel: 'User',
     tabBarIcon: ({ color, size }) => (
       <Icon name="user" color={color} size={30} />
@@ -93,6 +92,7 @@ const TabNavigator = (navigation) => (
 
 function App() {
 // const App = () => {
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

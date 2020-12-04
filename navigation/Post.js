@@ -190,7 +190,7 @@ export default class Post extends Component{
     postImageGetUrl = (img) => {
 
     var data = new FormData();
-    data.append("key", "d086ed635a22615e22b698dfaf132365");
+    data.append("key", "052856864d60201b7416ab674b8ebb92");
     data.append("image", img);
     fetch('https://api.imgbb.com/1/upload', {
     method: 'POST',
@@ -251,7 +251,7 @@ export default class Post extends Component{
     submitPost = () => {
       alert("successfully submitted!");
       this.PostData();
-      return this.props.navigation.navigate('Home');
+      return this.props.navigation.navigate('Profile');
      // this.props.route.params.onGoBack();
     }
 
